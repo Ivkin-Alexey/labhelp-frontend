@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import styles from './Counter.module.css'
 import {
   decrement,
@@ -11,6 +10,7 @@ import {
   selectCount,
   selectStatus,
 } from './counterSlice'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
 export const Counter = () => {
   const dispatch = useAppDispatch()

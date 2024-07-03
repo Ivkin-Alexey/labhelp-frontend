@@ -1,4 +1,3 @@
-import React from 'react'
 import { createBrowserRouter, Link } from 'react-router-dom'
 
 const router = createBrowserRouter([
