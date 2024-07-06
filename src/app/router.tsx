@@ -1,23 +1,28 @@
 import { createBrowserRouter, Link } from 'react-router-dom'
 
+import Root from '../components/root'
+import FavouritesPage from '../pages/favourites-page'
+import MainPage from '../pages/main-page'
+
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <div>
-        <h1>Главная страница</h1>
-        <Link to="favourites">Избранное</Link>
-      </div>
-    ),
-  },
-  {
-    path: 'favourites',
-    element: (
-      <div>
-        <h1>Избранное</h1>
-        <Link to="/">Главная</Link>
-      </div>
-    ),
+    element: <Root />,
+    // errorElement: <ErrorPage />,
+    children: [
+      {
+        path: '/',
+        element: <MainPage />,
+      },
+      {
+        path: 'favourites',
+        element: <FavouritesPage />,
+      },
+      // {
+      //   path: 'equipment/:equipmentID',
+      //   element: <EquipmentPage />,
+      // },
+    ],
   },
 ])
 
