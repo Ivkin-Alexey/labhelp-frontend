@@ -4,13 +4,15 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 
+import type { EquipmentID } from '../models/equipments'
+
 interface IEquipmentCard {
-  id: number
+  id: EquipmentID
   title: string
   description: string
   imgUrl: string
-  handleClick: (e: React.MouseEvent, id: number) => void
-  handleBtnClick: (e: React.MouseEvent, id: number) => void
+  handleClick: (e: React.MouseEvent, id: EquipmentID) => void
+  handleBtnClick: (e: React.MouseEvent, id: EquipmentID) => void
 }
 
 export function EquipmentCard(props: IEquipmentCard) {
