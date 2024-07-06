@@ -1,4 +1,3 @@
-import type React from 'react'
 import { useState, useEffect } from 'react'
 
 import { CircularProgress, Container } from '@mui/material'
@@ -8,6 +7,7 @@ import { EquipmentCard } from '../components/equipment-card'
 import type { EquipmentID, EquipmentItem } from '../models/equipments'
 
 export default function MainPage() {
+
   const [equipmentList, setEquipmentList] = useState<null | EquipmentItem[]>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
@@ -32,7 +32,8 @@ export default function MainPage() {
   function handleClick(e: React.MouseEvent, id: EquipmentID) {}
   function handleBtnClick(e: React.MouseEvent, id: EquipmentID) {}
 
-  function renderEquipmentList() {
+  function renderEquipmentList(): React.ReactNode {
+
     if (isLoading) {
       return <CircularProgress size="60px" />
     }
@@ -43,6 +44,7 @@ export default function MainPage() {
 
     if (!isLoading && Array.isArray(equipmentList)) {
       return equipmentList.map(el => {
+        
         const { id, imgUrl, name, model } = el
 
         return (
