@@ -1,0 +1,51 @@
+import { CircularProgress } from '@mui/material'
+
+import { EquipmentCard } from './equipment-card'
+import type { EquipmentID, EquipmentItem } from '../models/equipments'
+
+interface ICardList {
+  isLoading: boolean
+  isError: boolean
+  list: EquipmentItem[] | null
+}
+
+export default function CardList(props: ICardList) {
+  function handleClick(e: React.MouseEvent, id: EquipmentID) {} //TODO: implement routing to the card page
+  function handleBtnClick(e: React.MouseEvent, id: EquipmentID) {} //TODO: implement storage data in the favorites
+
+  const { isError, isLoading, list } = props
+
+  if (isLoading) {
+    return <CircularProgress size="60px" />
+  }
+
+  if (isError) {
+    return <h3>Произошла ошибка</h3>
+  }
+
+  if (Array.isArray(list) && list.length === 0) {
+    return <h3>Данные отсутствуют</h3>
+  }
+
+  if (Array.isArray(list)) {
+    return (
+      <>
+        {list.map(el => {
+          const { id, imgUrl, name, model } = el
+
+          return (
+            <EquipmentCard
+              key={id}
+              id={id}
+              title={name}
+              description={model}
+              imgUrl={imgUrl}
+              handleClick={handleClick}
+              handleBtnClick={handleBtnClick}
+            />
+          )
+        })}
+      </>
+    )
+  }
+}
