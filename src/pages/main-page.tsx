@@ -7,7 +7,6 @@ import { EquipmentCard } from '../components/equipment-card'
 import type { EquipmentID, EquipmentItem } from '../models/equipments'
 
 export default function MainPage() {
-
   const [equipmentList, setEquipmentList] = useState<null | EquipmentItem[]>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
@@ -29,11 +28,10 @@ export default function MainPage() {
     fetchEquipmentList()
   }, [])
 
-  function handleClick(e: React.MouseEvent, id: EquipmentID) {}
-  function handleBtnClick(e: React.MouseEvent, id: EquipmentID) {}
+  function handleClick(e: React.MouseEvent, id: EquipmentID) {} //TODO: implement routing to the card page
+  function handleBtnClick(e: React.MouseEvent, id: EquipmentID) {} //TODO: implement storage data in the favorites
 
   function renderEquipmentList(): React.ReactNode {
-
     if (isLoading) {
       return <CircularProgress size="60px" />
     }
@@ -42,9 +40,13 @@ export default function MainPage() {
       return <h3>Произошла ошибка</h3>
     }
 
-    if (!isLoading && Array.isArray(equipmentList)) {
+    if (Array.isArray(equipmentList)) {
+      
+      if (equipmentList.length === 0) {
+        return <h3>Данные отсутствуют</h3>
+      }
+
       return equipmentList.map(el => {
-        
         const { id, imgUrl, name, model } = el
 
         return (
@@ -59,6 +61,8 @@ export default function MainPage() {
           />
         )
       })
+    } else {
+      setIsError(true)
     }
   }
 
