@@ -1,24 +1,32 @@
+import { useState, useEffect } from 'react'
+
 import { Container } from '@mui/material'
 
-import {EquipmentCard} from '../components/equipment-card'
+import { BASE_URL } from '../app/constants'
+import CardList from '../components/equipment-card-list'
+import type { EquipmentItem } from '../models/equipments'
 
 export default function MainPage() {
-  const card = {
-    id: 0,
-    title: 'Title',
-    description: 'Description',
-    imgUrl: '#',
-    handleClick(e: React.MouseEvent, id: number) {},
-    handleBtnClick(e: React.MouseEvent, id: number) {},
-  }
+  const [equipmentList, setEquipmentList] = useState<null | EquipmentItem[]>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false)
 
-  const arr = []
+  useEffect(() => {
+    const fetchEquipmentList = async () => {
+      try {
+        setIsLoading(true)
+        setIsError(false)
+        const response = await fetch(BASE_URL + 'equipmentList?category=Микроскопы')
+        const json = await response.json()
+        setEquipmentList(json)
+        setIsLoading(false)
+      } catch (e) {
+        setIsError(true)
+      }
+    }
 
-  for (let i = 0; i < 5; i++) {
-    const newCard = Object.assign({}, card)
-    newCard.id = i
-    arr.push(newCard)
-  }
+    fetchEquipmentList()
+  }, [])
 
   return (
     <Container
@@ -30,21 +38,7 @@ export default function MainPage() {
         columnGap: '20px',
       }}
     >
-      {arr.map(el => {
-        const { id, title, description, imgUrl, handleBtnClick, handleClick } = el
-
-        return (
-          <EquipmentCard
-            key={id}
-            id={id}
-            title={title}
-            description={description}
-            imgUrl={imgUrl}
-            handleClick={handleClick}
-            handleBtnClick={handleBtnClick}
-          />
-        )
-      })}
+      <CardList list={equipmentList} isLoading={isLoading} isError={isError} />
     </Container>
   )
 }
