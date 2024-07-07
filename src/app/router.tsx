@@ -3,6 +3,7 @@ import { createBrowserRouter, Link } from 'react-router-dom'
 import Root from '../components/root'
 import FavouritesPage from '../pages/favourites-page'
 import MainPage from '../pages/main-page'
+import SignInPage from '../pages/sign-in-page'
 
 const router = createBrowserRouter([
   {
@@ -18,10 +19,10 @@ const router = createBrowserRouter([
         path: 'favourites',
         element: <FavouritesPage />,
       },
-      // {
-      //   path: 'equipment/:equipmentID',
-      //   element: <EquipmentPage />,
-      // },
+      {
+        path: 'signin',
+        element: <SignInPage />,
+      },
     ],
   },
 ])
