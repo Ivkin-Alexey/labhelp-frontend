@@ -6,7 +6,7 @@ import type { EquipmentID, EquipmentItem } from '../models/equipments'
 interface ICardList {
   isLoading: boolean
   isError: boolean
-  list: EquipmentItem[] | null
+  list: EquipmentItem[] | undefined
 }
 
 export default function CardList(props: ICardList) {

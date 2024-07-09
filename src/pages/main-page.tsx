@@ -1,32 +1,15 @@
-import { useState, useEffect } from 'react'
-
 import { Container } from '@mui/material'
 
-import { BASE_URL } from '../app/constants'
+import { defaultSearchPrompt } from '../app/constants'
 import CardList from '../components/equipment-card-list'
-import type { EquipmentItem } from '../models/equipments'
+import { useFetchEquipmentsByCategoryQuery } from '../store/equipments-api'
 
 export default function MainPage() {
-  const [equipmentList, setEquipmentList] = useState<null | EquipmentItem[]>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isError, setIsError] = useState<boolean>(false)
-
-  useEffect(() => {
-    const fetchEquipmentList = async () => {
-      try {
-        setIsLoading(true)
-        setIsError(false)
-        const response = await fetch(BASE_URL + 'equipmentList?category=Микроскопы')
-        const json = await response.json()
-        setEquipmentList(json)
-        setIsLoading(false)
-      } catch (e) {
-        setIsError(true)
-      }
-    }
-
-    fetchEquipmentList()
-  }, [])
+  const {
+    isFetching,
+    isError,
+    data: equipmentList,
+  } = useFetchEquipmentsByCategoryQuery(defaultSearchPrompt)
 
   return (
     <Container
@@ -38,7 +21,7 @@ export default function MainPage() {
         columnGap: '20px',
       }}
     >
-      <CardList list={equipmentList} isLoading={isLoading} isError={isError} />
+      <CardList list={equipmentList} isLoading={isFetching} isError={isError} />
     </Container>
   )
 }
