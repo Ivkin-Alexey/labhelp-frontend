@@ -4,9 +4,12 @@ import type { EquipmentItem } from '../models/equipments'
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentsByCategory: builder.query<EquipmentItem[], string>({
-      query: (category) => `/equipmentList?category=${category}`,
+      query: category => `/equipmentList?category=${category}`,
+    }),
+    fetchEquipmentByID: builder.query<EquipmentItem, string>({
+      query: equipmentID => `/equipmentList?equipmentID=${equipmentID}`,
     }),
   }),
 })
 
-export const { useFetchEquipmentsByCategoryQuery } = equipmentsApi
+export const { useFetchEquipmentsByCategoryQuery, useFetchEquipmentByIDQuery } = equipmentsApi
