@@ -10,7 +10,6 @@ interface ICardList {
 }
 
 export default function CardList(props: ICardList) {
-  function handleClick(e: React.MouseEvent, id: EquipmentID) {} //TODO: implement routing to the card page
   function handleBtnClick(e: React.MouseEvent, id: EquipmentID) {} //TODO: implement storage data in the favorites
 
   const { isError, isLoading, list } = props
@@ -40,7 +39,6 @@ export default function CardList(props: ICardList) {
               title={name}
               description={model}
               imgUrl={imgUrl}
-              handleClick={handleClick}
               handleBtnClick={handleBtnClick}
             />
           )
