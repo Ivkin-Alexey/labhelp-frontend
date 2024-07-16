@@ -1,15 +1,17 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    equipments: [],
+  equipmentList: [],
+  searchValue: null
 }
 
 export const equipmentsSlice = createSlice({
-    name: "equipments",
-    initialState,
-    reducers: {
-        setEquipmentList: (state, {payload: list}) => state.equipments = list,
-    }
+  name: 'equipments',
+  initialState,
+  reducers: {
+    setEquipmentList: (state, { payload: list }) => (state.equipmentList = list),
+    setSearchValue: (state, { payload: data }) => (state.searchValue = data),
+  },
 })
 
-export const {actions, reducer} = equipmentsSlice
+export const { setEquipmentList, setSearchValue } = equipmentsSlice.actions
