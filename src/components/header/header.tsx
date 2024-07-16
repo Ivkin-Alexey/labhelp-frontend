@@ -40,7 +40,7 @@ function Header() {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{marginBottom: "40px"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <HeaderLogo navigateToMainPage={navigateToMainPage} />
