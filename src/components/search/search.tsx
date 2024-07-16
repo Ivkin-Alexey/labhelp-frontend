@@ -1,6 +1,8 @@
+import type { SyntheticEvent } from 'react'
 import { useEffect, useState } from 'react'
 
-import { Button, Stack, TextField } from '@mui/material'
+import type { AutocompleteInputChangeReason } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import SearchInput from './search-input'
@@ -10,18 +12,18 @@ import type { EquipmentItem } from '../../models/equipments'
 
 interface ISearch {
   list?: EquipmentItem[] | undefined
+  isLoading: boolean
 }
 
 export function Search(props: ISearch) {
-
-const {list = []} = props
+  const { list = [], isLoading } = props
 
   const [searchParams] = useSearchParams()
   const term = searchParams.get('term')
 
-  const [value, setValue] = useState<string>(term ?? '')
+  const [inputValue, setInputValue] = useState<string>(term || "")
 
-  const debouncedValue = useDebounce(value, SEARCH_DELAY)
+  const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
 
   const navigate = useNavigate()
 
@@ -29,29 +31,59 @@ const {list = []} = props
     navigate('/search?term=' + term)
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    setValue(e.target.value)
+  function handleInputChange(
+    e: SyntheticEvent<Element, Event>,
+    inputValue: string,
+    reason: AutocompleteInputChangeReason,
+  ): void {
+    setInputValue(inputValue)
+  }
+
+  function handleSuggestChange(e: SyntheticEvent, value: EquipmentItem | null | string) {
+    // TODO: implement routing to equipment page
   }
 
   function handleClick() {
-    navigateHelper(value)
+    if(inputValue) {
+      navigateHelper(inputValue)
+    }
   }
+
+  useEffect(() => {
+    if (inputValue === "") {
+      navigate("/")
+    } 
+  }, [inputValue])
 
   useEffect(() => {
     if (debouncedValue) {
       navigateHelper(debouncedValue)
-    }
+    } 
   }, [debouncedValue])
+
+  useEffect(() => {
+    if (term) {
+      setInputValue(term)
+    }
+  }, [])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Enter') {
-      navigateHelper(value)
+      navigateHelper(inputValue)
     }
   }
 
   return (
     <Stack spacing={2} direction="row">
-      <SearchInput handleChange={handleChange} handleKeyDown={handleKeyDown} list={list}/>
+      <SearchInput
+        handleInputChange={handleInputChange}
+        handleChange={handleSuggestChange}
+        handleKeyDown={handleKeyDown}
+        list={list}
+        isLoading={isLoading}
+        inputValue={inputValue}
+        value={null}
+      />
       <Button onClick={handleClick} variant="outlined" sx={{ marginTop: '20px', height: '40px' }}>
         Искать
       </Button>
