@@ -1,7 +1,8 @@
 import { Container } from '@mui/material'
 
-import { defaultSearchPrompt } from '../app/constants'
+import { DEFAULT_SEARCH_TERM } from '../app/constants'
 import CardList from '../components/equipment-card-list'
+import { Search } from '../components/search/search'
 import { useFetchEquipmentsByCategoryQuery } from '../store/equipments-api'
 
 export default function MainPage() {
@@ -9,18 +10,11 @@ export default function MainPage() {
     isFetching,
     isError,
     data: equipmentList,
-  } = useFetchEquipmentsByCategoryQuery(defaultSearchPrompt)
+  } = useFetchEquipmentsByCategoryQuery(DEFAULT_SEARCH_TERM)
 
   return (
-    <Container
-      sx={{
-        margin: '0 auto',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        columnGap: '20px',
-      }}
-    >
+    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Search />
       <CardList list={equipmentList} isLoading={isFetching} isError={isError} />
     </Container>
   )

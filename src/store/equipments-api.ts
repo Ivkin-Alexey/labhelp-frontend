@@ -9,7 +9,11 @@ export const equipmentsApi = api.injectEndpoints({
     fetchEquipmentByID: builder.query<EquipmentItem, string>({
       query: equipmentID => `/equipmentList?equipmentID=${equipmentID}`,
     }),
+    fetchEquipmentsBySearchTerm: builder.query<EquipmentItem[], string>({
+      query: (searchTerm) => `/equipmentList?search=${searchTerm}`,
+    }),
   }),
 })
 
-export const { useFetchEquipmentsByCategoryQuery, useFetchEquipmentByIDQuery } = equipmentsApi
+export const { useFetchEquipmentsByCategoryQuery, useFetchEquipmentsBySearchTermQuery, useFetchEquipmentByIDQuery } = equipmentsApi
+

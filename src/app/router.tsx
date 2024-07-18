@@ -4,6 +4,7 @@ import Root from '../components/root'
 import EquipmentPage from '../pages/equipment-page'
 import FavouritesPage from '../pages/favourites-page'
 import MainPage from '../pages/main-page'
+import SearchPage from '../pages/search-page'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: 'favourites',
         element: <FavouritesPage />,
+      },
+      {
+        path: 'search',
+        element: <SearchPage />,
       },
     ],
   },
