@@ -1,4 +1,4 @@
-import { CircularProgress, Stack } from '@mui/material'
+import { CircularProgress, Stack, Typography } from '@mui/material'
 
 import { EquipmentCard } from './equipment-card'
 import type { EquipmentID, EquipmentItem } from '../models/equipments'
@@ -19,16 +19,31 @@ export default function CardList(props: ICardList) {
   }
 
   if (isError) {
-    return <h3>Произошла ошибка</h3>
+    return (
+      <Typography gutterBottom variant="body1" component="div" marginTop="40px">
+        Произошла ошибка
+      </Typography>
+    )
   }
 
   if (!list) {
-    return <h3>Данные отсутствуют</h3>
+    return (
+      <Typography gutterBottom variant="body1" component="div" marginTop="40px">
+        Оборудование не найдено
+      </Typography>
+    )
   }
 
   if (Array.isArray(list)) {
     return (
-      <Stack direction="row" spacing={4} useFlexGap flexWrap="wrap" justifyContent="center">
+      <Stack
+        direction="row"
+        spacing={4}
+        useFlexGap
+        flexWrap="wrap"
+        justifyContent="center"
+        marginBottom="40px"
+      >
         {list.map(el => {
           const { id, imgUrl, name, model } = el
 

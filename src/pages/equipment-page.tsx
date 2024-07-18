@@ -51,6 +51,9 @@ export default function EquipmentPage() {
             Модель: {model}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
+            Заводской №: {id}
+          </Typography>
+          <Typography variant="body1" color="text.secondary" marginBottom="10px">
             Описание: {toLowerCaseFirstChart(description)}
           </Typography>
           <Button

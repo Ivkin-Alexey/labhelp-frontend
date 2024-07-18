@@ -1,4 +1,4 @@
-import { Button, CardActionArea, CardActions } from '@mui/material'
+import { Box, Button, CardActionArea, CardActions } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -25,15 +25,27 @@ export function EquipmentCard(props: IEquipmentCard) {
   }
 
   return (
-    <Card sx={{ maxWidth: '200px', marginTop: '40px' }}>
-      <CardActionArea onClick={e => handleClick(e, id)}>
-        <CardMedia component="img" height="140" image={imgUrl} alt="Изображение карточки" />
+    <Card
+      sx={{
+        width: '10vw',
+        minWidth: '200px',
+        marginTop: '40px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+      }}
+    >
+      <CardActionArea onClick={e => handleClick(e, id)} sx={{ height: '25vh', minHeight: '330px' }}>
+        <CardMedia component="img" image={imgUrl} alt="Изображение карточки" sx={{ width: "70%", margin: "0 auto" }} />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="body1" component="div">
             {title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" marginBottom="5px">
             {description}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            № {id}
           </Typography>
         </CardContent>
       </CardActionArea>

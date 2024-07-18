@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 
 import Root from '../components/root'
 import EquipmentPage from '../pages/equipment-page'
