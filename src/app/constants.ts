@@ -1,4 +1,4 @@
-export const BASE_URL = "https://scmp-bot-server.ru/"
+export const BASE_URL = 'https://scmp-bot-server.ru/'
 
 export const DEFAULT_SEARCH_TERM = 'Микроскопы'
 

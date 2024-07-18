@@ -5,7 +5,7 @@ import type { Route } from '../../models/routes'
 
 interface IHeaderNavigation {
   handleCloseNavMenu: (path: string) => void
-  navigateToMainPage: () => void,
+  navigateToMainPage: () => void
   list: Route[]
 }
 

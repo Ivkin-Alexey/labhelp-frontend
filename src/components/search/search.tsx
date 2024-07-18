@@ -21,7 +21,7 @@ export function Search(props: ISearch) {
   const [searchParams] = useSearchParams()
   const term = searchParams.get('term')
 
-  const [inputValue, setInputValue] = useState<string>(term || "")
+  const [inputValue, setInputValue] = useState<string>(term || '')
 
   const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
 
@@ -44,21 +44,21 @@ export function Search(props: ISearch) {
   }
 
   function handleClick() {
-    if(inputValue) {
+    if (inputValue) {
       navigateHelper(inputValue)
     }
   }
 
   useEffect(() => {
-    if (inputValue === "") {
-      navigate("/")
-    } 
+    if (inputValue === '') {
+      navigate('/')
+    }
   }, [inputValue])
 
   useEffect(() => {
     if (debouncedValue) {
       navigateHelper(debouncedValue)
-    } 
+    }
   }, [debouncedValue])
 
   useEffect(() => {

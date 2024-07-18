@@ -5,7 +5,6 @@ interface IHeaderLogo {
 }
 
 export default function HeaderLogo(props: IHeaderLogo) {
-
   const { navigateToMainPage } = props
 
   return (

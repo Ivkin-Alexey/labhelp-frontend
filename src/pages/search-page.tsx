@@ -20,7 +20,7 @@ export default function MainPage() {
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Search list={suggestList} isLoading={isFetching}/>
+      <Search list={suggestList} isLoading={isFetching} />
       <Box
         sx={{
           display: 'flex',

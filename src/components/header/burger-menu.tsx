@@ -4,9 +4,9 @@ import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import type { Route } from '../../models/routes'
 
 interface IBurgerMenu {
-  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void,
+  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void
   handleCloseNavMenu: (path: string) => void
-  anchorElNav: null | HTMLElement,
+  anchorElNav: null | HTMLElement
   list: Route[]
 }
 

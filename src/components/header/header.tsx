@@ -11,7 +11,11 @@ import HeaderNavigation from './header-navigation'
 import UserMenu from './user-menu'
 
 const pages = [{ title: 'Избранное', path: '/favourites' }]
-const settings = [{ title: 'Войти', path: '/sigin' }, {title: 'Зарегистрироваться', path: '/sigup'}, {title: 'Выйти', path: '/'}, ]
+const settings = [
+  { title: 'Войти', path: '/sigin' },
+  { title: 'Зарегистрироваться', path: '/sigup' },
+  { title: 'Выйти', path: '/' },
+]
 
 function Header() {
   const navigate = useNavigate()
@@ -40,7 +44,7 @@ function Header() {
   }
 
   return (
-    <AppBar position="static" sx={{marginBottom: "40px"}}>
+    <AppBar position="static" sx={{ marginBottom: '40px' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <HeaderLogo navigateToMainPage={navigateToMainPage} />
@@ -50,7 +54,11 @@ function Header() {
             handleCloseNavMenu={handleCloseNavMenu}
             list={pages}
           />
-          <HeaderNavigation list={pages} handleCloseNavMenu={handleCloseNavMenu} navigateToMainPage={navigateToMainPage}/>
+          <HeaderNavigation
+            list={pages}
+            handleCloseNavMenu={handleCloseNavMenu}
+            navigateToMainPage={navigateToMainPage}
+          />
           <UserMenu
             handleOpenUserMenu={handleOpenUserMenu}
             anchorElUser={anchorElUser}
