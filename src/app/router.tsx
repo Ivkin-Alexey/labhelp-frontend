@@ -1,31 +1,57 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
+import { routes } from './constants'
+import { useAppSelector } from './hooks/hooks'
 import Root from '../components/root'
 import EquipmentPage from '../pages/equipment-page'
-import FavouritesPage from '../pages/favourites-page'
+import FavoritesPage from '../pages/favorites'
 import MainPage from '../pages/main-page'
 import SearchPage from '../pages/search-page'
+import SignInPage from '../pages/sign-in-page'
+import SignUpPage from '../pages/sign-up-page'
+
+interface IRequireAuth {
+  children: JSX.Element
+  redirectTo: string
+}
+
+function RequireAuth(props: IRequireAuth) {
+  const { isAuth } = useAppSelector(state => state.account)
+  return isAuth ? props.children : <Navigate to={props.redirectTo} />
+}
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: routes.main,
     element: <Root />,
-    // errorElement: <ErrorPage />,
+    // TODO: implement <ErrorPage />,
     children: [
       {
-        path: '/',
+        path: routes.main,
         element: <MainPage />,
       },
       {
-        path: '/:equipmentID',
+        path: routes.signIn,
+        element: <SignInPage />,
+      },
+      {
+        path: routes.signUp,
+        element: <SignUpPage />,
+      },
+      {
+        path: routes.equipment,
         element: <EquipmentPage />,
       },
       {
-        path: 'favourites',
-        element: <FavouritesPage />,
+        path: routes.favorites,
+        element: (
+          <RequireAuth redirectTo={routes.signIn}>
+            <FavoritesPage />
+          </RequireAuth>
+        ),
       },
       {
-        path: 'search',
+        path: routes.search,
         element: <SearchPage />,
       },
     ],

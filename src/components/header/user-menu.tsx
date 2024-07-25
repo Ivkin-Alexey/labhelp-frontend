@@ -1,6 +1,10 @@
 import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
+import { routes } from '../../app/constants'
+import { useAppDispatch } from '../../app/hooks/hooks'
 import type { Route } from '../../models/routes'
+import { logout } from '../../store/users-slice'
 
 interface IUserMenu {
   handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void
@@ -11,6 +15,16 @@ interface IUserMenu {
 
 export default function UserMenu(props: IUserMenu): React.ReactElement {
   const { handleOpenUserMenu, anchorElUser, handleCloseUserMenu, list } = props
+
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+
+  function handleClick(path: string): void {
+    navigate(path)
+    if (path === routes.main) {
+      dispatch(logout())
+    }
+  }
 
   return (
     <Box sx={{ flexGrow: 0 }}>
@@ -36,7 +50,7 @@ export default function UserMenu(props: IUserMenu): React.ReactElement {
         onClose={handleCloseUserMenu}
       >
         {list.map(setting => (
-          <MenuItem key={setting.title} onClick={handleCloseUserMenu}>
+          <MenuItem key={setting.title} onClick={() => handleClick(setting.path)}>
             <Typography textAlign="center">{setting.title}</Typography>
           </MenuItem>
         ))}
