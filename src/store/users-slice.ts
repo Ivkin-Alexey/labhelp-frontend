@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 interface AccountState {
   isAuth: boolean
 }
 
 const initialState: AccountState = {
-  isAuth: JSON.parse(localStorage.getItem('isAuth') || 'false'),
+  isAuth: false,
 }
 
 export const accountSlice = createSlice({
@@ -13,11 +13,9 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     logout: state => {
-      localStorage.setItem('isAuth', 'false')
       return { ...state, isAuth: false }
     },
     login: state => {
-      localStorage.setItem('isAuth', 'true')
       return { ...state, isAuth: true }
     },
   },

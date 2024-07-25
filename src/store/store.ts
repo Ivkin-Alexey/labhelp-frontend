@@ -2,7 +2,9 @@ import type { Action, Reducer, ThunkAction } from '@reduxjs/toolkit'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import { api } from './api'
+import { authMiddleware } from './auth-middleware'
 import { equipmentSlice } from './equipments-slice'
+import { preloadedState } from './preloaded-state'
 import { accountSlice } from './users-slice'
 
 const rootReducer: Reducer = combineReducers({
@@ -14,9 +16,10 @@ export type RootState = ReturnType<typeof store.getState>
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(api.middleware),
+  preloadedState,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(api.middleware).concat(authMiddleware),
 })
-
 
 export type AppStore = typeof store
 
