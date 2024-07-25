@@ -4,7 +4,7 @@ const initialState = {
   equipmentList: [],
 }
 
-export const equipmentsSlice = createSlice({
+export const equipmentSlice = createSlice({
   name: 'equipments',
   initialState,
   reducers: {
@@ -12,4 +12,6 @@ export const equipmentsSlice = createSlice({
   },
 })
 
-export const { setEquipmentList } = equipmentsSlice.actions
+export const { setEquipmentList } = equipmentSlice.actions
+
+export default equipmentSlice.reducer

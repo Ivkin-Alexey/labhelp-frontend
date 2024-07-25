@@ -1,3 +1,5 @@
+import type { Dispatch, SetStateAction } from 'react'
+
 import { Typography, Box, Button } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 
@@ -7,10 +9,11 @@ interface IHeaderNavigation {
   handleCloseNavMenu: (path: string) => void
   navigateToMainPage: () => void
   list: Route[]
+  isAuth: boolean
 }
 
 export default function HeaderNavigation(props: IHeaderNavigation) {
-  const { handleCloseNavMenu, navigateToMainPage, list } = props
+  const { handleCloseNavMenu, navigateToMainPage, list, isAuth } = props
   const location = useLocation()
 
   return (
@@ -35,23 +38,24 @@ export default function HeaderNavigation(props: IHeaderNavigation) {
         LOGO
       </Typography>
       <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        {list.map(page => (
-          <Button
-            key={page.title}
-            onClick={() => handleCloseNavMenu(page.path)}
-            sx={{
-              my: 2,
-              color: 'white',
-              display: 'block',
-              backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
-              '&:hover': {
+        {isAuth &&
+          list.map(page => (
+            <Button
+              key={page.title}
+              onClick={() => handleCloseNavMenu(page.path)}
+              sx={{
+                my: 2,
+                color: 'white',
+                display: 'block',
                 backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
-              },
-            }}
-          >
-            {page.title}
-          </Button>
-        ))}
+                '&:hover': {
+                  backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
+                },
+              }}
+            >
+              {page.title}
+            </Button>
+          ))}
       </Box>
     </>
   )
