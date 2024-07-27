@@ -8,4 +8,5 @@ export interface EquipmentItem {
   brand: string
   model: string
   imgUrl: string
+  isFavorite?: boolean
 }

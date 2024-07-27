@@ -10,6 +10,8 @@ export const api = createApi({
     }),
     { maxRetries: 3 },
   ),
+  tagTypes: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
+
   refetchOnFocus: true,
   endpoints: () => ({}),
 })

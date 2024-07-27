@@ -1,10 +1,11 @@
-import { Box, Button, CardActionArea, CardActions } from '@mui/material'
+import { CardActionArea, CardActions } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
+import FavoriteButtons from './favorite-buttons'
 import type { EquipmentID } from '../models/equipments'
 
 interface IEquipmentCard {
@@ -12,11 +13,11 @@ interface IEquipmentCard {
   title: string
   description: string
   imgUrl: string
-  handleBtnClick: (e: React.MouseEvent, id: EquipmentID) => void
+  isFavorite?: boolean
 }
 
 export function EquipmentCard(props: IEquipmentCard) {
-  const { id, title, description, imgUrl, handleBtnClick } = props
+  const { id, title, description, imgUrl, isFavorite } = props
 
   const navigate = useNavigate()
 
@@ -36,7 +37,12 @@ export function EquipmentCard(props: IEquipmentCard) {
       }}
     >
       <CardActionArea onClick={e => handleClick(e, id)} sx={{ height: '25vh', minHeight: '330px' }}>
-        <CardMedia component="img" image={imgUrl} alt="Изображение карточки" sx={{ width: "70%", margin: "0 auto" }} />
+        <CardMedia
+          component="img"
+          image={imgUrl}
+          alt="Изображение карточки"
+          sx={{ width: '70%', margin: '0 auto' }}
+        />
         <CardContent>
           <Typography gutterBottom variant="body1" component="div">
             {title}
@@ -50,9 +56,7 @@ export function EquipmentCard(props: IEquipmentCard) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" onClick={e => handleBtnClick(e, id)}>
-          В избранное
-        </Button>
+        <FavoriteButtons equipmentID={id} isFavorite={isFavorite} />
       </CardActions>
     </Card>
   )

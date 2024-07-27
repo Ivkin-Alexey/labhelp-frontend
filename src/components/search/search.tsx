@@ -12,11 +12,11 @@ import type { EquipmentItem } from '../../models/equipments'
 
 interface ISearch {
   list?: EquipmentItem[] | undefined
-  isLoading: boolean
+  isLoading?: boolean
 }
 
 export function Search(props: ISearch) {
-  const { list = [], isLoading } = props
+  const { list = [], isLoading = false} = props
 
   const [searchParams] = useSearchParams()
   const term = searchParams.get('term')

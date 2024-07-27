@@ -1,20 +1,16 @@
 import { Container } from '@mui/material'
 
-import { DEFAULT_SEARCH_TERM } from '../app/constants'
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/equipment-card-list'
-import { Search } from '../components/search/search'
-import { useFetchEquipmentsBySearchTermQuery } from '../store/equipments-api'
+import { useFetchFavoriteEquipmentsQuery } from '../store/equipments-api'
 
-export default function MainPage() {
+export default function FavoritesPage() {
   const { login } = useAppSelector(state => state.account)
-  const arg = { login, searchTerm: DEFAULT_SEARCH_TERM }
 
-  const { isFetching, isError, data: equipmentList } = useFetchEquipmentsBySearchTermQuery(arg)
+  const { isFetching, isError, data: equipmentList } = useFetchFavoriteEquipmentsQuery(login)
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Search />
       <CardList list={equipmentList} isLoading={isFetching} isError={isError} />
     </Container>
   )

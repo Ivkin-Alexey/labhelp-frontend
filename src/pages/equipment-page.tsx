@@ -1,8 +1,9 @@
-import { Box, Button, CircularProgress, Container, Typography } from '@mui/material'
+import { Box, CircularProgress, Container, Typography } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 
+import { useAppSelector } from '../app/hooks/hooks'
 import { toLowerCaseFirstChart } from '../app/utils/utils'
-import type { EquipmentID } from '../models/equipments'
+import FavoriteButtons from '../components/favorite-buttons'
 import { useFetchEquipmentByIDQuery } from '../store/equipments-api'
 
 export default function EquipmentPage() {
@@ -10,9 +11,9 @@ export default function EquipmentPage() {
 
   const equipmentID = location.pathname.slice(1)
 
-  const { isFetching, isError, data } = useFetchEquipmentByIDQuery(equipmentID)
+  const { login } = useAppSelector(state => state.account)
 
-  function handleBtnClick(e: React.MouseEvent, id: EquipmentID) {}
+  const { isFetching, isError, data } = useFetchEquipmentByIDQuery({ login, equipmentID })
 
   if (isFetching) {
     return <CircularProgress size="60px" />
@@ -23,7 +24,7 @@ export default function EquipmentPage() {
   }
 
   if (data) {
-    const { id, brand, name, model, imgUrl, description } = data
+    const { id, brand, name, model, imgUrl, description, isFavorite } = data
 
     return (
       <Container
@@ -56,15 +57,7 @@ export default function EquipmentPage() {
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
             Описание: {toLowerCaseFirstChart(description)}
           </Typography>
-          <Button
-            size="small"
-            variant="outlined"
-            color="primary"
-            onClick={e => handleBtnClick(e, id)}
-            sx={{ marginTop: '10px' }}
-          >
-            В избранное
-          </Button>
+          <FavoriteButtons equipmentID={id} isFavorite={isFavorite} />
         </Box>
       </Container>
     )

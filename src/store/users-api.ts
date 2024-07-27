@@ -9,13 +9,15 @@ export const usersApi = api.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
+      invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList'],
     }),
     signUp: builder.mutation<string, UserCredentials>({
-        query: credentials => ({
-            url: "/createNewPerson",
-            method: 'POST',
-            body: credentials,
-          }),
+      query: credentials => ({
+        url: "/createNewPerson",
+        method: 'POST',
+        body: credentials,
+      }),
+      invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList'],
     }),
   }),
 })
