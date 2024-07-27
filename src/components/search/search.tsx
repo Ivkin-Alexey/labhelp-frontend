@@ -49,8 +49,10 @@ export function Search(props: ISearch) {
     setInputValue(inputValue)
   }
 
-  function handleSuggestChange(e: SyntheticEvent, value: EquipmentItem | null | string) {
-    // TODO: implement routing to equipment page
+  function handleSuggestChange(_e: SyntheticEvent, value: EquipmentItem | null | string) {
+    if (value && typeof value === "object") {
+      navigate('/' + value.id)
+    }
   }
 
   function handleClick() {
