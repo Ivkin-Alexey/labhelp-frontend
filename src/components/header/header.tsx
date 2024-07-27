@@ -11,6 +11,7 @@ import HeaderNavigation from './header-navigation'
 import UserMenu from './user-menu'
 import { routes } from '../../app/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
+import { selectAccount } from '../../store/selectors'
 
 const pages = [
   { title: 'Избранное', path: routes.favorites },
@@ -25,7 +26,7 @@ const settings = [
 
 function Header() {
   const navigate = useNavigate()
-  const { isAuth } = useAppSelector(state => state.account)
+  const { isAuth } = useAppSelector(selectAccount)
 
   const location = useLocation()
 
@@ -63,7 +64,7 @@ function Header() {
     if (path === routes.signUp) {
       return [settings[0]]
     }
-    return settings.slice(0,2)
+    return settings.slice(0, 2)
   }
 
   return (

@@ -10,6 +10,7 @@ import MainPage from '../pages/main-page'
 import SearchPage from '../pages/search-page'
 import SignInPage from '../pages/sign-in-page'
 import SignUpPage from '../pages/sign-up-page'
+import { selectAccount } from '../store/selectors'
 
 interface IRequireAuth {
   children: JSX.Element
@@ -17,7 +18,7 @@ interface IRequireAuth {
 }
 
 function RequireAuth(props: IRequireAuth) {
-  const { isAuth } = useAppSelector(state => state.account)
+  const { isAuth } = useAppSelector(selectAccount)
   return isAuth ? props.children : <Navigate to={props.redirectTo} />
 }
 

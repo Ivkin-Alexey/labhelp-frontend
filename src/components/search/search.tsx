@@ -11,6 +11,7 @@ import { useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
 import type { EquipmentItem } from '../../models/equipments'
 import { useAddTermToHistoryMutation } from '../../store/equipments-api'
+import { selectAccount } from '../../store/selectors'
 
 interface ISearch {
   list?: EquipmentItem[] | undefined
@@ -25,7 +26,7 @@ export function Search(props: ISearch) {
 
   const [inputValue, setInputValue] = useState<string>(term || '')
 
-  const { isAuth, login } = useAppSelector(state => state.account)
+  const { isAuth, login } = useAppSelector(selectAccount)
 
   const [add] = useAddTermToHistoryMutation()
 
@@ -36,7 +37,7 @@ export function Search(props: ISearch) {
   function navigateHelper(term: string) {
     navigate('/search?term=' + term)
     if (isAuth) {
-      add({login, term})
+      add({ login, term })
     }
   }
 

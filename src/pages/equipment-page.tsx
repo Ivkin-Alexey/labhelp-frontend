@@ -5,13 +5,14 @@ import { useAppSelector } from '../app/hooks/hooks'
 import { toLowerCaseFirstChart } from '../app/utils/utils'
 import FavoriteButtons from '../components/favorite-buttons'
 import { useFetchEquipmentByIDQuery } from '../store/equipments-api'
+import { selectAccount } from '../store/selectors'
 
 export default function EquipmentPage() {
   const location = useLocation()
 
   const equipmentID = location.pathname.slice(1)
 
-  const { login } = useAppSelector(state => state.account)
+  const { login } = useAppSelector(selectAccount)
 
   const { isFetching, isError, data } = useFetchEquipmentByIDQuery({ login, equipmentID })
 
