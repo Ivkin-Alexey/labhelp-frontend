@@ -19,7 +19,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
 
   const [add] = useAddFavoriteEquipmentMutation()
   const [remove] = useDeleteFavoriteEquipmentMutation()
-  const { isAuth, login } = useAppSelector(state => state.account)
+  const { isAuth, login } = useAppSelector(state => state.account) // TODO: заменить на функцию-селектор, чтобы сделать инкапсуляцию структуры стейта по требованиям
   const navigate = useNavigate()
 
   return isFavorite ? (
