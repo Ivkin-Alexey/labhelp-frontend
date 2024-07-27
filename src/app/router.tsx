@@ -5,6 +5,7 @@ import { useAppSelector } from './hooks/hooks'
 import Root from '../components/root'
 import EquipmentPage from '../pages/equipment-page'
 import FavoritesPage from '../pages/favorites-page'
+import HistoryPage from '../pages/history-page'
 import MainPage from '../pages/main-page'
 import SearchPage from '../pages/search-page'
 import SignInPage from '../pages/sign-in-page'
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
         element: <EquipmentPage />,
       },
       {
+        path: routes.search,
+        element: <SearchPage />,
+      },
+      {
         path: routes.favorites,
         element: (
           <RequireAuth redirectTo={routes.signIn}>
@@ -51,8 +56,12 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: routes.search,
-        element: <SearchPage />,
+        path: routes.history,
+        element: (
+          <RequireAuth redirectTo={routes.signIn}>
+            <HistoryPage />
+          </RequireAuth>
+        ),
       },
     ],
   },

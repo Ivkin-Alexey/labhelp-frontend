@@ -73,6 +73,28 @@ export const equipmentsApi = api.injectEndpoints({
       }),
       invalidatesTags: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
     }),
+    fetchSearchHistory: builder.query<string,  string>({
+      query: login => ({
+        url: `/equipmentSearchHistory?login=${login}`,
+      }),
+      providesTags: ['HistoryList'],
+    }),
+    addTermToHistory: builder.mutation<string, { login: string; term: string }>({
+      query: data => ({
+        url: '/equipmentSearchHistory?add=true',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['HistoryList'],
+    }),
+    deleteTermFromHistory: builder.mutation<string, { login: string; term: string }>({
+      query: data => ({
+        url: '/equipmentSearchHistory?remove=true',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['HistoryList'],
+    }),
   }),
 })
 
@@ -82,4 +104,7 @@ export const {
   useFetchEquipmentByIDQuery,
   useAddFavoriteEquipmentMutation,
   useDeleteFavoriteEquipmentMutation,
+  useAddTermToHistoryMutation,
+  useDeleteTermFromHistoryMutation,
+  useFetchSearchHistoryQuery
 } = equipmentsApi

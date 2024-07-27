@@ -7,8 +7,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import SearchInput from './search-input'
 import { SEARCH_DELAY } from '../../app/constants'
+import { useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
 import type { EquipmentItem } from '../../models/equipments'
+import { useAddTermToHistoryMutation } from '../../store/equipments-api'
 
 interface ISearch {
   list?: EquipmentItem[] | undefined
@@ -16,12 +18,16 @@ interface ISearch {
 }
 
 export function Search(props: ISearch) {
-  const { list = [], isLoading = false} = props
+  const { list = [], isLoading = false } = props
 
   const [searchParams] = useSearchParams()
   const term = searchParams.get('term')
 
   const [inputValue, setInputValue] = useState<string>(term || '')
+
+  const { isAuth, login } = useAppSelector(state => state.account)
+
+  const [add] = useAddTermToHistoryMutation()
 
   const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
 
@@ -29,6 +35,9 @@ export function Search(props: ISearch) {
 
   function navigateHelper(term: string) {
     navigate('/search?term=' + term)
+    if (isAuth) {
+      add({login, term})
+    }
   }
 
   function handleInputChange(
