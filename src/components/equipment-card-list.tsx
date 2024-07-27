@@ -1,7 +1,7 @@
 import { CircularProgress, Stack, Typography } from '@mui/material'
 
 import { EquipmentCard } from './equipment-card'
-import type { EquipmentID, EquipmentItem } from '../models/equipments'
+import type { EquipmentItem } from '../models/equipments'
 
 interface ICardList {
   isLoading: boolean
@@ -10,7 +10,6 @@ interface ICardList {
 }
 
 export default function CardList(props: ICardList) {
-  function handleBtnClick(e: React.MouseEvent, id: EquipmentID) {} //TODO: implement storage data in the favorites
 
   const { isError, isLoading, list } = props
 
@@ -26,7 +25,7 @@ export default function CardList(props: ICardList) {
     )
   }
 
-  if (!list) {
+  if (list?.length === 0) {
     return (
       <Typography gutterBottom variant="body1" component="div" marginTop="40px">
         Оборудование не найдено
@@ -45,7 +44,7 @@ export default function CardList(props: ICardList) {
         marginBottom="40px"
       >
         {list.map(el => {
-          const { id, imgUrl, name, model } = el
+          const { id, imgUrl, name, model, isFavorite } = el
 
           return (
             <EquipmentCard
@@ -54,7 +53,7 @@ export default function CardList(props: ICardList) {
               title={name}
               description={model}
               imgUrl={imgUrl}
-              handleBtnClick={handleBtnClick}
+              isFavorite={isFavorite}
             />
           )
         })}

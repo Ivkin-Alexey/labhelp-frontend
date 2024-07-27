@@ -10,6 +10,7 @@ interface MyAction {
 export const authMiddleware: Middleware<{}, State, Dispatch<MyAction>> =
   store => next => action => {
     const result = next(action)
-      localStorage.setItem('isAuth', JSON.stringify(store.getState().account.isAuth))
+    localStorage.setItem('isAuth', JSON.stringify(store.getState().account.isAuth))
+    localStorage.setItem('login', JSON.stringify(store.getState().account.login))
     return result
   }
