@@ -61,19 +61,10 @@ export default function SignForm(props: ISignForm) {
               id="password"
               autoComplete="current-password"
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Запомнить меня"
-            /> */}
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               {title}
             </Button>
             <Grid container>
-              {/* <Grid item xs> // TODO: implement password recovery
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
               {isSignIn && <SignUpLink />}
             </Grid>
           </Box>
