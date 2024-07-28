@@ -13,16 +13,16 @@
 
 **React**
 
-- [x]  **Пишем функциональные компоненты c хуками**
+- [x]  **Использованы функциональные компоненты c хуками**
 - [x]  Есть разделение на **умные и глупые компоненты**
 - [x]  Есть **рендеринг списков** (equipment-card-list, history-list)
 - [x]  Реализована одна **форма** (компонент SignForm)
 - [x]  Есть применение **Контекст API**
-- [x]  Есть применение **предохранителя** (https://ru.reactjs.org/docs/error-boundaries.html). Можно и свой написать, можно и пакет [react-error-boundary](https://www.npmjs.com/package/react-error-boundary) заюзать. Главное, чтобы вы понимали что это и зачем.
-- [x]  Есть **кастомный хук** ()
+- [x]  Есть применение **предохранителя**
+- [x]  Есть **кастомный хук**
 - [x]  3 компонента используют **PropTypes** (equipment-card-list, equipment-card, history-list)
 - [x]  Поиск не триггерит много запросов к серверу (**debounce**)
-- [x]  Есть применение **lazy + Suspense** (https://ru.reactjs.org/docs/code-splitting.html#route-based-code-splitting)
+- [x]  Есть применение **lazy + Suspense**
 
 **Redux**
 
