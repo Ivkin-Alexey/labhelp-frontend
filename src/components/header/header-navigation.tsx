@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { startTransition, Suspense } from 'react'
 
 import { Typography, Box } from '@mui/material'
 
@@ -39,7 +39,9 @@ export default function HeaderNavigation(props: IHeaderNavigation) {
       </Typography>
 
       <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        {isAuth && <NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu} />}
+        <Suspense fallback={<div>Загружается...</div>}>
+          {isAuth && <NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu} />}
+        </Suspense>
       </Box>
     </>
   )
