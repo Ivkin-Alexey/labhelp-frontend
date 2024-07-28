@@ -13,7 +13,6 @@
 
 **React**
 
-<<<<<<< HEAD
 - [x] **Использованы функциональные компоненты c хуками**
 - [x] Есть разделение на **умные и глупые компоненты**
 - [x] Есть **рендеринг списков** (equipment-card-list, history-list)
@@ -24,7 +23,6 @@
 - [x] 3 компонента используют **PropTypes** (equipment-card-list, equipment-card, history-list)
 - [x] Поиск не триггерит много запросов к серверу (**debounce**)
 - [x] Есть применение **lazy + Suspense**
-=======
 - [x]  **Использованы функциональные компоненты c хуками**
 - [x]  Есть разделение на **умные и глупые компоненты**
 - [x]  Есть **рендеринг списков** (equipment-card-list, history-list)
@@ -35,7 +33,6 @@
 - [x]  3 компонента используют **PropTypes** (equipment-card-list, equipment-card, history-list)
 - [x]  Поиск не триггерит много запросов к серверу (**debounce**)
 - [x]  Есть применение **lazy + Suspense** (nav-buttons)
->>>>>>> a2a86784ca644ac23d64311847fc0bb258457c5c
 
 **Redux**
 
