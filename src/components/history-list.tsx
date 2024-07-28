@@ -1,5 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete'
 import { IconButton, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material'
+import PropTypes from 'prop-types'
+
 interface IHistoryList {
   list: string[]
   handleDelete(value: string): void
@@ -12,7 +14,7 @@ export default function HistoryList(props: IHistoryList) {
   return (
     <>
       <Typography gutterBottom variant="body1" component="div">
-        История поиска: 
+        История поиска:
       </Typography>
       <List sx={{ width: '100%', maxWidth: 600, bgcolor: 'background.paper' }}>
         {list.map(value => {
@@ -35,4 +37,10 @@ export default function HistoryList(props: IHistoryList) {
       </List>
     </>
   )
+}
+
+HistoryList.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.string.isRequired),
+  handleDelete: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired
 }

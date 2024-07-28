@@ -3,6 +3,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
+import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 
 import FavoriteButtons from './favorite-buttons'
@@ -60,4 +61,12 @@ export function EquipmentCard(props: IEquipmentCard) {
       </CardActions>
     </Card>
   )
+}
+
+EquipmentCard.propTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  imgUrl: PropTypes.string.isRequired,
+  isFavorite: PropTypes.bool,
 }

@@ -8,7 +8,7 @@ import { Search } from '../components/search/search'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/equipments-api'
 import { selectAccount } from '../store/selectors'
 
-export default function MainPage() {
+export default function SearchPage() {
   const [searchParams] = useSearchParams()
   const term = searchParams.get('term')
 
