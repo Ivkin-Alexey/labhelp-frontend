@@ -1,4 +1,5 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import { CircularProgress } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -17,10 +18,11 @@ interface ISignForm {
   handleSubmit(event: React.FormEvent<HTMLFormElement>): void
   title: string
   isSignIn?: boolean
+  isLoading: boolean
 }
 
 export default function SignForm(props: ISignForm) {
-  const { title, handleSubmit, isSignIn } = props
+  const { title, handleSubmit, isSignIn, isLoading } = props
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -34,9 +36,13 @@ export default function SignForm(props: ISignForm) {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          {isLoading ? (
+            <CircularProgress sx={{ m: 1 }} />
+          ) : (
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+          )}
           <Typography component="h1" variant="h5">
             {title}
           </Typography>
@@ -64,9 +70,7 @@ export default function SignForm(props: ISignForm) {
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               {title}
             </Button>
-            <Grid container>
-              {isSignIn && <SignUpLink />}
-            </Grid>
+            <Grid container>{isSignIn && <SignUpLink />}</Grid>
           </Box>
         </Box>
       </Container>

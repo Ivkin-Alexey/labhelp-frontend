@@ -1,6 +1,7 @@
 import type * as React from 'react'
 import { useEffect, useState } from 'react'
 
+import { useErrorBoundary } from 'react-error-boundary'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '../app/constants'
@@ -10,7 +11,8 @@ import { useSignInMutation } from '../store/users-api'
 import { login as loginAction } from '../store/users-slice'
 
 export default function SignInPage() {
-  const [signIn, { isError, isLoading, isSuccess }] = useSignInMutation()
+  const [signIn, { isError, isLoading, isSuccess, error }] = useSignInMutation()
+  const { showBoundary } = useErrorBoundary()
 
   const [savedLogin, setSavedLogin] = useState<FormDataEntryValue | null>(null)
 
@@ -38,12 +40,12 @@ export default function SignInPage() {
   }, [isSuccess])
 
   if (isError) {
-    // TODO: implement errors handling
+    showBoundary(error)
   }
 
   if (isLoading) {
     // TODO: implement loading animation
   }
 
-  return <SignForm handleSubmit={handleSubmit} title="Войти" isSignIn={true} />
+  return <SignForm handleSubmit={handleSubmit} isLoading={isLoading}  title="Войти" isSignIn={true} />
 }
