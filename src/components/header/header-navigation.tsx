@@ -1,5 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react'
-
 import { Typography, Box, Button } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 

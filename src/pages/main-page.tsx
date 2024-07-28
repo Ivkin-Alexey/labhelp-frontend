@@ -14,7 +14,13 @@ export default function MainPage() {
   const { isFetching, isError, data: equipmentList } = useFetchEquipmentsBySearchTermQuery(arg)
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <Search />
       <CardList list={equipmentList} isLoading={isFetching} isError={isError} />
     </Container>

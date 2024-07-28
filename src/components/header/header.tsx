@@ -1,5 +1,7 @@
 import * as React from 'react'
+import { useContext } from 'react'
 
+import { FormControlLabel, Switch } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
@@ -12,6 +14,7 @@ import UserMenu from './user-menu'
 import { routes } from '../../app/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import { selectAccount } from '../../store/selectors'
+import { ThemeContext } from '../root'
 
 const pages = [
   { title: 'Избранное', path: routes.favorites },
@@ -29,6 +32,8 @@ function Header() {
   const { isAuth } = useAppSelector(selectAccount)
 
   const location = useLocation()
+  
+  const { toggle } = useContext(ThemeContext)
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
@@ -68,33 +73,39 @@ function Header() {
   }
 
   return (
-    <AppBar position="static" sx={{ marginBottom: '40px' }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <HeaderLogo navigateToMainPage={navigateToMainPage} />
-          {isAuth && (
-            <BurgerMenu
-              handleOpenNavMenu={handleOpenNavMenu}
-              anchorElNav={anchorElNav}
-              handleCloseNavMenu={handleCloseNavMenu}
+
+      <AppBar position="static" sx={{ marginBottom: '40px' }}>
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <HeaderLogo navigateToMainPage={navigateToMainPage} />
+            {isAuth && (
+              <BurgerMenu
+                handleOpenNavMenu={handleOpenNavMenu}
+                anchorElNav={anchorElNav}
+                handleCloseNavMenu={handleCloseNavMenu}
+                list={pages}
+              />
+            )}
+            <HeaderNavigation
               list={pages}
+              isAuth={isAuth}
+              handleCloseNavMenu={handleCloseNavMenu}
+              navigateToMainPage={navigateToMainPage}
             />
-          )}
-          <HeaderNavigation
-            list={pages}
-            isAuth={isAuth}
-            handleCloseNavMenu={handleCloseNavMenu}
-            navigateToMainPage={navigateToMainPage}
-          />
-          <UserMenu
-            handleOpenUserMenu={handleOpenUserMenu}
-            anchorElUser={anchorElUser}
-            handleCloseUserMenu={handleCloseUserMenu}
-            list={getUserMenuList()}
-          />
-        </Toolbar>
-      </Container>
-    </AppBar>
+            <FormControlLabel
+              control={<Switch color="default" onChange={toggle} />}
+              label="Сменить тему"
+            />
+            <UserMenu
+              handleOpenUserMenu={handleOpenUserMenu}
+              anchorElUser={anchorElUser}
+              handleCloseUserMenu={handleCloseUserMenu}
+              list={getUserMenuList()}
+            />
+          </Toolbar>
+        </Container>
+      </AppBar>
   )
 }
+
 export default Header

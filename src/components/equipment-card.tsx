@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+
 import { CardActionArea, CardActions } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -7,6 +9,7 @@ import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 
 import FavoriteButtons from './favorite-buttons'
+import { ThemeContext } from './root'
 import type { EquipmentID } from '../models/equipments'
 
 interface IEquipmentCard {
@@ -26,6 +29,8 @@ export function EquipmentCard(props: IEquipmentCard) {
     navigate('/' + id)
   }
 
+  const { color } = useContext(ThemeContext)
+
   return (
     <Card
       sx={{
@@ -35,6 +40,7 @@ export function EquipmentCard(props: IEquipmentCard) {
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'column',
+        backgroundColor: color,
       }}
     >
       <CardActionArea onClick={e => handleClick(e, id)} sx={{ height: '25vh', minHeight: '330px' }}>
