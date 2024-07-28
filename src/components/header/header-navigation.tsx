@@ -1,5 +1,6 @@
-import { Typography, Box, Button } from '@mui/material'
-import { useLocation } from 'react-router-dom'
+import React from 'react'
+
+import { Typography, Box } from '@mui/material'
 
 import type { Route } from '../../models/routes'
 
@@ -12,7 +13,8 @@ interface IHeaderNavigation {
 
 export default function HeaderNavigation(props: IHeaderNavigation) {
   const { handleCloseNavMenu, navigateToMainPage, list, isAuth } = props
-  const location = useLocation()
+
+  const NavButtons = React.lazy(() => import('./nav-buttons-list'))
 
   return (
     <>
@@ -35,25 +37,9 @@ export default function HeaderNavigation(props: IHeaderNavigation) {
       >
         LOGO
       </Typography>
+
       <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        {isAuth &&
-          list.map(page => (
-            <Button
-              key={page.title}
-              onClick={() => handleCloseNavMenu(page.path)}
-              sx={{
-                my: 2,
-                color: 'white',
-                display: 'block',
-                backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
-                '&:hover': {
-                  backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
-                },
-              }}
-            >
-              {page.title}
-            </Button>
-          ))}
+        {isAuth && <NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu} />}
       </Box>
     </>
   )
