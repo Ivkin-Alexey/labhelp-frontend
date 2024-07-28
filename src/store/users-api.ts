@@ -5,7 +5,7 @@ export const usersApi = api.injectEndpoints({
   endpoints: builder => ({
     signIn: builder.mutation<string, UserCredentials>({
       query: credentials => ({
-        url: "/login",
+        url: '/login',
         method: 'POST',
         body: credentials,
       }),
@@ -13,7 +13,7 @@ export const usersApi = api.injectEndpoints({
     }),
     signUp: builder.mutation<string, UserCredentials>({
       query: credentials => ({
-        url: "/createNewPerson",
+        url: '/createNewPerson',
         method: 'POST',
         body: credentials,
       }),

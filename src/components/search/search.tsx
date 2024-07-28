@@ -50,7 +50,7 @@ export function Search(props: ISearch) {
   }
 
   function handleSuggestChange(_e: SyntheticEvent, value: EquipmentItem | null | string) {
-    if (value && typeof value === "object") {
+    if (value && typeof value === 'object') {
       navigate('/' + value.id)
     }
   }

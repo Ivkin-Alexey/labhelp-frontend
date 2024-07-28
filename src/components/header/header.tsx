@@ -32,7 +32,7 @@ function Header() {
   const { isAuth } = useAppSelector(selectAccount)
 
   const location = useLocation()
-  
+
   const { color, toggle } = useContext(ThemeContext)
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
@@ -73,38 +73,37 @@ function Header() {
   }
 
   return (
-
-      <AppBar position="static" sx={{ marginBottom: '40px' }}>
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <HeaderLogo navigateToMainPage={navigateToMainPage} />
-            {isAuth && (
-              <BurgerMenu
-                handleOpenNavMenu={handleOpenNavMenu}
-                anchorElNav={anchorElNav}
-                handleCloseNavMenu={handleCloseNavMenu}
-                list={pages}
-              />
-            )}
-            <HeaderNavigation
-              list={pages}
-              isAuth={isAuth}
+    <AppBar position="static" sx={{ marginBottom: '40px' }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <HeaderLogo navigateToMainPage={navigateToMainPage} />
+          {isAuth && (
+            <BurgerMenu
+              handleOpenNavMenu={handleOpenNavMenu}
+              anchorElNav={anchorElNav}
               handleCloseNavMenu={handleCloseNavMenu}
-              navigateToMainPage={navigateToMainPage}
+              list={pages}
             />
-            <FormControlLabel
-            control={<Switch color="default" checked={color !== "white"} onChange={toggle} />}
-              label="Сменить тему"
-            />
-            <UserMenu
-              handleOpenUserMenu={handleOpenUserMenu}
-              anchorElUser={anchorElUser}
-              handleCloseUserMenu={handleCloseUserMenu}
-              list={getUserMenuList()}
-            />
-          </Toolbar>
-        </Container>
-      </AppBar>
+          )}
+          <HeaderNavigation
+            list={pages}
+            isAuth={isAuth}
+            handleCloseNavMenu={handleCloseNavMenu}
+            navigateToMainPage={navigateToMainPage}
+          />
+          <FormControlLabel
+            control={<Switch color="default" checked={color !== 'white'} onChange={toggle} />}
+            label="Сменить тему"
+          />
+          <UserMenu
+            handleOpenUserMenu={handleOpenUserMenu}
+            anchorElUser={anchorElUser}
+            handleCloseUserMenu={handleCloseUserMenu}
+            list={getUserMenuList()}
+          />
+        </Toolbar>
+      </Container>
+    </AppBar>
   )
 }
 

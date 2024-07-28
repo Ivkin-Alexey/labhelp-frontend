@@ -74,7 +74,7 @@ export const equipmentsApi = api.injectEndpoints({
       }),
       invalidatesTags: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
     }),
-    fetchSearchHistory: builder.query<string,  string>({
+    fetchSearchHistory: builder.query<string, string>({
       query: login => ({
         url: `/equipmentSearchHistory?login=${login}`,
       }),
@@ -107,5 +107,5 @@ export const {
   useDeleteFavoriteEquipmentMutation,
   useAddTermToHistoryMutation,
   useDeleteTermFromHistoryMutation,
-  useFetchSearchHistoryQuery
+  useFetchSearchHistoryQuery,
 } = equipmentsApi

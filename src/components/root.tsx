@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from 'react'
+import { createContext, useMemo} from 'react'
 
 import { Outlet } from 'react-router-dom'
 
@@ -10,7 +10,7 @@ export const ThemeContext = createContext({ color: 'white', toggle: () => {} })
 export default function Root() {
   const [color, toggle] = useTheme()
 
-  const memoized = useMemo(() => ({ color, toggle }), [color])
+  const memoized = useMemo(() => ({ color, toggle }), [color, toggle])
 
   return (
     <ThemeContext.Provider value={memoized}>

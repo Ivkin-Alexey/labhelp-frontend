@@ -65,14 +65,16 @@ export default function CardList(props: ICardList) {
 CardList.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
-  list: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    name:PropTypes.string.isRequired,
-    brand: PropTypes.string.isRequired,
-    model: PropTypes.string.isRequired,
-    imgUrl: PropTypes.string.isRequired,
-    isFavorite: PropTypes.bool,
-  }))
+  list: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      brand: PropTypes.string.isRequired,
+      model: PropTypes.string.isRequired,
+      imgUrl: PropTypes.string.isRequired,
+      isFavorite: PropTypes.bool,
+    }),
+  ),
 }

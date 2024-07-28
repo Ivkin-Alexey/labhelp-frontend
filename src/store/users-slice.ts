@@ -14,7 +14,7 @@ export const accountSlice = createSlice({
   name: 'account',
   initialState,
   reducers: {
-    logout: (state) => {
+    logout: state => {
       return { ...state, isAuth: false, login: false }
     },
     login: (state, { payload: login }) => {

@@ -42,5 +42,5 @@ export default function HistoryList(props: IHistoryList) {
 HistoryList.propTypes = {
   list: PropTypes.arrayOf(PropTypes.string.isRequired),
   handleDelete: PropTypes.func.isRequired,
-  handleClick: PropTypes.func.isRequired
+  handleClick: PropTypes.func.isRequired,
 }

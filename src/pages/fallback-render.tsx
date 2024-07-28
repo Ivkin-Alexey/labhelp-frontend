@@ -4,7 +4,7 @@ export default function FallbackRender() {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
-      <pre style={{ color: "red" }}>{"sdfdsf"}</pre>
+      <pre style={{ color: 'red' }}>{'sdfdsf'}</pre>
     </div>
-  );
+  )
 }

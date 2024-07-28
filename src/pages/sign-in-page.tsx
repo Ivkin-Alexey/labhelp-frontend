@@ -47,5 +47,7 @@ export default function SignInPage() {
     // TODO: implement loading animation
   }
 
-  return <SignForm handleSubmit={handleSubmit} isLoading={isLoading}  title="Войти" isSignIn={true} />
+  return (
+    <SignForm handleSubmit={handleSubmit} isLoading={isLoading} title="Войти" isSignIn={true} />
+  )
 }
