@@ -1,9 +1,12 @@
+import { useContext } from 'react'
+
 import { Box, CircularProgress, Container, Typography } from '@mui/material'
 import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../app/hooks/hooks'
 import { toLowerCaseFirstChart } from '../app/utils/utils'
 import FavoriteButtons from '../components/favorite-buttons'
+import { ThemeContext } from '../components/root'
 import { useFetchEquipmentByIDQuery } from '../store/equipments-api'
 import { selectAccount } from '../store/selectors'
 
@@ -13,6 +16,8 @@ export default function EquipmentPage() {
   const equipmentID = location.pathname.slice(1)
 
   const { login } = useAppSelector(selectAccount)
+
+  const { color } = useContext(ThemeContext)
 
   const { isFetching, isError, data } = useFetchEquipmentByIDQuery({ login, equipmentID })
 
@@ -34,6 +39,7 @@ export default function EquipmentPage() {
           flexDirection: 'column',
           alignItems: 'center',
           marginTop: '40px',
+          backgroundColor: color,
         }}
       >
         <Box>

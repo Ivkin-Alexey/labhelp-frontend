@@ -8,17 +8,18 @@ export const equipmentsApi = api.injectEndpoints({
         const { data: equipment } = await baseQuery(
           `/equipmentList?equipmentID=${data.equipmentID}`,
         )
-        const { data: userFavoriteEquipmentList } = await baseQuery(
-          `/favoriteEquipments?login=${data.login}`,
-        )
-        if (
-          Array.isArray(userFavoriteEquipmentList) &&
-          userFavoriteEquipmentList.find(el => el.id === data.equipmentID)
-        ) {
-          return { data: { ...(equipment as EquipmentItem), isFavorite: true } }
-        } else {
-          return { data: equipment as EquipmentItem }
+        if (data.login) {
+          const { data: userFavoriteEquipmentList } = await baseQuery(
+            `/favoriteEquipments?login=${data.login}`,
+          )
+          if (
+            Array.isArray(userFavoriteEquipmentList) &&
+            userFavoriteEquipmentList.find(el => el.id === data.equipmentID)
+          ) {
+            return { data: { ...(equipment as EquipmentItem), isFavorite: true } }
+          }
         }
+        return { data: equipment as EquipmentItem }
       },
       providesTags: ['Equipment'],
     }),
