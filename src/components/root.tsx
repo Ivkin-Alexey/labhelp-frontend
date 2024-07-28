@@ -1,24 +1,19 @@
-import { createContext, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 
 import { Outlet } from 'react-router-dom'
 
 import Header from './header/header'
+import useTheme from '../app/hooks/useTheme'
 
 export const ThemeContext = createContext({ color: 'white', toggle: () => {} })
 
 export default function Root() {
-  const [color, setColor] = useState('white')
+  const [color, toggle] = useTheme()
 
-  function toggle() {
-    if (color === 'white') {
-      setColor('#002884')
-    } else {
-      setColor('white')
-    }
-  }
+  const memoized = useMemo(() => ({ color, toggle }), [color])
 
   return (
-    <ThemeContext.Provider value={{ color, toggle }}>
+    <ThemeContext.Provider value={memoized}>
       <Header />
       <Outlet />
     </ThemeContext.Provider>

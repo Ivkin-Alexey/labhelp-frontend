@@ -33,7 +33,7 @@ function Header() {
 
   const location = useLocation()
   
-  const { toggle } = useContext(ThemeContext)
+  const { color, toggle } = useContext(ThemeContext)
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
@@ -93,7 +93,7 @@ function Header() {
               navigateToMainPage={navigateToMainPage}
             />
             <FormControlLabel
-              control={<Switch color="default" onChange={toggle} />}
+            control={<Switch color="default" checked={color !== "white"} onChange={toggle} />}
               label="Сменить тему"
             />
             <UserMenu

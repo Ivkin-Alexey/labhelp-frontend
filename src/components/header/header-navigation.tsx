@@ -1,4 +1,4 @@
-import React, { startTransition, Suspense } from 'react'
+import React, { Suspense, useMemo } from 'react'
 
 import { Typography, Box } from '@mui/material'
 
@@ -14,7 +14,7 @@ interface IHeaderNavigation {
 export default function HeaderNavigation(props: IHeaderNavigation) {
   const { handleCloseNavMenu, navigateToMainPage, list, isAuth } = props
 
-  const NavButtons = React.lazy(() => import('./nav-buttons-list'))
+  const NavButtons = useMemo(() => React.lazy(() => import('./nav-buttons-list')), [isAuth])
 
   return (
     <>

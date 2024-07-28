@@ -1,22 +1,19 @@
 import { useEffect, useState } from 'react'
 
 export default function useTheme(): [string, () => void] {
-  const theme = {
-    light: 'white',
-    dark: '#2196f3',
-  }
 
-  const [color, setColor] = useState<string>(localStorage.getItem('theme') || theme.light)
+  const [color, setColor] = useState<string>(localStorage.getItem('color') || "white")
 
   useEffect(() => {
-    localStorage.setItem('theme', color)
+    localStorage.setItem('color', color)
   }, [color])
 
-  function toggle(): void {
-    if (color === theme.light) {
-      setColor(theme.dark)
+
+  function toggle() {
+    if (color === 'white') {
+      setColor('#002884')
     } else {
-      setColor(theme.light)
+      setColor('white')
     }
   }
 
