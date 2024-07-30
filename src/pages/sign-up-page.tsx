@@ -36,13 +36,5 @@ export default function SignUpPage() {
     }
   }, [isSuccess])
 
-  if (isError) {
-    // TODO: implement errors handling
-  }
-
-  if (isLoading) {
-    // TODO: implement loading animation
-  }
-
-  return <SignForm handleSubmit={handleSubmit} title="Зарегистрироваться" />
+  return <SignForm handleSubmit={handleSubmit} title="Зарегистрироваться" isLoading={isLoading} />
 }
