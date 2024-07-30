@@ -91,10 +91,10 @@ function Header() {
             handleCloseNavMenu={handleCloseNavMenu}
             navigateToMainPage={navigateToMainPage}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Switch color="default" checked={color !== 'white'} onChange={toggle} />}
             label="Сменить тему"
-          />
+          /> */}
           <UserMenu
             handleOpenUserMenu={handleOpenUserMenu}
             anchorElUser={anchorElUser}
