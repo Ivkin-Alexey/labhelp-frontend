@@ -1,11 +1,12 @@
+import { useMemo } from 'react'
+import React from 'react'
+
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 import { routes } from './constants'
 import { useAppSelector } from './hooks/hooks'
 import Root from '../components/root'
 import EquipmentPage from '../pages/equipment-page'
-import FavoritesPage from '../pages/favorites-page'
-import HistoryPage from '../pages/history-page'
 import MainPage from '../pages/main-page'
 import SearchPage from '../pages/search-page'
 import SignInPage from '../pages/sign-in-page'
@@ -13,13 +14,26 @@ import SignUpPage from '../pages/sign-up-page'
 import { selectAccount } from '../store/selectors'
 
 interface IRequireAuth {
-  children: JSX.Element
   redirectTo: string
+  path: string
 }
 
 function RequireAuth(props: IRequireAuth) {
   const { isAuth } = useAppSelector(selectAccount)
-  return isAuth ? props.children : <Navigate to={props.redirectTo} />
+
+  const FavoritesPage = useMemo(() => React.lazy(() => import('../pages/favorites-page')), [isAuth])
+  const HistoryPage = useMemo(() => React.lazy(() => import('../pages/favorites-page')), [isAuth])
+
+  if (!isAuth) {
+    ;<Navigate to={props.redirectTo} />
+  }
+
+  if (props.path === routes.history) {
+    return <HistoryPage />
+  }
+  if (props.path === routes.favorites) {
+    return <FavoritesPage />
+  }
 }
 
 const router = createBrowserRouter([
@@ -50,19 +64,11 @@ const router = createBrowserRouter([
       },
       {
         path: routes.favorites,
-        element: (
-          <RequireAuth redirectTo={routes.signIn}>
-            <FavoritesPage />
-          </RequireAuth>
-        ),
+        element: <RequireAuth path={routes.favorites} redirectTo={routes.signIn} />,
       },
       {
         path: routes.history,
-        element: (
-          <RequireAuth redirectTo={routes.signIn}>
-            <HistoryPage />
-          </RequireAuth>
-        ),
+        element: <RequireAuth path={routes.history} redirectTo={routes.signIn} />,
       },
     ],
   },
