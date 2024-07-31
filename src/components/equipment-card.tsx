@@ -62,7 +62,7 @@ export function EquipmentCard(props: IEquipmentCard) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
+      <CardActions sx={{"marginLeft": "auto"}}>
         <FavoriteButtons equipmentID={id} isFavorite={isFavorite} />
       </CardActions>
     </Card>

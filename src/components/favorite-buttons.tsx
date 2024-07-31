@@ -1,4 +1,6 @@
-import { Button } from '@mui/material'
+import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded'
+import StarRoundedIcon from '@mui/icons-material/StarRounded'
+import { IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '../app/constants'
@@ -24,8 +26,9 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
   const navigate = useNavigate()
 
   return isFavorite ? (
-    <Button
-      size="small"
+    <IconButton
+      edge="start"
+      aria-label="comments"
       color="primary"
       onClick={() => {
         if (isAuth) {
@@ -35,11 +38,12 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         }
       }}
     >
-      Удалить
-    </Button>
+      <StarRoundedIcon />
+    </IconButton>
   ) : (
-    <Button
-      size="small"
+    <IconButton
+      edge="start"
+      aria-label="comments"
       color="primary"
       onClick={() => {
         if (isAuth) {
@@ -49,7 +53,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         }
       }}
     >
-      В избранное
-    </Button>
+      <StarBorderRoundedIcon />
+    </IconButton>
   )
 }
