@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import type { ReactNode } from 'react'
+import { Suspense, useMemo } from 'react'
 import React from 'react'
 
 import { createBrowserRouter, Navigate } from 'react-router-dom'
@@ -15,25 +16,19 @@ import { selectAccount } from '../store/selectors'
 
 interface IRequireAuth {
   redirectTo: string
-  path: string
+  component: React.ElementType
 }
+
+const FavoritesPage = React.lazy(() => import('../pages/favorites-page'))
+const HistoryPage = React.lazy(() => import('../pages/history-page'))
 
 function RequireAuth(props: IRequireAuth) {
   const { isAuth } = useAppSelector(selectAccount)
 
-  const FavoritesPage = useMemo(() => React.lazy(() => import('../pages/favorites-page')), [isAuth])
-  const HistoryPage = useMemo(() => React.lazy(() => import('../pages/favorites-page')), [isAuth])
-
   if (!isAuth) {
-    ;<Navigate to={props.redirectTo} />
+    return <Navigate to={props.redirectTo} />
   }
-
-  if (props.path === routes.history) {
-    return <HistoryPage />
-  }
-  if (props.path === routes.favorites) {
-    return <FavoritesPage />
-  }
+  return <Suspense fallback={<div>Loading...</div>}><props.component/></Suspense>
 }
 
 const router = createBrowserRouter([
@@ -64,11 +59,11 @@ const router = createBrowserRouter([
       },
       {
         path: routes.favorites,
-        element: <RequireAuth path={routes.favorites} redirectTo={routes.signIn} />,
+        element: <RequireAuth component={FavoritesPage} redirectTo={routes.signIn} />,
       },
       {
         path: routes.history,
-        element: <RequireAuth path={routes.history} redirectTo={routes.signIn} />,
+        element: <RequireAuth component={HistoryPage} redirectTo={routes.signIn} />,
       },
     ],
   },
