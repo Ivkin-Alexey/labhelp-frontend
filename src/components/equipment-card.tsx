@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import "./components.css"
 
 import { CardActionArea, CardActions } from '@mui/material'
 import Card from '@mui/material/Card'
@@ -51,7 +52,7 @@ export function EquipmentCard(props: IEquipmentCard) {
           sx={{ width: '70%', margin: '0 auto' }}
         />
         <CardContent>
-          <Typography gutterBottom variant="body1" component="div">
+          <Typography className="cardText" gutterBottom variant="body1" component="div">
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary" marginBottom="5px">
