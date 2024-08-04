@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import "./components.css"
+import './components.css'
 
 import { CardActionArea, CardActions } from '@mui/material'
 import Card from '@mui/material/Card'
@@ -44,13 +44,14 @@ export function EquipmentCard(props: IEquipmentCard) {
         backgroundColor: color,
       }}
     >
-      <CardActionArea onClick={e => handleClick(e, id)} sx={{ height: '25vh', minHeight: '330px' }}>
-        <CardMedia
-          component="img"
-          image={imgUrl}
-          alt="Изображение карточки"
-          sx={{ width: '70%', margin: '0 auto' }}
-        />
+      <CardActionArea
+        onClick={e => handleClick(e, id)}
+        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
+        className="cardActionArea"
+      >
+        <div className="cardMediaWrapper">
+          <CardMedia component="img" image={imgUrl} alt="Изображение карточки" />
+        </div>
         <CardContent>
           <Typography className="cardText" gutterBottom variant="body1" component="div">
             {title}
@@ -63,7 +64,7 @@ export function EquipmentCard(props: IEquipmentCard) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{"marginLeft": "auto"}}>
+      <CardActions sx={{ marginLeft: 'auto' }}>
         <FavoriteButtons equipmentID={id} isFavorite={isFavorite} />
       </CardActions>
     </Card>
