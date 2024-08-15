@@ -44,7 +44,7 @@ export default function CardList(props: ICardList) {
         marginBottom="40px"
       >
         {list.map(el => {
-          const { id, imgUrl, name, model, isFavorite } = el
+          const { id, imgUrl, name, model, isFavorite, isOperate } = el
 
           return (
             <EquipmentCard
@@ -54,6 +54,7 @@ export default function CardList(props: ICardList) {
               description={model}
               imgUrl={imgUrl}
               isFavorite={isFavorite}
+              isOperate={isOperate}
             />
           )
         })}

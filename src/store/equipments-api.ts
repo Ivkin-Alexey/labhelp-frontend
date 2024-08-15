@@ -3,61 +3,39 @@ import type { EquipmentID, EquipmentItem } from '../models/equipments'
 
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
-    fetchEquipmentByID: builder.query<EquipmentItem, { login: string; equipmentID: EquipmentID }>({
-      queryFn: async (data, _queryApi, _extraOptions, baseQuery) => {
-        const { data: equipment } = await baseQuery(
-          `/equipmentList?equipmentID=${data.equipmentID}`,
-        )
-        if (data.login) {
-          const { data: userFavoriteEquipmentList } = await baseQuery(
-            `/favoriteEquipments?login=${data.login}`,
-          )
-          if (
-            Array.isArray(userFavoriteEquipmentList) &&
-            userFavoriteEquipmentList.find(el => el.id === data.equipmentID)
-          ) {
-            return { data: { ...(equipment as EquipmentItem), isFavorite: true } }
-          }
-        }
-        return { data: equipment as EquipmentItem }
-      },
+    fetchEquipmentByID: builder.query<EquipmentItem, string>({
+      query: equipmentID => `/equipmentList?equipmentID=${equipmentID}`,
       providesTags: ['Equipment'],
     }),
     fetchEquipmentsBySearchTerm: builder.query<
       EquipmentItem[],
-      { searchTerm: string; login: string | false }
+      { searchTerm: string; login: string }
     >({
-      queryFn: async (data, _queryApi, _extraOptions, baseQuery) => {
-        const { data: equipmentList } = await baseQuery(`/equipmentList?search=${data.searchTerm}`)
-        if (data.login) {
-          const { data: userFavoriteEquipmentList } = await baseQuery(
-            `/favoriteEquipments?login=${data.login}`,
-          )
-          if (Array.isArray(userFavoriteEquipmentList) && Array.isArray(equipmentList)) {
-            if (userFavoriteEquipmentList.length === 0) {
-              return { data: equipmentList as EquipmentItem[] }
-            }
-            const updatedEquipmentList = equipmentList.map(el => {
-              if (userFavoriteEquipmentList.find(item => item.id === el.id)) {
-                return { ...el, isFavorite: true }
-              } else {
-                return el
-              }
-            })
-            return { data: updatedEquipmentList as EquipmentItem[] }
-          }
-        }
-        return { data: equipmentList as EquipmentItem[] }
-      },
+      query: data => `/equipmentList?search=${data.searchTerm}&login=${data.login}`,
       providesTags: ['EquipmentList'],
     }),
     fetchFavoriteEquipments: builder.query<EquipmentItem[], string>({
       query: login => `/favoriteEquipments?login=${login}`,
       providesTags: ['FavoriteEquipmentList'],
-      transformResponse(res: EquipmentItem[]): EquipmentItem[] {
-        return res.map(el => ({ ...el, isFavorite: true }))
-      },
     }),
+    addOperatingEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
+      query: data => ({
+        url: '/operateEquipment',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
+    }),
+    deleteOperatingEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>(
+      {
+        query: data => ({
+          url: '/operateEquipment',
+          method: 'DELETE',
+          body: data,
+        }),
+        invalidatesTags: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
+      },
+    ),
     addFavoriteEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
       query: data => ({
         url: '/favoriteEquipment?add=true',
@@ -108,4 +86,6 @@ export const {
   useAddTermToHistoryMutation,
   useDeleteTermFromHistoryMutation,
   useFetchSearchHistoryQuery,
+  useAddOperatingEquipmentMutation,
+  useDeleteOperatingEquipmentMutation,
 } = equipmentsApi

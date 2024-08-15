@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import './components.css'
 
-import { CardActionArea, CardActions } from '@mui/material'
+import { CardActionArea, CardActions, Chip } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -10,6 +10,7 @@ import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 
 import FavoriteButtons from './favorite-buttons'
+import OperateButtons from './operating-buttons'
 import { ThemeContext } from './root'
 import type { EquipmentID } from '../models/equipments'
 
@@ -19,10 +20,11 @@ interface IEquipmentCard {
   description: string
   imgUrl: string
   isFavorite?: boolean
+  isOperate?: boolean
 }
 
 export function EquipmentCard(props: IEquipmentCard) {
-  const { id, title, description, imgUrl, isFavorite } = props
+  const { id, title, description, imgUrl, isFavorite, isOperate } = props
 
   const navigate = useNavigate()
 
@@ -49,6 +51,9 @@ export function EquipmentCard(props: IEquipmentCard) {
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
         className="cardActionArea"
       >
+        <div className='cardHeader'><Typography className="cardText" gutterBottom variant="body1" component="div">
+            В работе
+          </Typography></div>
         <div className="cardMediaWrapper">
           <CardMedia component="img" image={imgUrl} alt="Изображение карточки" />
         </div>
@@ -64,7 +69,8 @@ export function EquipmentCard(props: IEquipmentCard) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ marginLeft: 'auto' }}>
+      <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
+        <OperateButtons equipmentID={id} isOperate={isOperate} />
         <FavoriteButtons equipmentID={id} isFavorite={isFavorite} />
       </CardActions>
     </Card>
@@ -77,4 +83,5 @@ EquipmentCard.propTypes = {
   description: PropTypes.string.isRequired,
   imgUrl: PropTypes.string.isRequired,
   isFavorite: PropTypes.bool,
+  isOperate: PropTypes.bool,
 }

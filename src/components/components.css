@@ -9,7 +9,6 @@
 
 .cardActionArea {
   width: 200px;
-  height: 330px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -25,6 +24,17 @@
 
 .cardActionArea .cardMediaWrapper img{
     object-fit: contain;
+}
+
+.cardHeader {
+  display: block;
+  height: 30px;
+  width: 90%;
+  border-radius: 7px;
+  background-color: brown;
+  padding: 1px;
+  margin: 7px;
+  text-align: center;
 }
 
 

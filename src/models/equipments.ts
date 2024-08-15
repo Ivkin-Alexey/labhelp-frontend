@@ -9,4 +9,5 @@ export interface EquipmentItem {
   model: string
   imgUrl: string
   isFavorite?: boolean
+  isOperate?: boolean
 }
