@@ -8,6 +8,7 @@
 }
 
 .cardActionArea {
+  position: relative;
   width: 200px;
   display: flex;
   flex-direction: column;
@@ -26,15 +27,9 @@
     object-fit: contain;
 }
 
-.cardHeader {
-  display: block;
-  height: 30px;
-  width: 90%;
-  border-radius: 7px;
-  background-color: brown;
-  padding: 1px;
-  margin: 7px;
-  text-align: center;
+.operateStatus {
+  position: absolute;
+  top: 20px;
 }
 
 

@@ -1,7 +1,7 @@
 import { CircularProgress, Stack, Typography } from '@mui/material'
 import PropTypes from 'prop-types'
 
-import { EquipmentCard } from './equipment-card'
+import { EquipmentCard } from './equipment-card/equipment-card'
 import type { EquipmentItem } from '../models/equipments'
 
 interface ICardList {
@@ -44,17 +44,19 @@ export default function CardList(props: ICardList) {
         marginBottom="40px"
       >
         {list.map(el => {
-          const { id, imgUrl, name, model, isFavorite, isOperate } = el
+          const { id, imgUrl, name, model, isFavorite, isOperate, userID } = el
 
           return (
             <EquipmentCard
               key={id}
               id={id}
+              userID={userID}
               title={name}
               description={model}
               imgUrl={imgUrl}
               isFavorite={isFavorite}
               isOperate={isOperate}
+              isCardMode={true}
             />
           )
         })}

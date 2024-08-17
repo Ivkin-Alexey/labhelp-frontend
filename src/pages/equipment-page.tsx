@@ -5,7 +5,8 @@ import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../app/hooks/hooks'
 import { toLowerCaseFirstChart } from '../app/utils/utils'
-import FavoriteButtons from '../components/favorite-buttons'
+import FavoriteButtons from '../components/equipment-card/favorite-buttons'
+import OperateStatus from '../components/equipment-card/operate-status'
 import { ThemeContext } from '../components/root'
 import { useFetchEquipmentByIDQuery } from '../store/equipments-api'
 import { selectAccount } from '../store/selectors'
@@ -19,7 +20,7 @@ export default function EquipmentPage() {
 
   const { color } = useContext(ThemeContext)
 
-  const { isFetching, isError, data } = useFetchEquipmentByIDQuery({ login, equipmentID })
+  const { isFetching, isError, data } = useFetchEquipmentByIDQuery(equipmentID)
 
   if (isFetching) {
     return <CircularProgress size="60px" />
@@ -30,7 +31,9 @@ export default function EquipmentPage() {
   }
 
   if (data) {
-    const { id, brand, name, model, imgUrl, description, isFavorite } = data
+    let { id, brand, name, model, imgUrl, description, isFavorite, isOperate, userName, userID } = data
+
+    if (userID === login) { userName = "Вы используете" }
 
     return (
       <Container
@@ -42,7 +45,8 @@ export default function EquipmentPage() {
           backgroundColor: color,
         }}
       >
-        <Box>
+        <Box sx={{position: "relative"}}>
+          <OperateStatus isOperate={isOperate} userName={userName} />
           <img
             height="400"
             src={imgUrl}
@@ -64,7 +68,7 @@ export default function EquipmentPage() {
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
             Описание: {toLowerCaseFirstChart(description)}
           </Typography>
-          <FavoriteButtons equipmentID={id} isFavorite={isFavorite} />
+          <FavoriteButtons equipmentID={id} isFavorite={isFavorite} isCardMode={false} />
         </Box>
       </Container>
     )

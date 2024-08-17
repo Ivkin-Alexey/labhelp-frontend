@@ -10,4 +10,6 @@ export interface EquipmentItem {
   imgUrl: string
   isFavorite?: boolean
   isOperate?: boolean
+  userID?: string
+  userName?: string
 }

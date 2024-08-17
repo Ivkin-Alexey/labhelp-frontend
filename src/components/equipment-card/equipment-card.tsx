@@ -10,9 +10,10 @@ import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 
 import FavoriteButtons from './favorite-buttons'
+import OperateStatus from './operate-status'
 import OperateButtons from './operating-buttons'
-import { ThemeContext } from './root'
-import type { EquipmentID } from '../models/equipments'
+import type { EquipmentID } from '../../models/equipments'
+import { ThemeContext } from '../root'
 
 interface IEquipmentCard {
   id: EquipmentID
@@ -21,10 +22,13 @@ interface IEquipmentCard {
   imgUrl: string
   isFavorite?: boolean
   isOperate?: boolean
+  userID?: string
+  isCardMode: boolean
+  userName: string
 }
 
 export function EquipmentCard(props: IEquipmentCard) {
-  const { id, title, description, imgUrl, isFavorite, isOperate } = props
+  const { id, title, description, imgUrl, isFavorite, isOperate, userID, isCardMode, userName } = props
 
   const navigate = useNavigate()
 
@@ -51,9 +55,7 @@ export function EquipmentCard(props: IEquipmentCard) {
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
         className="cardActionArea"
       >
-        <div className='cardHeader'><Typography className="cardText" gutterBottom variant="body1" component="div">
-            В работе
-          </Typography></div>
+        <OperateStatus isOperate={isOperate} userName={userName}/>
         <div className="cardMediaWrapper">
           <CardMedia component="img" image={imgUrl} alt="Изображение карточки" />
         </div>
@@ -69,9 +71,9 @@ export function EquipmentCard(props: IEquipmentCard) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
-        <OperateButtons equipmentID={id} isOperate={isOperate} />
-        <FavoriteButtons equipmentID={id} isFavorite={isFavorite} />
+      <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: "16px",  }}>
+        <OperateButtons equipmentID={id} isOperate={isOperate} userID={userID} />
+        <FavoriteButtons equipmentID={id} isFavorite={isFavorite} isCardMode={isCardMode} />
       </CardActions>
     </Card>
   )
