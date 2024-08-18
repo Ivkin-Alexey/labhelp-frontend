@@ -17,7 +17,7 @@ interface IOperateButtons {
 }
 
 export default function OperateButtons(props: IOperateButtons) {
-  const { isOperate = false, equipmentID, userID } = props
+  const { isOperate, equipmentID, userID } = props
 
   const [add] = useAddOperatingEquipmentMutation()
   const [remove] = useDeleteOperatingEquipmentMutation()
@@ -33,7 +33,6 @@ export default function OperateButtons(props: IOperateButtons) {
         color="primary"
         onClick={() => {
           if (isAuth) {
-            console.log( login, equipmentID)
             remove({ login, equipmentID })
           } else {
             navigate(routes.signIn)

@@ -24,7 +24,7 @@ interface IEquipmentCard {
   isOperate?: boolean
   userID?: string
   isCardMode: boolean
-  userName: string
+  userName?: string
 }
 
 export function EquipmentCard(props: IEquipmentCard) {

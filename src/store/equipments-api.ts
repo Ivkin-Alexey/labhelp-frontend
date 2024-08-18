@@ -1,4 +1,5 @@
 import { api } from './api'
+import { DEFAULT_SEARCH_TERM } from '../app/constants'
 import type { EquipmentID, EquipmentItem } from '../models/equipments'
 
 export const equipmentsApi = api.injectEndpoints({
@@ -24,7 +25,27 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
+      invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
+      async onQueryStarted(data, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          equipmentsApi.util.updateQueryData(
+            'fetchEquipmentsBySearchTerm',
+            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
+            draft => 
+              draft.forEach(el => {
+                if (el.id === data.equipmentID) {
+                  el.isOperate = true;
+                  el.userID = data.login
+                }
+              }),
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
     }),
     deleteOperatingEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>(
       {
@@ -33,7 +54,27 @@ export const equipmentsApi = api.injectEndpoints({
           method: 'DELETE',
           body: data,
         }),
-        invalidatesTags: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
+        invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
+        async onQueryStarted(data, { dispatch, queryFulfilled }) {
+          const patchResult = dispatch(
+            equipmentsApi.util.updateQueryData(
+              'fetchEquipmentsBySearchTerm',
+              { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
+              draft => 
+                draft.forEach(el => {
+                  if (el.id === data.equipmentID) {
+                    delete el.isOperate
+                    delete el.userID
+                  }
+                }),
+            ),
+          )
+          try {
+            await queryFulfilled
+          } catch {
+            patchResult.undo()
+          }
+        },
       },
     ),
     addFavoriteEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
@@ -42,7 +83,26 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
+      invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
+      async onQueryStarted(data, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          equipmentsApi.util.updateQueryData(
+            'fetchEquipmentsBySearchTerm',
+            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
+            draft => 
+              draft.forEach(el => {
+                if (el.id === data.equipmentID) {
+                  el.isFavorite = true
+                }
+              }),
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
     }),
     deleteFavoriteEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
       query: data => ({
@@ -50,7 +110,26 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment'],
+      invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
+      async onQueryStarted(data, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          equipmentsApi.util.updateQueryData(
+            'fetchEquipmentsBySearchTerm',
+            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
+            draft =>
+              draft.forEach(el => {
+                if (el.id === data.equipmentID) {
+                  delete el.isFavorite
+                }
+              }),
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
     }),
     fetchSearchHistory: builder.query<string, string>({
       query: login => ({
