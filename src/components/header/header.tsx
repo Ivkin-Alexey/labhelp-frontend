@@ -18,7 +18,8 @@ import { ThemeContext } from '../root'
 
 const pages = [
   { title: 'Избранное', path: routes.favorites },
-  { title: 'История', path: routes.history },
+  { title: 'История поиска', path: routes.history },
+  { title: 'Оборудование в работе', path: routes.operatingEquipments },
 ]
 
 const settings = [

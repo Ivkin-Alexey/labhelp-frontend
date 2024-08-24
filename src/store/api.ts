@@ -10,7 +10,7 @@ export const api = createApi({
     }),
     { maxRetries: 3 },
   ),
-  tagTypes: ['EquipmentList', 'FavoriteEquipmentList', 'Equipment', 'HistoryList'],
+  tagTypes: ['EquipmentList', 'FavoriteEquipmentList', 'OperatingEquipmentList', 'Equipment', 'HistoryList'],
 
   refetchOnFocus: true,
   endpoints: () => ({}),

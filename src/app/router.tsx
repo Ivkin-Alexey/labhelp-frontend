@@ -7,6 +7,7 @@ import RequireAuth from '../components/require-auth'
 import Root from '../components/root'
 import EquipmentPage from '../pages/equipment-page'
 import MainPage from '../pages/main-page'
+import OperatingEquipmentsPage from '../pages/operating-equipments-page'
 import SearchPage from '../pages/search-page'
 import SignInPage from '../pages/sign-in-page'
 import SignUpPage from '../pages/sign-up-page'
@@ -53,6 +54,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth redirectTo={routes.signIn}>
             <HistoryPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: routes.operatingEquipments,
+        element: (
+          <RequireAuth redirectTo={routes.signIn}>
+            <OperatingEquipmentsPage />
           </RequireAuth>
         ),
       },

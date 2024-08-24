@@ -34,6 +34,7 @@ export default function CardList(props: ICardList) {
   }
 
   if (Array.isArray(list)) {
+
     return (
       <Stack
         direction="row"

@@ -19,6 +19,10 @@ export const equipmentsApi = api.injectEndpoints({
       query: login => `/favoriteEquipments?login=${login}`,
       providesTags: ['FavoriteEquipmentList'],
     }),
+    fetchOperatingEquipments: builder.query<EquipmentItem[], void>({
+      query: (login) => `/workingEquipmentList?login=${login}`,
+      providesTags: ['OperatingEquipmentList'],
+    }),
     addOperatingEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
       query: data => ({
         url: '/operateEquipment',
@@ -158,6 +162,7 @@ export const equipmentsApi = api.injectEndpoints({
 
 export const {
   useFetchEquipmentsBySearchTermQuery,
+  useFetchOperatingEquipmentsQuery,
   useFetchFavoriteEquipmentsQuery,
   useFetchEquipmentByIDQuery,
   useAddFavoriteEquipmentMutation,
