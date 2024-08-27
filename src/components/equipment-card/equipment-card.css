@@ -27,7 +27,7 @@
     object-fit: contain;
 }
 
-.operateStatus {
+.cardStatus {
   position: absolute;
   top: 20px;
 }

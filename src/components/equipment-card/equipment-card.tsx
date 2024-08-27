@@ -1,12 +1,10 @@
-import { useContext } from 'react'
-import './components.css'
+import './equipment-card.css'
 
-import { CardActionArea, CardActions, Chip } from '@mui/material'
+import { CardActionArea, CardActions } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
-import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 
 import FavoriteButtons from './favorite-buttons'
@@ -14,6 +12,7 @@ import OperateStatus from './operate-status'
 import OperateButtons from './operating-buttons'
 import type { EquipmentID } from '../../models/equipments'
 import { ThemeContext } from '../root'
+import CardStatus from '../user-card/card-status'
 
 interface IEquipmentCard {
   id: EquipmentID
@@ -28,15 +27,13 @@ interface IEquipmentCard {
 }
 
 export function EquipmentCard(props: IEquipmentCard) {
-  const { id, title, description, imgUrl, isFavorite, isOperate, userID, isCardMode, userName } = props
+  const { id, title, description, imgUrl, isFavorite, isOperate = false, userID, isCardMode, userName} = props
 
   const navigate = useNavigate()
 
   function handleClick(e: React.MouseEvent, id: EquipmentID) {
     navigate('/' + id)
   }
-
-  const { color } = useContext(ThemeContext)
 
   return (
     <Card
@@ -47,7 +44,6 @@ export function EquipmentCard(props: IEquipmentCard) {
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'column',
-        backgroundColor: color,
       }}
     >
       <CardActionArea
@@ -55,7 +51,7 @@ export function EquipmentCard(props: IEquipmentCard) {
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
         className="cardActionArea"
       >
-        <OperateStatus isOperate={isOperate} userName={userName}/>
+        <CardStatus isVisible={isOperate} text={userName || "В работе"}/>
         <div className="cardMediaWrapper">
           <CardMedia component="img" image={imgUrl} alt="Изображение карточки" />
         </div>
@@ -77,13 +73,4 @@ export function EquipmentCard(props: IEquipmentCard) {
       </CardActions>
     </Card>
   )
-}
-
-EquipmentCard.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  imgUrl: PropTypes.string.isRequired,
-  isFavorite: PropTypes.bool,
-  isOperate: PropTypes.bool,
 }

@@ -1,6 +1,6 @@
 export type EquipmentID = string
 
-export interface EquipmentItem {
+export interface IEquipmentItem {
   id: EquipmentID
   category: string
   description: string
@@ -14,7 +14,7 @@ export interface EquipmentItem {
   userName?: string
 }
 
-export interface AvailableEquipments {
+export interface IAvailableEquipments {
   inaccessible: string[] | [], 
   available: string[] | []
 }

@@ -20,6 +20,7 @@ const pages = [
   { title: 'Избранное', path: routes.favorites },
   { title: 'История поиска', path: routes.history },
   { title: 'Оборудование в работе', path: routes.operatingEquipments },
+  { title: 'Администрироваие', path: routes.admin },
 ]
 
 const settings = [

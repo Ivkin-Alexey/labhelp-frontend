@@ -1,19 +1,20 @@
 import { CircularProgress, Typography } from '@mui/material'
-import PropTypes from 'prop-types'
 
-import type { EquipmentItem } from '../models/equipments'
-import EquipmentCardList from './equipment-card-list'
+import type { IEquipmentItem } from '../models/equipments'
+import React from 'react'
+import { IUserCard } from '../models/users'
 
 interface ICardList {
   isLoading: boolean
   isError: boolean
-  list?: EquipmentItem[] | UserCard[]
+  Component: React.ElementType
+  list?: IEquipmentItem[] | IUserCard[]
 }
 
 export default function CardList(props: ICardList) {
-  const { isError, isLoading, list } = props
+  const { isError, isLoading, list, Component } = props
 
-  if (isLoading) {
+  if (isLoading || !Component) {
     return <CircularProgress size="60px" />
   }
 
@@ -34,23 +35,6 @@ export default function CardList(props: ICardList) {
   }
 
   if (Array.isArray(list)) {
-    return <EquipmentCardList list={list}/>
+    return <Component list={list}/>
   }
-}
-
-CardList.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-  isError: PropTypes.bool.isRequired,
-  list: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      category: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      brand: PropTypes.string.isRequired,
-      model: PropTypes.string.isRequired,
-      imgUrl: PropTypes.string.isRequired,
-      isFavorite: PropTypes.bool,
-    }),
-  ),
 }
