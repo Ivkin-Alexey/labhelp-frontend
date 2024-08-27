@@ -13,3 +13,8 @@ export interface EquipmentItem {
   userID?: string
   userName?: string
 }
+
+export interface AvailableEquipments {
+  inaccessible: string[] | [], 
+  available: string[] | []
+}

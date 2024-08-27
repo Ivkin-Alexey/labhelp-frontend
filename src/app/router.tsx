@@ -65,6 +65,14 @@ const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
+      {
+        path: routes.admin,
+        element: (
+          <RequireAuth redirectTo={routes.signIn}>
+            <AdminPage />
+          </RequireAuth>
+        ),
+      },
     ],
   },
 ])

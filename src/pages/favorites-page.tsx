@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 
 import { useAppSelector } from '../app/hooks/hooks'
-import CardList from '../components/equipment-card-list'
+import CardList from '../components/card-list'
 import { useFetchFavoriteEquipmentsQuery } from '../store/equipments-api'
 import { selectAccount } from '../store/selectors'
 

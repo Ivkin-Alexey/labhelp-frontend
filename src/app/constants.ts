@@ -14,5 +14,6 @@ export const routes = {
   favorites: '/favorites',
   history: '/history',
   search: '/search',
-  operatingEquipments: '/operating-equipments'
+  operatingEquipments: '/operating-equipments',
+  admin: '/admin',
 }

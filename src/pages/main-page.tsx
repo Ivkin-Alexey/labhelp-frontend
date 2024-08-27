@@ -2,7 +2,7 @@ import { Container } from '@mui/material'
 
 import { DEFAULT_SEARCH_TERM } from '../app/constants'
 import { useAppSelector } from '../app/hooks/hooks'
-import CardList from '../components/equipment-card-list'
+import CardList from '../components/card-list'
 import { Search } from '../components/search/search'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/equipments-api'
 import { selectAccount } from '../store/selectors'
