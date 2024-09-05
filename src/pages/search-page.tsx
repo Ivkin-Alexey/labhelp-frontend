@@ -1,7 +1,7 @@
 import { Box, Container } from '@mui/material'
 import { useSearchParams } from 'react-router-dom'
 
-import { DEFAULT_SEARCH_TERM, SEARCH_SUGGEST_NUMBER } from '../app/constants'
+import { DEFAULT_SEARCH_TERM, SEARCH_SUGGEST_NUMBER } from '../app/constants/constants'
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
 import { Search } from '../components/search/search'

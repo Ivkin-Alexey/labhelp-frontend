@@ -1,6 +1,6 @@
 import { Grid, Link } from '@mui/material'
 
-import { routes } from '../../app/constants'
+import { routes } from '../../app/constants/constants'
 
 export default function SignUpLink() {
   return (

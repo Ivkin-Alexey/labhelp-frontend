@@ -1,8 +1,9 @@
 import { Container } from '@mui/material'
 
-import { DEFAULT_SEARCH_TERM } from '../app/constants'
+import { DEFAULT_SEARCH_TERM, routes } from '../app/constants/constants'
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
+import {Outlet, useLocation} from "react-router-dom";
 import { Search } from '../components/search/search'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/equipments-api'
 import { selectAccount } from '../store/selectors'
@@ -14,6 +15,8 @@ export default function AdminPage() {
 
 const isFetching = false
 const isError = false
+
+const {pathname} = useLocation()
 
 const userList: IUserCard[] = [
   {
@@ -72,7 +75,10 @@ const userList: IUserCard[] = [
     },
 ]
 
+if(pathname !== routes.admin) return <Outlet/>
+
   return (
+    
     <Container
       sx={{
         display: 'flex',

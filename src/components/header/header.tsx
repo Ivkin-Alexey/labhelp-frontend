@@ -11,7 +11,7 @@ import BurgerMenu from './burger-menu'
 import HeaderLogo from './header-logo'
 import HeaderNavigation from './header-navigation'
 import UserMenu from './user-menu'
-import { routes } from '../../app/constants'
+import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import { selectAccount } from '../../store/selectors'
 import { ThemeContext } from '../root'
@@ -20,7 +20,7 @@ const pages = [
   { title: 'Избранное', path: routes.favorites },
   { title: 'История поиска', path: routes.history },
   { title: 'Оборудование в работе', path: routes.operatingEquipments },
-  { title: 'Администрироваие', path: routes.admin },
+  { title: 'Администрирование', path: routes.admin },
 ]
 
 const settings = [

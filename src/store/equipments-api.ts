@@ -1,5 +1,5 @@
 import { api } from './api'
-import { DEFAULT_SEARCH_TERM } from '../app/constants'
+import { DEFAULT_SEARCH_TERM } from '../app/constants/constants'
 import type { EquipmentID, EquipmentItem } from '../models/equipments'
 
 export const equipmentsApi = api.injectEndpoints({

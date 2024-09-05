@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
-import { routes } from '../app/constants'
+import { routes } from '../app/constants/constants'
 import { useAppDispatch } from '../app/hooks/hooks'
 import SignForm from '../components/sign-form/sign-form'
 import { useSignUpMutation } from '../store/users-api'

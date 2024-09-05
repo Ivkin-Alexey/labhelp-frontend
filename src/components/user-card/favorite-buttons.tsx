@@ -3,7 +3,7 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded'
 import { Button, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
-import { routes } from '../../app/constants'
+import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import type { EquipmentID } from '../../models/equipments'
 import {

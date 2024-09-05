@@ -6,7 +6,7 @@ import { Button, Stack } from '@mui/material'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import SearchInput from './search-input'
-import { SEARCH_DELAY } from '../../app/constants'
+import { SEARCH_DELAY } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
 import type { EquipmentItem } from '../../models/equipments'

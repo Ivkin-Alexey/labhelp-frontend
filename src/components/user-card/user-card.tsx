@@ -12,6 +12,7 @@ import FavoriteButtons from './favorite-buttons'
 import CardStatus from './card-status'
 import OperateButtons from './operating-buttons'
 import type { TUserID, IUserCard } from '../../models/users'
+import { routes } from '../../app/constants/constants'
 
 export function UserCard(props: IUserCard) {
   const { imgUrl = "#", login: userID, password, fullName, position, department, isVerified } = props
@@ -19,7 +20,7 @@ export function UserCard(props: IUserCard) {
   const navigate = useNavigate()
 
   function handleClick(e: React.MouseEvent, userID: TUserID) {
-    navigate('/user/' + userID)
+    navigate(routes.admin + "/" + userID)
   }
 
   return (
