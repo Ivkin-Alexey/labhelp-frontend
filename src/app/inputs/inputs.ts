@@ -1,6 +1,6 @@
-import { IFormBase } from "../../models/inputs";
+import { IFormSettigs } from "../../models/inputs";
 import personalData from "./personalData";
 
-const inputs: IFormBase = Object.assign({}, personalData)
+const inputsSettings: IFormSettigs = Object.assign({}, personalData)
 
-export default inputs;
+export default inputsSettings;

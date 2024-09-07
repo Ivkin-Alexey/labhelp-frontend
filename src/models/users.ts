@@ -1,4 +1,6 @@
-import { AvailableEquipments } from "./equipments"
+import personalData from "../app/inputs/personalData"
+import { IAvailableEquipments } from "./equipments"
+import { TInputValue } from "./inputs"
 
 export type TUserID = string
 
@@ -7,13 +9,19 @@ export interface IUserCredentials {
   password: FormDataEntryValue | null
 }
 
-export interface IUserCard {
+type TUserFormSettings = {
+  [key in keyof typeof personalData]: TInputValue;
+};
+
+export type IUserForm = {
+  [key in keyof TUserFormSettings]: TInputValue
+}
+
+export interface IUserCard extends IUserForm {
   imgUrl?: string,
-  login: string,
-  password: string, 
-  fullName: string, 
-  position: string, 
-  department: string, 
-  equipments?: "all" | AvailableEquipments
+  equipments?: "all" | IAvailableEquipments
   isVerified: boolean
 }
+
+
+

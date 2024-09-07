@@ -1,49 +1,54 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {MenuItem, Stack, TextField} from "@mui/material";
 import ListSubheader from "@mui/material/ListSubheader";
 import Button from "@mui/material/Button";
 import {useDispatch, useSelector} from "react-redux";
 import validateInputValue from "../app/inputs/validators";
-import inputs from "../app/inputs/inputs";
+import inputsSettings from "../app/inputs/inputs";
 import {useNavigate} from "react-router-dom";
 import localisations from "../app/constants/localizations/localizations";
 import { IUserCard } from '../models/users';
-import { IFormBase, IInputBase, IInputArray, IStudentCategoryFilteringRule } from '../models/inputs';
+import { IInputSettings, TInputArray, IStudentCategoryFilteringRule, TInputValue} from '../models/inputs';
+import { IUserForm } from '../models/users';
 
 interface IFormProps {
-    defaultTextInputs: IInputArray,
-    defaultValues: IUserCard,
+    inputList: TInputArray,
+    defaultInputValues: IUserForm,
     filteringRules: {[key: string]: IStudentCategoryFilteringRule[]},
-    sendData: (data: IUserCard) => void,
-    confirmMessage?: string
+    submit: (data: IUserCard) => void,
+    confirmMessage?: string,
+    btnText?: string
+    header?: string
 }
 
 interface IFormState {
-    [key: string]: IFormInputState
+    [key: string]: IInputState
 }
 
-interface IFormInputState {
+interface IInputState {
     required: boolean,
     validateRules: string[],
-    value: string, 
+    value: IUserForm[keyof IUserForm], 
     isValid: boolean, 
     errorText: string
 }
 
 const Form = (props: IFormProps) => {
         const {
-        defaultTextInputs,
-        defaultValues,
+        inputList: inputLabelList,
+        defaultInputValues,
         filteringRules,
         confirmMessage,
-        sendData = defaultOnSendData
+        submit = defaultOnSendData,
+        btnText = "Отправить",
+        header = localisations.components.form.header
     } = props;
 
-    const defaultFormState: IFormState = defaultTextInputs.reduce((acc, cur) => {
-        let inputItem: IInputBase = inputs[cur];
+    const defaultFormState: IFormState = useMemo(() => inputLabelList.reduce((acc, cur) => {
+        let inputSettings: IInputSettings = inputsSettings[cur];
 
-        const {required, initValue, validateRules} = inputItem;
-        const value = defaultValues ? defaultValues[cur as keyof IUserCard] : initValue;
+        const {required, initValue, validateRules} = inputSettings;
+        const value: TInputValue = defaultInputValues[cur as keyof IUserForm] || initValue;
 
         return {
             ...acc,
@@ -53,7 +58,7 @@ const Form = (props: IFormProps) => {
                 ...validateInputValue(value, validateRules, required),
             }
         }
-    }, {});
+    }, {}), []);
 
     const [formState, setFormState] = useState<IFormState>(defaultFormState);
     const [textInputs, setTextInputs] = useState(filterInputs());
@@ -103,13 +108,13 @@ const Form = (props: IFormProps) => {
         let {name, value} = e.target;
         value = value ? value[0].toUpperCase() + value.slice(1) : "";
         setFormState(state => {
-            const {validateRules, required} = state[name as keyof IFormState];
-            const obj: IFormInputState = state[name as keyof IFormState]
+            const inputState: IInputState = state[name as keyof IFormState]
+
             return {
                 ...state,
                 [name as keyof IFormState]: {
-                    ...obj,
-                    ...validateInputValue(value, validateRules, required)
+                    ...inputState,
+                    ...validateInputValue(value, inputState.validateRules, inputState.required)
                 }
             };
         })
@@ -127,7 +132,7 @@ const Form = (props: IFormProps) => {
             const obj = arr.find(el => el.inputValue === formState[rule].value);
             if(obj) hiddenInputs = [...hiddenInputs, ...obj.hiddenFormFields];
         }
-        return defaultTextInputs.filter(el => !hiddenInputs.includes(el));
+        return inputLabelList.filter(el => !hiddenInputs.includes(el));
     }
 
     function validateFormData() {
@@ -145,7 +150,7 @@ const Form = (props: IFormProps) => {
     function renderTextFields() {
         return textInputs.map((el, i) => {
             const {value, isValid, errorText} = formState[el as keyof IFormState];
-            const {selectOptions, id, label, select, required} = inputs[el];
+            const {selectOptions, id, label, select, required} = inputsSettings[el];
             return <TextField
                 error={!isValid}
                 required={required}
@@ -174,10 +179,10 @@ const Form = (props: IFormProps) => {
             autoComplete="off"
         >
             <ListSubheader component="div">
-                {localisations.components.form.header}
+                {header}
             </ListSubheader>
             {renderTextFields()}
-            <Button disabled={isDisabled} onClick={handleSubmit}>Отправить</Button>
+            <Button variant="contained" disabled={isDisabled} onClick={handleSubmit}>{btnText}</Button>
         </Stack>
     );
 };

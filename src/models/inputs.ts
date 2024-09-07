@@ -7,13 +7,21 @@ export interface IStudentCategoryFilteringRule {
     hiddenFormFields: string[]
 }
 
+export type TInputValue = string
+
+export type TInputLabel = string
+
 export type TValidateRules = Array<TValidateRule>
 
 export type TValidateRule = string | { minLength: number} | {maxLength: number}
 
-export type IInputArray = string[]
+export type TInputArray = string[]
 
-export interface IInputBase {
+export type TValidateResult = {value: string, isValid: boolean, errorText: string}
+
+export type TValidateCallback = (length: number) => void
+
+export interface IInputSettings {
     label: string,
     id: string,
     required: boolean,
@@ -23,8 +31,8 @@ export interface IInputBase {
     selectOptions?: string[]
 }
 
-export interface IFormBase {
-    [key: string]: IInputBase
+export interface IFormSettigs {
+    [key: string]: IInputSettings
 }
 
 

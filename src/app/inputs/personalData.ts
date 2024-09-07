@@ -19,14 +19,14 @@ const personalData = {
         id: 'outlined-required',
         required: true,
         initValue: "",
-        validateRules: ["cyrillicTextOnly"]
+        validateRules: ["cyrillicTextOnly", {"minLength": 2}, {"maxLength": 30}]
     },
     patronymic: {
         label: 'Отчество',
         id: 'outlined-basic',
         required: false,
         initValue: "",
-        validateRules: ["cyrillicTextOnly"]
+        validateRules: ["cyrillicTextOnly", {"minLength": 2}, {"maxLength": 30}]
     },
     login: {
         label: 'Логин',

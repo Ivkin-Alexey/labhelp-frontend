@@ -6,6 +6,10 @@ export const SEARCH_DELAY = 1000 // ms
 
 export const SEARCH_SUGGEST_NUMBER = 5
 
+export const PASSWORD_SPECIAL_CHARACTERS = "!@#$%^&-_=+"
+
+export const LOGIN_SPECIAL_CHARACTERS = "-_@"
+
 export const routes = {
   main: '/',
   signIn: '/signin',

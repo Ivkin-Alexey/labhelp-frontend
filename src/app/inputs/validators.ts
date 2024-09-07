@@ -1,10 +1,11 @@
-import validateErrorMessages from "../constants/localizations/validateErrors";
+import validateErrorMessages from "../constants/localizations/validateErrors"
 import {capitalize} from "../methods/methods";
-import type {TValidateRule, TValidateRules} from "../../models/inputs"
-const cyrillicWithSpaceRegExp = /[^а-яёА-ЯЁ ]/gi;
-const cyrillicRegExp = /[^а-яёА-ЯЁ]/gi;
-const userIDRegExp = /^[0-9A-Za-z]$/;
-const passwordRegExp = /^(?=.*?[0-9])(?=.*?[A-Za-z]).$/
+import type {TValidateCallback, TValidateResult, TValidateRule, TValidateRules} from "../../models/inputs"
+import { LOGIN_SPECIAL_CHARACTERS } from "../constants/constants"
+const cyrillicWithSpaceRegExp = /[^а-яёА-ЯЁ ]/gi
+const cyrillicRegExp = /[^а-яёА-ЯЁ]/gi
+const userIDRegExp = /^[a-zA-Z0-9][a-zA-Z0-9-_@]*$/
+const passwordRegExp = new RegExp("^[A-Za-z\\d" + LOGIN_SPECIAL_CHARACTERS + "]*$")
 
 const phoneRegExp = /\D+/g;
 const requiredPhoneCharacter = "+";
@@ -18,35 +19,43 @@ const {
     incorrectPassword
 } = validateErrorMessages;
 
-export default function validateInputValue(value: string = "", rules: TValidateRules, required: boolean) {
+interface IValidateRulesObj {
+    [key: string]: () => void
+}
 
-    type TValidateResult = {value: string, isValid: boolean, errorText: string}
+interface IValidateLengthObj {
+    maxLength: (length: number) => void
+    minLength: (length: number) => void
+}
 
-    type TValidateCallback = (length: number) => void
+export default function validateInputValue(value: string = "", rules: TValidateRules, required: boolean): TValidateResult {
 
     let result: TValidateResult = {value, isValid: true, errorText: ""};
-
-    type TvalidateRules = {[key: string]: TValidateCallback | (() => void)}
-
-    const validateRules: TvalidateRules = {
+    const validateRules: IValidateRulesObj = {
         cyrillicTextOnly: () => checkIsCyrillicOnly(),
         spaceBetweenWordsOnly: () => checkIsSpaceBetweenWords(),
         phone: () => checkIsPhone(),
         login: () => checkIsLoginCorrect(),
         password: () => checkIsPasswordCorrect(),
-        maxLength: (lenght: number) => checkIsMaxLengthCorrect(lenght),
-        minLength: (lenght: number) => checkIsMinLengthCorrect(lenght),
+
+    }
+    const validateLength: IValidateLengthObj =  {
+        maxLength: (lenght) => checkIsMaxLengthCorrect(lenght),
+        minLength: (lenght) => checkIsMinLengthCorrect(lenght),
+    }
+
+    function validate(rule: TValidateRule) {
+        if (typeof rule === "object") {
+            const [[key, value]] = Object.entries(rule)
+            validateLength[key as keyof IValidateLengthObj](value)
+        } else {
+            validateRules[rule]()
+        }
     }
 
     executePreCheck();
 
-    rules.forEach(rule => {
-        if (typeof rule === "string") validateRules[rule]();
-        else {
-            const [[key, value]] = Object.entries(rule)
-            validateRules[key](value)
-        }
-    })
+    rules.forEach(rule => validate(rule))
 
     executeDefaultCheck();
 

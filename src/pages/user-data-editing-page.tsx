@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {useLocation} from "react-router-dom";
 import { categoryFilteringRules } from '../app/inputs/filteringRules';
 import { IUserCard } from '../models/users';
+import { Container } from '@mui/material';
 
 const EditPersonalDataPage = () => {
 
@@ -22,7 +23,9 @@ const EditPersonalDataPage = () => {
         {
           login: "26594",
           password: "123456",
-          fullName: "Иванов Иван Иванович",
+          firstName: "Иван",
+          lastName: "Иванов",
+          patronymic: "Иванович",
           position: "научный сотрудник",
           department: "НЦ Переработки ресурсов",
           equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
@@ -31,7 +34,9 @@ const EditPersonalDataPage = () => {
         {
           login: "26595",
           password: "123456",
-          fullName: "Иванов Иван Иванович",
+          firstName: "Иван",
+          lastName: "Иванов",
+          patronymic: "Иванович",
           position: "научный сотрудник",
           department: "НЦ Переработки ресурсов",
           equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
@@ -40,7 +45,9 @@ const EditPersonalDataPage = () => {
         {
           login: "26596",
           password: "123456",
-          fullName: "Иванов Иван Иванович",
+          firstName: "Иван",
+          lastName: "Иванов",
+          patronymic: "Иванович",
           position: "научный сотрудник",
           department: "НЦ Переработки ресурсов",
           equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
@@ -49,7 +56,9 @@ const EditPersonalDataPage = () => {
         {
           login: "26597",
           password: "123456",
-          fullName: "Иванов Иван Иванович",
+          firstName: "Иван",
+          lastName: "Иванов",
+          patronymic: "Иванович",
           position: "научный сотрудник",
           department: "НЦ Переработки ресурсов",
           equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
@@ -58,7 +67,9 @@ const EditPersonalDataPage = () => {
         {
           login: "26598",
           password: "123456",
-          fullName: "Иванов Иван Иванович",
+          firstName: "Иван",
+          lastName: "Иванов",
+          patronymic: "Иванович",
           position: "научный сотрудник",
           department: "НЦ Переработки ресурсов",
           equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
@@ -67,7 +78,9 @@ const EditPersonalDataPage = () => {
           {
             login: "26599",
             password: "123456",
-            fullName: "Иванов Иван Иванович",
+            firstName: "Иван",
+            lastName: "Иванов",
+            patronymic: "Иванович",
             position: "научный сотрудник",
             department: "НЦ Переработки ресурсов",
             equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
@@ -78,12 +91,16 @@ const EditPersonalDataPage = () => {
       const userData = userList.find(el => el.login === userID)
       if(!userData) return null
 
-    return <Form defaultTextInputs={forms.editPersonalData}
-                 defaultValues={userData}
+    return <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Form inputList={forms.editPersonalData}
+                 defaultInputValues={userData}
                  confirmMessage={message}
                  filteringRules={categoryFilteringRules}
-                 sendData={sendData}
-    />;
+                 submit={sendData}
+                 btnText="Подтвердить"
+                 header="Данные пользователя:"
+    />
+    </Container>
 };
 
 export default EditPersonalDataPage;
