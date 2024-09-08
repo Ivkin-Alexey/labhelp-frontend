@@ -1,5 +1,5 @@
 const forms = {
-    editPersonalData: ["firstName", "lastName", "patronymic", "category", "position", "studentsEducationYear", "postGraduateEducationYear",  "login", "password"],
+    editPersonalData: ["firstName", "lastName", "patronymic", "category", "position", "department", "studentsEducationYear", "postGraduateEducationYear",  "login", "password"],
 };
 
 export default forms;

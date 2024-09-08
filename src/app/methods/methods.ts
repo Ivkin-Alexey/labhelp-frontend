@@ -1,4 +1,6 @@
-export function createPersonName(person) {
+import { IUserCard, IUserForm } from "../../models/users";
+
+export function createPersonName(person: IUserForm) {
     const {firstName, lastName, patronymic} = person;
     let name = "";
     if(lastName) {
@@ -12,11 +14,11 @@ export function createPersonName(person) {
     return name;
 }
 
-export function createFullPersonName(personData) {
+export function createFullPersonName(personData: IUserForm) {
     const {firstName, lastName, patronymic} = personData || {};
     return ((lastName ?? "") + ' ' + (firstName ?? "") + ' ' + (patronymic ?? "")).trim();
 }
  
-export function capitalize(str) {
+export function capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }

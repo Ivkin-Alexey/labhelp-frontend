@@ -20,5 +20,5 @@ export const routes = {
   search: '/search',
   operatingEquipments: '/operating-equipments',
   admin: '/admin',
-  userProfile: '/admin/:userID',
+  userProfile: '/admin/:login',
 }

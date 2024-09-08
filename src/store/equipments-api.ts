@@ -39,7 +39,7 @@ export const equipmentsApi = api.injectEndpoints({
               draft.forEach(el => {
                 if (el.id === data.equipmentID) {
                   el.isOperate = true;
-                  el.userID = data.login
+                  el.login = data.login
                 }
               }),
           ),
@@ -68,7 +68,7 @@ export const equipmentsApi = api.injectEndpoints({
                 draft.forEach(el => {
                   if (el.id === data.equipmentID) {
                     delete el.isOperate
-                    delete el.userID
+                    delete el.login
                   }
                 }),
             ),

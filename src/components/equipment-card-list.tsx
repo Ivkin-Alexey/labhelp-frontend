@@ -19,13 +19,13 @@ export default function EquipmentCardList({list}: IEquipmentCardList) {
       justifyContent="center"
       marginBottom="40px"
     >{list.map(el => {
-            const { id, imgUrl, name, model, isFavorite, isOperate, userID, userName } = el
+            const { id, imgUrl, name, model, isFavorite, isOperate, login, userName } = el
   
             return (
               <EquipmentCard
                 key={id}
                 id={id}
-                userID={userID}
+                login={login}
                 title={name}
                 description={model}
                 imgUrl={imgUrl}

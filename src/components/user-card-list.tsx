@@ -20,18 +20,13 @@ export default function UserCardList({list}: IUserCardList) {
       justifyContent="center"
       marginBottom="40px"
     >{list.map(el => {
-            const { login, password, fullName, imgUrl, equipments, position, department, isVerified } = el
+            const { login: login, ...props } = el
   
             return (
               <UserCard
                 key={login}
                 login={login}
-                fullName={fullName}
-                imgUrl={imgUrl}
-                isVerified={isVerified} 
-                password={password} 
-                position={position} 
-                department={department}
+                {...props}
                 />
             )
           })}

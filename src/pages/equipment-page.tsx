@@ -31,9 +31,9 @@ export default function EquipmentPage() {
   }
 
   if (data) {
-    let { id, brand, name, model, imgUrl, description, isFavorite, isOperate, userName, userID } = data
+    let { id, brand, name, model, imgUrl, description, isFavorite, isOperate, userName, login } = data
 
-    if (userID === login) { userName = "Вы используете" }
+    if (login === login) { userName = "Вы используете" }
 
     return (
       <Container

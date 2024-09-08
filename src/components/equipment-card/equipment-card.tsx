@@ -21,13 +21,13 @@ interface IEquipmentCard {
   imgUrl: string
   isFavorite?: boolean
   isOperate?: boolean
-  userID?: string
+  login?: string
   isCardMode: boolean
   userName?: string
 }
 
 export function EquipmentCard(props: IEquipmentCard) {
-  const { id, title, description, imgUrl, isFavorite, isOperate = false, userID, isCardMode, userName} = props
+  const { id, title, description, imgUrl, isFavorite, isOperate = false, login, isCardMode, userName} = props
 
   const navigate = useNavigate()
 
@@ -68,7 +68,7 @@ export function EquipmentCard(props: IEquipmentCard) {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: "16px",  }}>
-        <OperateButtons equipmentID={id} isOperate={isOperate} userID={userID} />
+        <OperateButtons equipmentID={id} isOperate={isOperate} login={login} />
         <FavoriteButtons equipmentID={id} isFavorite={isFavorite} isCardMode={isCardMode} />
       </CardActions>
     </Card>

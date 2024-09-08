@@ -49,6 +49,13 @@ const personalData = {
         initValue: "",
         validateRules: ["cyrillicTextOnly", "spaceBetweenWordsOnly"],
     },
+    department: {
+        label: 'Подразделение',
+        id: 'outlined-basic',
+        required: true,
+        initValue: "",
+        validateRules: ["cyrillicTextOnly", "spaceBetweenWordsOnly"],
+    },
     studentsEducationYear: {
         label: 'Курс',
         select: true,

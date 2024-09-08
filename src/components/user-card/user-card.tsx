@@ -11,23 +11,26 @@ import { useNavigate } from 'react-router-dom'
 import FavoriteButtons from './favorite-buttons'
 import CardStatus from './card-status'
 import OperateButtons from './operating-buttons'
-import type { TUserID, IUserCard } from '../../models/users'
+import type { TLogin, IUserCard } from '../../models/users'
 import { routes } from '../../app/constants/constants'
+import { createPersonName } from '../../app/methods/methods'
 
 export function UserCard(props: IUserCard) {
-  const { imgUrl = "#", login: userID, password, fullName, position, department, isVerified } = props
+  const { imgUrl = "#", login: login, password, position, department, isVerified } = props
 
   const navigate = useNavigate()
 
-  function handleClick(e: React.MouseEvent, userID: TUserID) {
-    navigate(routes.admin + "/" + userID)
+  function handleClick(e: React.MouseEvent, login: TLogin) {
+    navigate(routes.admin + "/" + login)
   }
+
+  const fullName = createPersonName(props)
 
   return (
     <Card
       sx={{
         width: '12vw',
-        minWidth: '200px',
+        minWidth: '230px',
         marginTop: '40px',
         display: 'flex',
         justifyContent: 'space-between',
@@ -35,7 +38,7 @@ export function UserCard(props: IUserCard) {
       }}
     >
       <CardActionArea
-        onClick={e => handleClick(e, userID)}
+        onClick={e => handleClick(e, login)}
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
         className="cardActionArea"
       >
@@ -54,7 +57,7 @@ export function UserCard(props: IUserCard) {
            {department}
           </Typography>
           <Typography variant="body2" color="text.primary" marginBottom="5px">
-           логин: {userID}
+           логин: {login}
           </Typography>
           <Typography variant="body2" color="text.primary" marginBottom="5px">
            пароль: {password}
@@ -62,7 +65,7 @@ export function UserCard(props: IUserCard) {
         </CardContent>
       </CardActionArea>
       {/* <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: "16px",  }}> */}
-        {/* <OperateButtons equipmentID={id} isOperate={isOperate} userID={userID} />
+        {/* <OperateButtons equipmentID={id} isOperate={isOperate} login={login} />
         <FavoriteButtons equipmentID={id} isFavorite={isFavorite} isCardMode={isCardMode} /> */}
       {/* </CardActions> */}
     </Card>

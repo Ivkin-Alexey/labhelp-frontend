@@ -3,13 +3,13 @@ import {MenuItem, Stack, TextField} from "@mui/material";
 import ListSubheader from "@mui/material/ListSubheader";
 import Button from "@mui/material/Button";
 import {useDispatch, useSelector} from "react-redux";
-import validateInputValue from "../app/inputs/validators";
-import inputsSettings from "../app/inputs/inputs";
+import validateInputValue from "../../app/inputs/validators";
+import inputsSettings from "../../app/inputs/inputs";
 import {useNavigate} from "react-router-dom";
-import localisations from "../app/constants/localizations/localizations";
-import { IUserCard } from '../models/users';
-import { IInputSettings, TInputArray, IStudentCategoryFilteringRule, TInputValue} from '../models/inputs';
-import { IUserForm } from '../models/users';
+import localisations from "../../app/constants/localizations/localizations";
+import { IUserCard } from '../../models/users';
+import { IInputSettings, TInputArray, IStudentCategoryFilteringRule, TInputValue} from '../../models/inputs';
+import { IUserForm } from '../../models/users';
 
 interface IFormProps {
     inputList: TInputArray,
@@ -19,6 +19,7 @@ interface IFormProps {
     confirmMessage?: string,
     btnText?: string
     header?: string
+    optionalButtons?: React.ReactNode | undefined
 }
 
 interface IFormState {
@@ -41,7 +42,8 @@ const Form = (props: IFormProps) => {
         confirmMessage,
         submit = defaultOnSendData,
         btnText = "Отправить",
-        header = localisations.components.form.header
+        header = localisations.components.form.header,
+        optionalButtons
     } = props;
 
     const defaultFormState: IFormState = useMemo(() => inputLabelList.reduce((acc, cur) => {
@@ -183,6 +185,7 @@ const Form = (props: IFormProps) => {
             </ListSubheader>
             {renderTextFields()}
             <Button variant="contained" disabled={isDisabled} onClick={handleSubmit}>{btnText}</Button>
+            {optionalButtons ?? null}
         </Stack>
     );
 };

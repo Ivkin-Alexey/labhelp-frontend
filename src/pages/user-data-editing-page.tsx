@@ -1,17 +1,22 @@
 import forms from '../app/inputs/forms';
 import localisations from '../app/constants/localizations/localizations';
-import Form from "../components/form";
-import {useNavigate} from "react-router-dom";
+import Form from "../components/form/form";
+import {redirect, useNavigate} from "react-router-dom";
 import {useLocation} from "react-router-dom";
 import { categoryFilteringRules } from '../app/inputs/filteringRules';
-import { IUserCard } from '../models/users';
+import { IUserCard, TLogin } from '../models/users';
 import { Container } from '@mui/material';
+import OptionalUserFormButtons from '../components/form/option-buttons';
+import { ConstructionOutlined } from '@mui/icons-material';
+import { routes } from '../app/constants/constants';
+import React from 'react';
 
 const EditPersonalDataPage = () => {
 
     const location = useLocation()
+    const navigate = useNavigate()
 
-    const userID = location.pathname.split("/").at(-1)
+    const login: TLogin | undefined = location.pathname.split("/").at(-1)
 
     const message = localisations.pages.editPersonalData.confirmMsg
 
@@ -88,8 +93,18 @@ const EditPersonalDataPage = () => {
           },
       ]
 
-      const userData = userList.find(el => el.login === userID)
+      const userData: IUserCard | undefined = userList.find(el => el.login === login)
       if(!userData) return null
+
+      function handleDeletePerson(login: TLogin | undefined) {
+          if(!login) return
+          console.log(login)
+          navigate(routes.admin)
+      }
+
+      const optionalButtons = () => {
+        if (userData.role !== "admin") return <OptionalUserFormButtons handleOnClick={() => handleDeletePerson(login)}/>
+      }
 
     return <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Form inputList={forms.editPersonalData}
@@ -99,6 +114,7 @@ const EditPersonalDataPage = () => {
                  submit={sendData}
                  btnText="Подтвердить"
                  header="Данные пользователя:"
+                 optionalButtons={optionalButtons()}
     />
     </Container>
 };

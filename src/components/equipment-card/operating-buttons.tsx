@@ -13,11 +13,11 @@ import { selectAccount } from '../../store/selectors'
 interface IOperateButtons {
   isOperate?: boolean
   equipmentID: EquipmentID
-  userID: string | undefined
+  login: string | undefined
 }
 
 export default function OperateButtons(props: IOperateButtons) {
-  const { isOperate, equipmentID, userID } = props
+  const { isOperate, equipmentID, login } = props
 
   const [add] = useAddOperatingEquipmentMutation()
   const [remove] = useDeleteOperatingEquipmentMutation()
@@ -26,7 +26,7 @@ export default function OperateButtons(props: IOperateButtons) {
 
   function renderEndBtn() {
 
-    if (userID !== login) { return null}
+    if (login !== login) { return null}
     
     return (
       <Button
