@@ -1,25 +1,25 @@
 import { api } from './api'
 import { DEFAULT_SEARCH_TERM } from '../app/constants/constants'
-import type { EquipmentID, EquipmentItem } from '../models/equipments'
+import type { EquipmentID, IEquipmentItem } from '../models/equipments'
 
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
-    fetchEquipmentByID: builder.query<EquipmentItem, string>({
+    fetchEquipmentByID: builder.query<IEquipmentItem, string>({
       query: equipmentID => `/equipmentList?equipmentID=${equipmentID}`,
       providesTags: ['Equipment'],
     }),
     fetchEquipmentsBySearchTerm: builder.query<
-      EquipmentItem[],
+      IEquipmentItem[],
       { searchTerm: string; login: string }
     >({
       query: data => `/equipmentList?search=${data.searchTerm}&login=${data.login}`,
       providesTags: ['EquipmentList'],
     }),
-    fetchFavoriteEquipments: builder.query<EquipmentItem[], string>({
+    fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
       query: login => `/favoriteEquipments?login=${login}`,
       providesTags: ['FavoriteEquipmentList'],
     }),
-    fetchOperatingEquipments: builder.query<EquipmentItem[], void>({
+    fetchOperatingEquipments: builder.query<IEquipmentItem[], void>({
       query: (login) => `/workingEquipmentList?login=${login}`,
       providesTags: ['OperatingEquipmentList'],
     }),

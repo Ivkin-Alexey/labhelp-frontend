@@ -6,13 +6,13 @@ import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
 import { Search } from '../components/search/search'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/equipments-api'
-import { selectAccount } from '../store/selectors'
+import { selectLogin } from '../store/selectors'
 
 export default function SearchPage() {
   const [searchParams] = useSearchParams()
   const term = searchParams.get('term')
 
-  const { login } = useAppSelector(selectAccount)
+  const login = useAppSelector(selectLogin)
   const arg = { login, searchTerm: term || DEFAULT_SEARCH_TERM }
 
   const { isFetching, isError, data: equipmentList } = useFetchEquipmentsBySearchTermQuery(arg)

@@ -9,18 +9,18 @@ import FavoriteButtons from '../components/equipment-card/favorite-buttons'
 import OperateStatus from '../components/equipment-card/operate-status'
 import { ThemeContext } from '../components/root'
 import { useFetchEquipmentByIDQuery } from '../store/equipments-api'
-import { selectAccount } from '../store/selectors'
+import { selectLogin } from '../store/selectors'
 
 export default function EquipmentPage() {
   const location = useLocation()
 
   const equipmentID = location.pathname.slice(1)
 
-  const { login } = useAppSelector(selectAccount)
-
   const { color } = useContext(ThemeContext)
 
   const { isFetching, isError, data } = useFetchEquipmentByIDQuery(equipmentID)
+
+  const accountLogin = useAppSelector(selectLogin)
 
   if (isFetching) {
     return <CircularProgress size="60px" />
@@ -31,9 +31,17 @@ export default function EquipmentPage() {
   }
 
   if (data) {
-    let { id, brand, name, model, imgUrl, description, isFavorite, isOperate, userName, login } = data
+    let { id, brand, name, model, imgUrl, description, isFavorite, isOperate, userName, login, userID } = data
 
-    if (login === login) { userName = "Вы используете" }
+    let label;
+
+    console.log(data)
+
+    if (accountLogin === login || accountLogin === userID) { 
+      label = "Вы используете" 
+    } else if (userID) {
+      label = "В работе у пользователя " + userID 
+    }
 
     return (
       <Container
@@ -46,7 +54,7 @@ export default function EquipmentPage() {
         }}
       >
         <Box sx={{position: "relative"}}>
-          <OperateStatus isOperate={isOperate} userName={userName} />
+          <OperateStatus isOperate={isOperate} label={label} />
           <img
             height="400"
             src={imgUrl}

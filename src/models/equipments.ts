@@ -11,6 +11,7 @@ export interface IEquipmentItem {
   isFavorite?: boolean
   isOperate?: boolean
   login?: string
+  userID?: string
   userName?: string
 }
 

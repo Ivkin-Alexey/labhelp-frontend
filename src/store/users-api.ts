@@ -9,7 +9,7 @@ export const usersApi = api.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList'],
+      invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList', 'OperatingEquipmentList'],
     }),
     signUp: builder.mutation<string, IUserCredentials>({
       query: credentials => ({
@@ -17,7 +17,7 @@ export const usersApi = api.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList'],
+      invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList', 'OperatingEquipmentList'],
     }),
     getAccountData: builder.query<TAccountData, TLogin>({
       query: login => '/person/' + login,
@@ -26,4 +26,4 @@ export const usersApi = api.injectEndpoints({
   }),
 })
 
-export const { useSignInMutation, useSignUpMutation } = usersApi
+export const { useSignInMutation, useSignUpMutation, useLazyGetAccountDataQuery } = usersApi

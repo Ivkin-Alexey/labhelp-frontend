@@ -3,11 +3,10 @@ import React, { useEffect } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { routes } from './constants/constants'
-import RequireAuth from '../components/require-auth'
+import {RequireAuth, RequireAdminRole} from '../components/require-auth'
 import Root from '../components/root'
 import EquipmentPage from '../pages/equipment-page'
 import MainPage from '../pages/main-page'
-import OperatingEquipmentsPage from '../pages/operating-equipments-page'
 import SearchPage from '../pages/search-page'
 import SignInPage from '../pages/sign-in-page'
 import SignUpPage from '../pages/sign-up-page'
@@ -16,6 +15,7 @@ import EditPersonalDataPage from '../pages/user-data-editing-page'
 
 const FavoritesPage = React.lazy(() => import('../pages/favorites-page'))
 const HistoryPage = React.lazy(() => import('../pages/history-page'))
+const OperatingEquipmentsPage = React.lazy(() => import('../pages/operating-equipments-page'))
 
 const router = createBrowserRouter([
   {
@@ -70,9 +70,9 @@ const router = createBrowserRouter([
       {
         path: routes.admin,
         element: (
-          <RequireAuth redirectTo={routes.signIn}>
+          <RequireAdminRole redirectTo={routes.signIn}>
             <AdminPage />
-          </RequireAuth>
+          </RequireAdminRole>
         ),
       },
           {

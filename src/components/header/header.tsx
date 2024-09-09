@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { FormControlLabel, Switch } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
@@ -15,11 +15,15 @@ import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import { selectAccount } from '../../store/selectors'
 import { ThemeContext } from '../root'
+import { accountSlice } from '../../store/users-slice'
 
-const pages = [
+let pages = [
   { title: 'Избранное', path: routes.favorites },
   { title: 'История поиска', path: routes.history },
   { title: 'Оборудование в работе', path: routes.operatingEquipments },
+]
+
+const adminPages = [
   { title: 'Администрирование', path: routes.admin },
 ]
 
@@ -39,6 +43,8 @@ function Header() {
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+  const [pagesState, setPagesState] = React.useState(pages)
+  const {accountData} = useAppSelector(selectAccount)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -46,6 +52,12 @@ function Header() {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
+
+  useEffect(() => {
+    if(accountData?.role === "admin") {
+      setPagesState(prev => Array.from(new Set([...prev, ...adminPages])))
+    }
+  }, [accountData])
 
   const handleCloseNavMenu = (path: string) => {
     setAnchorElNav(null)
@@ -84,11 +96,11 @@ function Header() {
               handleOpenNavMenu={handleOpenNavMenu}
               anchorElNav={anchorElNav}
               handleCloseNavMenu={handleCloseNavMenu}
-              list={pages}
+              list={pagesState}
             />
           )}
           <HeaderNavigation
-            list={pages}
+            list={pagesState}
             isAuth={isAuth}
             handleCloseNavMenu={handleCloseNavMenu}
             navigateToMainPage={navigateToMainPage}

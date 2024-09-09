@@ -27,7 +27,7 @@ interface IEquipmentCard {
 }
 
 export function EquipmentCard(props: IEquipmentCard) {
-  const { id, title, description, imgUrl, isFavorite, isOperate = false, login, isCardMode, userName} = props
+  const { id, title, description, imgUrl, isFavorite = false, isOperate = false, login, isCardMode, userName} = props
 
   const navigate = useNavigate()
 
