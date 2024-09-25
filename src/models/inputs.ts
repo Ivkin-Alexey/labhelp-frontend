@@ -31,6 +31,10 @@ export interface IInputSettings {
     selectOptions?: string[]
 }
 
+export interface IFormValues {
+    [key: string]: string
+}
+
 export interface IFormSettigs {
     [key: string]: IInputSettings
 }

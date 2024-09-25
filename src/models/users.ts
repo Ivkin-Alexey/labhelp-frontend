@@ -11,6 +11,11 @@ export interface IUserCredentials {
   password: FormDataEntryValue | null
 }
 
+export interface IUserFormData {
+  login: TLogin
+  data: Partial<IUserForm>,
+}
+
 export interface IUserCard extends IUserForm {
   imgUrl?: string,
   equipments?: "all" | IAvailableEquipments

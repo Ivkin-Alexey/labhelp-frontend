@@ -20,7 +20,6 @@ export default function EquipmentCardList({list}: IEquipmentCardList) {
       marginBottom="40px"
     >{list.map(el => {
             const { id, imgUrl, name, model, isFavorite, isOperate, login, userName, userID } = el
-  console.log(el)
             return (
               <EquipmentCard
                 key={id}

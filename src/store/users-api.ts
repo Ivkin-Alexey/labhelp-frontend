@@ -1,5 +1,5 @@
 import { api } from './api'
-import type { TAccountData, TLogin, IUserCredentials } from '../models/users'
+import type { TAccountData, TLogin, IUserCredentials, IUserFormData } from '../models/users'
 
 export const usersApi = api.injectEndpoints({
   endpoints: builder => ({
@@ -19,6 +19,14 @@ export const usersApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList', 'OperatingEquipmentList'],
     }),
+    updatePersonData: builder.mutation<string, IUserFormData>({
+      query: userFormData => ({
+        url: '/updatePersonData',
+        method: 'POST',
+        body: userFormData,
+      }),
+      invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList', 'OperatingEquipmentList'],
+    }),
     getAccountData: builder.query<TAccountData, TLogin>({
       query: login => '/person/' + login,
       providesTags: ['account'],
@@ -26,4 +34,4 @@ export const usersApi = api.injectEndpoints({
   }),
 })
 
-export const { useSignInMutation, useSignUpMutation, useLazyGetAccountDataQuery } = usersApi
+export const { useSignInMutation, useSignUpMutation, useLazyGetAccountDataQuery, useUpdatePersonDataMutation } = usersApi

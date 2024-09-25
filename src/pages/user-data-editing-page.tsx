@@ -4,12 +4,14 @@ import Form from "../components/form/form";
 import {redirect, useNavigate} from "react-router-dom";
 import {useLocation} from "react-router-dom";
 import { categoryFilteringRules } from '../app/inputs/filteringRules';
-import { IUserCard, TLogin } from '../models/users';
+import { IUserCard, IUserFormData, TLogin } from '../models/users';
 import { Container } from '@mui/material';
 import OptionalUserFormButtons from '../components/form/option-buttons';
 import { ConstructionOutlined } from '@mui/icons-material';
 import { routes } from '../app/constants/constants';
 import React from 'react';
+import { IFormValues } from '../models/inputs';
+import { useUpdatePersonDataMutation } from '../store/users-api';
 
 const EditPersonalDataPage = () => {
 
@@ -20,9 +22,7 @@ const EditPersonalDataPage = () => {
 
     const message = localisations.pages.editPersonalData.confirmMsg
 
-    function sendData() {
-        console.log("Данные отправлены")
-    }
+    const [sendData, {isSuccess, isError, isLoading}] = useUpdatePersonDataMutation()
 
     const userList: IUserCard[] = [
         {

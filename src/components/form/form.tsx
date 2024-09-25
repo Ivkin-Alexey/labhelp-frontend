@@ -2,20 +2,21 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {MenuItem, Stack, TextField} from "@mui/material";
 import ListSubheader from "@mui/material/ListSubheader";
 import Button from "@mui/material/Button";
-import {useDispatch, useSelector} from "react-redux";
 import validateInputValue from "../../app/inputs/validators";
 import inputsSettings from "../../app/inputs/inputs";
 import {useNavigate} from "react-router-dom";
 import localisations from "../../app/constants/localizations/localizations";
-import { IUserCard } from '../../models/users';
-import { IInputSettings, TInputArray, IStudentCategoryFilteringRule, TInputValue} from '../../models/inputs';
+import { TLogin } from '../../models/users';
+import { IInputSettings, TInputArray, IStudentCategoryFilteringRule, TInputValue, IFormValues} from '../../models/inputs';
 import { IUserForm } from '../../models/users';
+import { useAppSelector } from '../../app/hooks/hooks';
+import { selectLogin } from '../../store/selectors';
 
 interface IFormProps {
     inputList: TInputArray,
     defaultInputValues: IUserForm,
     filteringRules: {[key: string]: IStudentCategoryFilteringRule[]},
-    submit: (data: IUserCard) => void,
+    submit: (login: TLogin, data: IFormValues) => void,
     confirmMessage?: string,
     btnText?: string
     header?: string
@@ -40,14 +41,17 @@ const Form = (props: IFormProps) => {
         defaultInputValues,
         filteringRules,
         confirmMessage,
-        submit = defaultOnSendData,
+        submit,
         btnText = "Отправить",
         header = localisations.components.form.header,
         optionalButtons
-    } = props;
+    } = props
+
+    const accountLogin = useAppSelector(selectLogin)
 
     const defaultFormState: IFormState = useMemo(() => inputLabelList.reduce((acc, cur) => {
-        let inputSettings: IInputSettings = inputsSettings[cur];
+
+        let inputSettings: IInputSettings = inputsSettings[cur]
 
         const {required, initValue, validateRules} = inputSettings;
         const value: TInputValue = defaultInputValues[cur as keyof IUserForm] || initValue;
@@ -65,35 +69,23 @@ const Form = (props: IFormProps) => {
     const [formState, setFormState] = useState<IFormState>(defaultFormState);
     const [textInputs, setTextInputs] = useState(filterInputs());
     const [isDisabled, setIsDisabled] = useState(true);
-    const navigate = useNavigate();
-    // const [updatePerson, {isSuccess}] = useUpdatePersonMutation();
+
+    const formValues = useMemo(() => {
+        const formValues: IFormValues = {}
+        for(let key in formState) {
+            formValues[key] = formState[key].value
+        }
+        return formValues
+    }, [formState])
 
     const onSendData = useCallback(() => {
-        // const formDataEntries = Object.entries(formData).map(el => [el[0], el[1].value]);
-        // const data = Object.fromEntries(formDataEntries);
-        // sendData(data);
+        submit(accountLogin, formValues);
     }, [formState]);
-
-    function defaultOnSendData(data: IUserCard) {
-        console.log(data)
-        // updatePerson(chatID, accountChatID, data, queryId);
-    }
-
-    // useEffect(() => {
-        
-    // }, [isSuccess])
 
     // function popupCallback() {
     //     if(accountData.role === "superAdmin") navigate(-1);
     //     else tg.close()
     // }
-
-    // useEffect(() => {
-    //     tg.onEvent('mainButtonClicked', onSendData)
-    //     return () => {
-    //         tg.offEvent('mainButtonClicked', onSendData)
-    //     }
-    // }, [onSendData])
 
     useEffect(() => {
         if (validateFormData()) {
@@ -104,7 +96,6 @@ const Form = (props: IFormProps) => {
         setTextInputs(() => filterInputs());
         setFormState(() => formState)
     }, [formState]);
-
 
     const onChangeData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let {name, value} = e.target;
@@ -121,11 +112,6 @@ const Form = (props: IFormProps) => {
             };
         })
     }
-
-    function handleSubmit() {
-        if(!validateFormData()) onSendData()
-    }
-
 
     function filterInputs() {
         let hiddenInputs: string[] = [];
@@ -184,7 +170,7 @@ const Form = (props: IFormProps) => {
                 {header}
             </ListSubheader>
             {renderTextFields()}
-            <Button variant="contained" disabled={isDisabled} onClick={handleSubmit}>{btnText}</Button>
+            <Button variant="contained" disabled={isDisabled} onClick={onSendData}>{btnText}</Button>
             {optionalButtons ?? null}
         </Stack>
     );
