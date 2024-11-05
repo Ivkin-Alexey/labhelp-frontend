@@ -6,17 +6,18 @@ import validateInputValue from "../../app/inputs/validators";
 import inputsSettings from "../../app/inputs/inputs";
 import {useNavigate} from "react-router-dom";
 import localisations from "../../app/constants/localizations/localizations";
-import { TLogin } from '../../models/users';
+import { IUserFormData, TLogin } from '../../models/users';
 import { IInputSettings, TInputArray, IStudentCategoryFilteringRule, TInputValue, IFormValues} from '../../models/inputs';
 import { IUserForm } from '../../models/users';
 import { useAppSelector } from '../../app/hooks/hooks';
 import { selectLogin } from '../../store/selectors';
+import CircularButton from '../circular-button';
 
 interface IFormProps {
     inputList: TInputArray,
     defaultInputValues: IUserForm,
     filteringRules: {[key: string]: IStudentCategoryFilteringRule[]},
-    submit: (login: TLogin, data: IFormValues) => void,
+    submit: (formData: IUserFormData) => void,
     confirmMessage?: string,
     btnText?: string
     header?: string
@@ -79,7 +80,8 @@ const Form = (props: IFormProps) => {
     }, [formState])
 
     const onSendData = useCallback(() => {
-        submit(accountLogin, formValues);
+        console.log(formState)
+        submit({login: accountLogin, data: formValues});
     }, [formState]);
 
     // function popupCallback() {
@@ -170,6 +172,7 @@ const Form = (props: IFormProps) => {
                 {header}
             </ListSubheader>
             {renderTextFields()}
+            <CircularButton isLoading >{btnText}</CircularButton>
             <Button variant="contained" disabled={isDisabled} onClick={onSendData}>{btnText}</Button>
             {optionalButtons ?? null}
         </Stack>

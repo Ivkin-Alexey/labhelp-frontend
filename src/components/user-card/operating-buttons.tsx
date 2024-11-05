@@ -9,6 +9,7 @@ import {
   useDeleteOperatingEquipmentMutation,
 } from '../../store/equipments-api'
 import { selectAccount } from '../../store/selectors'
+import { useDeletePersonMutation } from '../../store/users-api'
 
 interface IOperateButtons {
   isOperate?: boolean
@@ -20,7 +21,7 @@ export default function OperateButtons(props: IOperateButtons) {
   const { isOperate, equipmentID, login } = props
 
   const [add] = useAddOperatingEquipmentMutation()
-  const [remove] = useDeleteOperatingEquipmentMutation()
+  const [remove] = useDeletePersonMutation
   const { isAuth, accountData } = useAppSelector(selectAccount)
   const {login: accountLogin} = accountData
   const navigate = useNavigate()

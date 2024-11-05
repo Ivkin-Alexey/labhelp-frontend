@@ -9,20 +9,24 @@ import { Container } from '@mui/material';
 import OptionalUserFormButtons from '../components/form/option-buttons';
 import { ConstructionOutlined } from '@mui/icons-material';
 import { routes } from '../app/constants/constants';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IFormValues } from '../models/inputs';
-import { useUpdatePersonDataMutation } from '../store/users-api';
+import { useDeletePersonMutation, useUpdatePersonDataMutation } from '../store/users-api';
+import { selectLogin } from '../store/selectors';
+import { useAppSelector } from '../app/hooks/hooks';
 
 const EditPersonalDataPage = () => {
 
     const location = useLocation()
     const navigate = useNavigate()
+    const accountLogin = useAppSelector(selectLogin)
 
     const login: TLogin | undefined = location.pathname.split("/").at(-1)
 
     const message = localisations.pages.editPersonalData.confirmMsg
 
-    const [sendData, {isSuccess, isError, isLoading}] = useUpdatePersonDataMutation()
+    const [sendData, {isSuccess: isSuccessUpdate, isError: isErrorUpdate, isLoading: isLoadingUpdate}] = useUpdatePersonDataMutation()
+    const [deleteMutation, {isSuccess: isSuccessDelete, isError: isErrorDelete, isLoading: isLoadingDelete}] = useDeletePersonMutation()
 
     const userList: IUserCard[] = [
         {
@@ -99,12 +103,18 @@ const EditPersonalDataPage = () => {
       function handleDeletePerson(login: TLogin | undefined) {
           if(!login) return
           console.log(login)
-          navigate(routes.admin)
+          deleteMutation({login: accountLogin, deletedPersonLogin: login})
       }
 
       const optionalButtons = () => {
         if (userData.role !== "admin") return <OptionalUserFormButtons handleOnClick={() => handleDeletePerson(login)}/>
       }
+
+      useEffect(() => {
+        if(isSuccessDelete) {
+          navigate(routes.admin)
+        }
+      }, [isSuccessDelete])
 
     return <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Form inputList={forms.editPersonalData}
