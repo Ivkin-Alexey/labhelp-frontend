@@ -1,8 +1,9 @@
+import type React from 'react'
+
 import { CircularProgress, Typography } from '@mui/material'
 
 import type { IEquipmentItem } from '../models/equipments'
-import React from 'react'
-import { IUserCard } from '../models/users'
+import type { IUserCard } from '../models/users'
 
 interface ICardList {
   isLoading: boolean

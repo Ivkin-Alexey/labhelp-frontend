@@ -8,26 +8,24 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
 import FavoriteButtons from './favorite-buttons'
-import OperateStatus from './operate-status'
 import OperateButtons from './operating-buttons'
-import type { EquipmentID } from '../../models/equipments'
-import { ThemeContext } from '../root'
+import type { EquipmentID, TEquipmentCard } from '../../models/equipments'
 import CardStatus from '../user-card/card-status'
 
-interface IEquipmentCard {
-  id: EquipmentID
-  title: string
-  description: string
-  imgUrl: string
-  isFavorite?: boolean
-  isOperate?: boolean
-  login?: string
-  isCardMode: boolean
-  userName?: string
-}
-
-export function EquipmentCard(props: IEquipmentCard) {
-  const { id, title, description, imgUrl, isFavorite = false, isOperate = false, login, isCardMode, userName} = props
+export function EquipmentCard(props: TEquipmentCard) {
+  const {
+    id,
+    name,
+    inventoryNumber,
+    serialNumber,
+    description,
+    imgUrl,
+    isFavorite = false,
+    isOperate = false,
+    login,
+    isCardMode,
+    userName,
+  } = props
 
   const navigate = useNavigate()
 
@@ -51,23 +49,26 @@ export function EquipmentCard(props: IEquipmentCard) {
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
         className="cardActionArea"
       >
-        <CardStatus isVisible={isOperate} text={userName || "В работе"}/>
+        <CardStatus isVisible={isOperate} text={userName || 'В работе'} />
         <div className="cardMediaWrapper">
           <CardMedia component="img" image={imgUrl} alt="Изображение карточки" />
         </div>
         <CardContent>
           <Typography className="cardText" gutterBottom variant="body1" component="div">
-            {title}
+            {name}
           </Typography>
-          <Typography variant="body2" color="text.secondary" marginBottom="5px">
+          {!isCardMode && <Typography variant="body2" color="text.secondary" marginBottom="5px">
             {description}
+          </Typography>}
+          <Typography variant="body2" color="text.secondary">
+            Инвентарный № {inventoryNumber}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            № {id}
+            Заводской № {serialNumber}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: "16px",  }}>
+      <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: '16px' }}>
         <OperateButtons equipmentID={id} isOperate={isOperate} login={login} />
         <FavoriteButtons equipmentID={id} isFavorite={isFavorite} isCardMode={isCardMode} />
       </CardActions>

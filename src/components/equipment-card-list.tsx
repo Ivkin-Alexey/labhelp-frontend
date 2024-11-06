@@ -1,40 +1,29 @@
-import { Stack } from "@mui/material"
-import { IEquipmentItem } from "../models/equipments"
-import { EquipmentCard } from "./equipment-card/equipment-card"
+import { Stack } from '@mui/material'
+
+import { EquipmentCard } from './equipment-card/equipment-card'
+import type { IEquipmentItem } from '../models/equipments'
 
 interface IEquipmentCardList {
   list?: IEquipmentItem[]
 }
 
-export default function EquipmentCardList({list}: IEquipmentCardList) {
+export default function EquipmentCardList({ list }: IEquipmentCardList) {
+  if (!list) {
+    return null
+  }
 
-  if(!list) return null
-  
-     return (
-      <Stack
+  return (
+    <Stack
       direction="row"
       spacing={4}
       useFlexGap
       flexWrap="wrap"
       justifyContent="center"
       marginBottom="40px"
-    >{list.map(el => {
-            const { id, imgUrl, name, model, isFavorite, isOperate, login, userName, userID } = el
-            return (
-              <EquipmentCard
-                key={id}
-                id={id}
-                login={login || userID}
-                title={name}
-                description={model}
-                imgUrl={imgUrl}
-                isFavorite={isFavorite}
-                isOperate={isOperate}
-                isCardMode={true}
-                userName={userName}
-              />
-            )
-          })}
-        </Stack>
-      )
+    >
+      {list.map((el,i) => {
+        return <EquipmentCard key={i} {...el} isCardMode={true} />
+      })}
+    </Stack>
+  )
 }

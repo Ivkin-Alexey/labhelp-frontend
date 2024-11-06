@@ -13,9 +13,15 @@ export interface IEquipmentItem {
   login?: string
   userID?: string
   userName?: string
+  serialNumber: string
+  inventoryNumber: string
+}
+
+export type TEquipmentCard = IEquipmentItem & {
+  isCardMode: boolean
 }
 
 export interface IAvailableEquipments {
-  inaccessible: string[] | [], 
+  inaccessible: string[] | []
   available: string[] | []
 }
