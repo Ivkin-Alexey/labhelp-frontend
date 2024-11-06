@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { TAccountData } from '../models/users'
 
 interface AccountState {
   isAuth: boolean
-  login: string | false
+  accountData: TAccountData | null
 }
 
 const initialState: AccountState = {
   isAuth: false,
-  login: false,
+  accountData: null
 }
 
 export const accountSlice = createSlice({
@@ -15,10 +16,10 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     logout: state => {
-      return { ...state, isAuth: false, login: false }
+      return { ...state, isAuth: false, accountData: null }
     },
-    login: (state, { payload: login }) => {
-      return { ...state, isAuth: true, login }
+    login: (state, { payload: accountData }) => {
+      return { ...state, isAuth: true, accountData: accountData }
     },
   },
 })

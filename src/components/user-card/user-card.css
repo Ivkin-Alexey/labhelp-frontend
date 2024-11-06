@@ -1,0 +1,36 @@
+.cardText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.cardActionArea {
+  position: relative;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.cardActionArea .cardMediaWrapper {
+    display: flex;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+.cardActionArea .cardMediaWrapper img{
+    object-fit: contain;
+}
+
+.cardStatus {
+  position: absolute;
+  top: 20px;
+}
+
+
+

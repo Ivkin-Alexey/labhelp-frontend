@@ -6,15 +6,15 @@ import { Button, Stack } from '@mui/material'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import SearchInput from './search-input'
-import { SEARCH_DELAY } from '../../app/constants'
+import { SEARCH_DELAY } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
-import type { EquipmentItem } from '../../models/equipments'
+import type { IEquipmentItem } from '../../models/equipments'
 import { useAddTermToHistoryMutation } from '../../store/equipments-api'
-import { selectAccount } from '../../store/selectors'
+import { selectAccount, selectLogin } from '../../store/selectors'
 
 interface ISearch {
-  list?: EquipmentItem[] | undefined
+  list?: IEquipmentItem[] | undefined
   isLoading?: boolean
 }
 
@@ -26,7 +26,8 @@ export function Search(props: ISearch) {
 
   const [inputValue, setInputValue] = useState<string>(term || '')
 
-  const { isAuth, login } = useAppSelector(selectAccount)
+  const { isAuth } = useAppSelector(selectAccount)
+  const login = useAppSelector(selectLogin)
 
   const [add] = useAddTermToHistoryMutation()
 
@@ -49,7 +50,7 @@ export function Search(props: ISearch) {
     setInputValue(inputValue)
   }
 
-  function handleSuggestChange(_e: SyntheticEvent, value: EquipmentItem | null | string) {
+  function handleSuggestChange(_e: SyntheticEvent, value: IEquipmentItem | null | string) {
     if (value && typeof value === 'object') {
       navigate('/' + value.id)
     }

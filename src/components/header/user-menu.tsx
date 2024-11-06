@@ -1,7 +1,7 @@
 import { Box, Tooltip, IconButton, Avatar, Menu, MenuItem, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
-import { routes } from '../../app/constants'
+import { routes } from '../../app/constants/constants'
 import { useAppDispatch } from '../../app/hooks/hooks'
 import type { Route } from '../../models/routes'
 import { logout } from '../../store/users-slice'

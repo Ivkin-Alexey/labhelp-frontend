@@ -4,17 +4,27 @@ import { Navigate } from 'react-router-dom'
 
 import Fallback from './Fallback'
 import { useAppSelector } from '../app/hooks/hooks'
-import { selectAccount } from '../store/selectors'
+import { selectAccount, selectRole } from '../store/selectors'
 
 interface IRequireAuth {
   redirectTo: string
   children: JSX.Element
 }
 
-export default function RequireAuth(props: IRequireAuth) {
+export function RequireAuth(props: IRequireAuth) {
   const { isAuth } = useAppSelector(selectAccount)
 
   if (!isAuth) {
+    return <Navigate to={props.redirectTo} />
+  }
+
+  return <Suspense fallback={Fallback()}>{props.children}</Suspense>
+}
+
+export function RequireAdminRole(props: IRequireAuth) {
+  const role = useAppSelector(selectRole)
+
+  if (role !== "admin") {
     return <Navigate to={props.redirectTo} />
   }
 

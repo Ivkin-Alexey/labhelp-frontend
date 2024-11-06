@@ -18,11 +18,9 @@ if (container) {
 
   root.render(
     <ErrorBoundary FallbackComponent={FallbackRender}>
-      <React.StrictMode>
         <Provider store={store}>
           <RouterProvider router={router} />
         </Provider>
-      </React.StrictMode>
     </ErrorBoundary>,
   )
 } else {

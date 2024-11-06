@@ -8,33 +8,34 @@ import {
   useAddOperatingEquipmentMutation,
   useDeleteOperatingEquipmentMutation,
 } from '../../store/equipments-api'
-import { selectAccount, selectLogin } from '../../store/selectors'
+import { selectAccount } from '../../store/selectors'
+import { useDeletePersonMutation } from '../../store/users-api'
 
 interface IOperateButtons {
   isOperate?: boolean
   equipmentID: EquipmentID
-  login?: string
+  login: string
 }
 
 export default function OperateButtons(props: IOperateButtons) {
-  const { isOperate, equipmentID, login: operatePersonLogin } = props
+  const { isOperate, equipmentID, login } = props
 
   const [add] = useAddOperatingEquipmentMutation()
-  const [remove] = useDeleteOperatingEquipmentMutation()
-  const { isAuth } = useAppSelector(selectAccount)
-  const accountLogin = useAppSelector(selectLogin)
+  const [remove] = useDeletePersonMutation
+  const { isAuth, accountData } = useAppSelector(selectAccount)
+  const {login: accountLogin} = accountData
   const navigate = useNavigate()
 
   function renderEndBtn() {
 
-    if (operatePersonLogin !== accountLogin) { return null}
+    if (login !== accountLogin) { return null}
     
     return (
       <Button
         color="primary"
         onClick={() => {
           if (isAuth) {
-            remove({ login: accountLogin, equipmentID })
+            remove({ login, equipmentID })
           } else {
             navigate(routes.signIn)
           }
@@ -51,7 +52,7 @@ export default function OperateButtons(props: IOperateButtons) {
         color="primary"
         onClick={() => {
           if (isAuth) {
-            add({ login: accountLogin, equipmentID })
+            add({ login, equipmentID })
           } else {
             navigate(routes.signIn)
           }
@@ -64,7 +65,3 @@ export default function OperateButtons(props: IOperateButtons) {
 
   return isOperate ? renderEndBtn() : renderStartBtn()
 }
-function useAppDispath() {
-  throw new Error('Function not implemented.')
-}
-

@@ -10,7 +10,7 @@ import {
   useAddFavoriteEquipmentMutation,
   useDeleteFavoriteEquipmentMutation,
 } from '../../store/equipments-api'
-import { selectAccount, selectLogin } from '../../store/selectors'
+import { selectAccount } from '../../store/selectors'
 
 interface IFavoriteButtons {
   isFavorite?: boolean
@@ -23,8 +23,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
 
   const [add] = useAddFavoriteEquipmentMutation()
   const [remove] = useDeleteFavoriteEquipmentMutation()
-  const { isAuth } = useAppSelector(selectAccount)
-  const login = useAppSelector(selectLogin)
+  const { isAuth, login } = useAppSelector(selectAccount)
   const navigate = useNavigate()
 
   function handleAdd() {
