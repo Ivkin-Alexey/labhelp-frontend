@@ -15,7 +15,7 @@ export const usersApi = api.injectEndpoints({
       query: credentials => ({
         url: '/createNewPerson',
         method: 'POST',
-        body: credentials,
+        body: { userData: credentials},
       }),
       invalidatesTags: ['Equipment', 'EquipmentList', 'FavoriteEquipmentList', 'OperatingEquipmentList'],
     }),

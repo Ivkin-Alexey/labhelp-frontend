@@ -1,10 +1,10 @@
-import personalData from "../app/inputs/personalData"
-import { IAvailableEquipments } from "./equipments"
-import { TInputValue } from "./inputs"
+import type { IAvailableEquipments } from './equipments'
+import type { TInputValue } from './inputs'
+import type personalData from '../app/inputs/personalData'
 
 export type TLogin = string
 
-export type TPersonRole = "admin" | "student" | "employee"
+export type TPersonRole = 'admin' | 'student' | 'employee'
 
 export interface IUserCredentials {
   login: FormDataEntryValue | null
@@ -13,12 +13,12 @@ export interface IUserCredentials {
 
 export interface IUserFormData {
   login: TLogin
-  data: Partial<IUserForm>,
+  data: Partial<IUserForm>
 }
 
 export interface IUserCard extends IUserForm {
-  imgUrl?: string,
-  equipments?: "all" | IAvailableEquipments
+  imgUrl?: string
+  equipments?: 'all' | IAvailableEquipments
   isVerified: boolean
   role?: TPersonRole
 }
@@ -26,14 +26,9 @@ export interface IUserCard extends IUserForm {
 export type TAccountData = IUserCard
 
 type TUserFormSettings = {
-  [key in keyof typeof personalData]: TInputValue;
-};
+  [key in keyof typeof personalData]: TInputValue
+}
 
 export type IUserForm = {
   [key in keyof TUserFormSettings]: TInputValue
 }
-
-
-
-
-
