@@ -20,7 +20,7 @@ export const equipmentsApi = api.injectEndpoints({
       providesTags: ['FavoriteEquipmentList'],
     }),
     fetchOperatingEquipments: builder.query<IEquipmentItem[], void>({
-      query: (login) => `/workingEquipmentList?login=${login}`,
+      query: login => `/workingEquipmentList?login=${login}`,
       providesTags: ['OperatingEquipmentList'],
     }),
     addOperatingEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
@@ -35,10 +35,10 @@ export const equipmentsApi = api.injectEndpoints({
           equipmentsApi.util.updateQueryData(
             'fetchEquipmentsBySearchTerm',
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
-            draft => 
+            draft =>
               draft.forEach(el => {
                 if (el.id === data.equipmentID) {
-                  el.isOperate = true;
+                  el.isOperate = true
                   el.login = data.login
                 }
               }),
@@ -64,7 +64,7 @@ export const equipmentsApi = api.injectEndpoints({
             equipmentsApi.util.updateQueryData(
               'fetchEquipmentsBySearchTerm',
               { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
-              draft => 
+              draft =>
                 draft.forEach(el => {
                   if (el.id === data.equipmentID) {
                     delete el.isOperate
@@ -93,7 +93,7 @@ export const equipmentsApi = api.injectEndpoints({
           equipmentsApi.util.updateQueryData(
             'fetchEquipmentsBySearchTerm',
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
-            draft => 
+            draft =>
               draft.forEach(el => {
                 if (el.id === data.equipmentID) {
                   el.isFavorite = true

@@ -7,7 +7,7 @@ import { routes } from '../app/constants/constants'
 import { useAppDispatch } from '../app/hooks/hooks'
 import SignForm from '../components/sign-form/sign-form'
 import { useSignUpMutation } from '../store/users-api'
-import { login as loginAction } from '../store/users-slice'
+import { setUserData as loginAction } from '../store/users-slice'
 
 export default function SignUpPage() {
   const [signup, { isError, isLoading, isSuccess }] = useSignUpMutation()
@@ -24,8 +24,10 @@ export default function SignUpPage() {
     const password = data.get('password')
     setSavedLogin(login)
     signup({
-      login,
-      password,
+      userData: {
+        login,
+        password,
+      },
     })
   }
 

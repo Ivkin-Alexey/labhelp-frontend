@@ -1,16 +1,43 @@
-import type { Dispatch, Middleware } from '@reduxjs/toolkit'
+import type { Middleware } from 'redux'
 
 import type { State } from './preloaded-state'
+import type { IUserData } from '../models/users'
 
-interface MyAction {
+interface IAction {
   type: string
-  payload?: boolean
+  payload?: IUserData | string
 }
 
-export const authMiddleware: Middleware<{}, State, Dispatch<MyAction>> =
-  store => next => action => {
-    const result = next(action)
-    localStorage.setItem('isAuth', JSON.stringify(store.getState().account.isAuth))
-    localStorage.setItem('accountData', JSON.stringify(store.getState().account.accountData))
-    return result
+function isAction(obj: any): obj is IAction {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.type === 'string' &&
+    (typeof obj.payload === 'string' || typeof obj.payload === 'object')
+  )
+}
+
+export const authMiddleware: Middleware<{}, State> = store => next => action => {
+  const result = next(action)
+
+  if (isAction(action)) {
+    switch (action.type) {
+      case 'account/setToken':
+        if (typeof action.payload === 'string') {
+          localStorage.setItem('token', action.payload)
+        }
+        break
+
+      case 'account/setUserData':
+        if (typeof action.payload === 'object') {
+          localStorage.setItem('accountData', JSON.stringify(action.payload))
+        }
+        break
+
+      default:
+        break
+    }
   }
+
+  return result
+}

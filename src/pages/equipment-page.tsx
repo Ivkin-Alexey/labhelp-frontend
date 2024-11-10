@@ -35,8 +35,6 @@ export default function EquipmentPage() {
 
     let label;
 
-    console.log(data)
-
     if (accountLogin === login || accountLogin === userID) { 
       label = "Вы используете" 
     } else if (userID) {

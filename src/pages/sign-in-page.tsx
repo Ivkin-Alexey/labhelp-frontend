@@ -8,11 +8,23 @@ import { routes } from '../app/constants/constants'
 import { useAppDispatch } from '../app/hooks/hooks'
 import SignForm from '../components/sign-form/sign-form'
 import { useLazyGetAccountDataQuery, useSignInMutation } from '../store/users-api'
-import { login as loginAction } from '../store/users-slice'
+import { setUserData } from '../store/users-slice'
 
 export default function SignInPage() {
-  const [signIn, { isError, isLoading, isSuccess }] = useSignInMutation()
-  const [getAccountData, {data: accountData, isError: isAccountError, isLoading: isAccountLoading, isSuccess: isAccountSuccess, error }] = useLazyGetAccountDataQuery()
+  const [signIn, { isError: isAuthError, isLoading: isAuthLoading, isSuccess: isAuthSuccess }] =
+    useSignInMutation()
+
+  const [
+    getAccountData,
+    {
+      data: accountData,
+      isError: isAccountError,
+      isLoading: isAccountLoading,
+      isSuccess: isAccountSuccess,
+      error,
+    },
+  ] = useLazyGetAccountDataQuery()
+
   const { showBoundary } = useErrorBoundary()
 
   const [savedLogin, setSavedLogin] = useState<FormDataEntryValue | null>(null)
@@ -34,14 +46,13 @@ export default function SignInPage() {
   }
 
   useEffect(() => {
-    if (isSuccess && savedLogin) {
+    if (isAuthSuccess && savedLogin) {
       getAccountData(savedLogin?.toString())
     }
-  }, [isSuccess])
+  }, [isAuthSuccess])
 
   useEffect(() => {
     if (isAccountSuccess) {
-      dispatch(loginAction(accountData))
       navigate(routes.main)
     }
   }, [isAccountSuccess])
@@ -52,16 +63,11 @@ export default function SignInPage() {
     }
   }, [isAccountError])
 
-  if (isError) {
+  if (isAuthError) {
     showBoundary(error)
   }
 
-  if (isLoading) {
-    // TODO: implement loading animation
-  }
-
   return (
-    <SignForm handleSubmit={handleSubmit} isLoading={isLoading} title="Войти" isSignIn={true} />
+    <SignForm handleSubmit={handleSubmit} isLoading={isAuthLoading} title="Войти" isSignIn={true} />
   )
 }
-

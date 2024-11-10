@@ -11,9 +11,13 @@ export interface IUserCredentials {
   password: FormDataEntryValue | null
 }
 
-export interface IUserFormData {
+export interface IUserRegistrationData extends IUserCredentials{
+  role?: TPersonRole
+}
+
+export interface IUserData {
   login: TLogin
-  data: Partial<IUserForm>
+  data?: Partial<IUserForm>
 }
 
 export interface IUserCard extends IUserForm {

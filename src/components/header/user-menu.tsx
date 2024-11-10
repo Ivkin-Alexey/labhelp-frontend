@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../../app/constants/constants'
 import { useAppDispatch } from '../../app/hooks/hooks'
 import type { Route } from '../../models/routes'
-import { logout } from '../../store/users-slice'
+import { clearUserData } from '../../store/users-slice'
 
 interface IUserMenu {
   handleOpenUserMenu: (event: React.MouseEvent<HTMLElement>) => void
@@ -22,7 +22,7 @@ export default function UserMenu(props: IUserMenu): React.ReactElement {
   function handleClick(path: string): void {
     navigate(path)
     if (path === routes.main) {
-      dispatch(logout())
+      dispatch(clearUserData())
     }
   }
 
