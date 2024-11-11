@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
-import type { EquipmentID } from '../../models/equipments'
+import type { equipmentId } from '../../models/equipments'
 import {
   useAddOperatingEquipmentMutation,
   useDeleteOperatingEquipmentMutation,
@@ -13,29 +13,30 @@ import { useDeletePersonMutation } from '../../store/users-api'
 
 interface IOperateButtons {
   isOperate?: boolean
-  equipmentID: EquipmentID
+  equipmentId: equipmentId
   login: string
 }
 
 export default function OperateButtons(props: IOperateButtons) {
-  const { isOperate, equipmentID, login } = props
+  const { isOperate, equipmentId, login } = props
 
   const [add] = useAddOperatingEquipmentMutation()
   const [remove] = useDeletePersonMutation
   const { isAuth, accountData } = useAppSelector(selectAccount)
-  const {login: accountLogin} = accountData
+  const { login: accountLogin } = accountData
   const navigate = useNavigate()
 
   function renderEndBtn() {
+    if (login !== accountLogin) {
+      return null
+    }
 
-    if (login !== accountLogin) { return null}
-    
     return (
       <Button
         color="primary"
         onClick={() => {
           if (isAuth) {
-            remove({ login, equipmentID })
+            remove({ login, equipmentId })
           } else {
             navigate(routes.signIn)
           }
@@ -52,7 +53,7 @@ export default function OperateButtons(props: IOperateButtons) {
         color="primary"
         onClick={() => {
           if (isAuth) {
-            add({ login, equipmentID })
+            add({ login, equipmentId })
           } else {
             navigate(routes.signIn)
           }

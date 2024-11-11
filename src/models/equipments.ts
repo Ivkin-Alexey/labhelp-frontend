@@ -1,7 +1,7 @@
-export type EquipmentID = string
+export type equipmentId = string
 
 export interface IEquipmentItem {
-  id: EquipmentID
+  id: equipmentId
   category: string
   description: string
   name: string
@@ -11,7 +11,7 @@ export interface IEquipmentItem {
   isFavorite?: boolean
   isOperate?: boolean
   login?: string
-  userID?: string
+  userId?: string
   userName?: string
   serialNumber: string
   inventoryNumber: string

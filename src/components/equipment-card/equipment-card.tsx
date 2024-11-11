@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 
 import FavoriteButtons from './favorite-buttons'
 import OperateButtons from './operating-buttons'
-import type { EquipmentID, TEquipmentCard } from '../../models/equipments'
+import type { equipmentId, TEquipmentCard } from '../../models/equipments'
 import CardStatus from '../user-card/card-status'
 
 export function EquipmentCard(props: TEquipmentCard) {
@@ -29,7 +29,7 @@ export function EquipmentCard(props: TEquipmentCard) {
 
   const navigate = useNavigate()
 
-  function handleClick(e: React.MouseEvent, id: EquipmentID) {
+  function handleClick(e: React.MouseEvent, id: equipmentId) {
     navigate('/' + id)
   }
 
@@ -57,9 +57,11 @@ export function EquipmentCard(props: TEquipmentCard) {
           <Typography className="cardText" gutterBottom variant="body1" component="div">
             {name}
           </Typography>
-          {!isCardMode && <Typography variant="body2" color="text.secondary" marginBottom="5px">
-            {description}
-          </Typography>}
+          {!isCardMode && (
+            <Typography variant="body2" color="text.secondary" marginBottom="5px">
+              {description}
+            </Typography>
+          )}
           <Typography variant="body2" color="text.secondary">
             Инвентарный № {inventoryNumber}
           </Typography>
@@ -69,8 +71,8 @@ export function EquipmentCard(props: TEquipmentCard) {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: '16px' }}>
-        <OperateButtons equipmentID={id} isOperate={isOperate} login={login} />
-        <FavoriteButtons equipmentID={id} isFavorite={isFavorite} isCardMode={isCardMode} />
+        <OperateButtons equipmentId={id} isOperate={isOperate} login={login} />
+        <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={isCardMode} />
       </CardActions>
     </Card>
   )

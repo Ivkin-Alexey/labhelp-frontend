@@ -1,11 +1,11 @@
 import { api } from './api'
 import { DEFAULT_SEARCH_TERM } from '../app/constants/constants'
-import type { EquipmentID, IEquipmentItem } from '../models/equipments'
+import type { equipmentId, IEquipmentItem } from '../models/equipments'
 
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentByID: builder.query<IEquipmentItem, string>({
-      query: equipmentID => `/equipmentList?equipmentID=${equipmentID}`,
+      query: equipmentId => `/equipmentList?equipmentId=${equipmentId}`,
       providesTags: ['Equipment'],
     }),
     fetchEquipmentsBySearchTerm: builder.query<
@@ -23,7 +23,7 @@ export const equipmentsApi = api.injectEndpoints({
       query: login => `/workingEquipmentList?login=${login}`,
       providesTags: ['OperatingEquipmentList'],
     }),
-    addOperatingEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
+    addOperatingEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
       query: data => ({
         url: '/operateEquipment',
         method: 'POST',
@@ -37,7 +37,7 @@ export const equipmentsApi = api.injectEndpoints({
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
             draft =>
               draft.forEach(el => {
-                if (el.id === data.equipmentID) {
+                if (el.id === data.equipmentId) {
                   el.isOperate = true
                   el.login = data.login
                 }
@@ -51,7 +51,7 @@ export const equipmentsApi = api.injectEndpoints({
         }
       },
     }),
-    deleteOperatingEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>(
+    deleteOperatingEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>(
       {
         query: data => ({
           url: '/operateEquipment',
@@ -66,7 +66,7 @@ export const equipmentsApi = api.injectEndpoints({
               { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
               draft =>
                 draft.forEach(el => {
-                  if (el.id === data.equipmentID) {
+                  if (el.id === data.equipmentId) {
                     delete el.isOperate
                     delete el.login
                   }
@@ -81,7 +81,7 @@ export const equipmentsApi = api.injectEndpoints({
         },
       },
     ),
-    addFavoriteEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
+    addFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
       query: data => ({
         url: '/favoriteEquipment?add=true',
         method: 'POST',
@@ -95,7 +95,7 @@ export const equipmentsApi = api.injectEndpoints({
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
             draft =>
               draft.forEach(el => {
-                if (el.id === data.equipmentID) {
+                if (el.id === data.equipmentId) {
                   el.isFavorite = true
                 }
               }),
@@ -108,7 +108,7 @@ export const equipmentsApi = api.injectEndpoints({
         }
       },
     }),
-    deleteFavoriteEquipment: builder.mutation<string, { login: string; equipmentID: EquipmentID }>({
+    deleteFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
       query: data => ({
         url: '/favoriteEquipment?remove=true',
         method: 'POST',
@@ -122,7 +122,7 @@ export const equipmentsApi = api.injectEndpoints({
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
             draft =>
               draft.forEach(el => {
-                if (el.id === data.equipmentID) {
+                if (el.id === data.equipmentId) {
                   delete el.isFavorite
                 }
               }),

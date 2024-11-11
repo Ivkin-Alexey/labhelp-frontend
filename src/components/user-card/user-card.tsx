@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import './user-card.css'
 
-import { CardActionArea, CardActions} from '@mui/material'
+import { CardActionArea, CardActions } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -16,12 +16,12 @@ import { routes } from '../../app/constants/constants'
 import { createPersonName } from '../../app/methods/methods'
 
 export function UserCard(props: IUserCard) {
-  const { imgUrl = "#", login: login, password, position, department, isVerified } = props
+  const { imgUrl = '#', login: login, password, position, department, isVerified } = props
 
   const navigate = useNavigate()
 
   function handleClick(e: React.MouseEvent, login: TLogin) {
-    navigate(routes.admin + "/" + login)
+    navigate(routes.admin + '/' + login)
   }
 
   const fullName = createPersonName(props)
@@ -34,7 +34,7 @@ export function UserCard(props: IUserCard) {
         marginTop: '40px',
         display: 'flex',
         justifyContent: 'space-between',
-        flexDirection: 'column'
+        flexDirection: 'column',
       }}
     >
       <CardActionArea
@@ -42,9 +42,9 @@ export function UserCard(props: IUserCard) {
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
         className="cardActionArea"
       >
-        <CardStatus isVisible={!isVerified} text="Не подтвержден" color="error"/>
+        <CardStatus isVisible={!isVerified} text="Не подтвержден" color="error" />
         <div className="cardMediaWrapper">
-          <CardMedia component="img" image={imgUrl || "../"} alt="Изображение карточки" />
+          <CardMedia component="img" image={imgUrl || '../'} alt="Изображение карточки" />
         </div>
         <CardContent>
           <Typography className="cardText" gutterBottom variant="body1" component="div">
@@ -54,19 +54,19 @@ export function UserCard(props: IUserCard) {
             {position}
           </Typography>
           <Typography variant="body2" color="text.secondary" marginBottom="5px">
-           {department}
+            {department}
           </Typography>
           <Typography variant="body2" color="text.primary" marginBottom="5px">
-           логин: {login}
+            логин: {login}
           </Typography>
           <Typography variant="body2" color="text.primary" marginBottom="5px">
-           пароль: {password}
+            пароль: {password}
           </Typography>
         </CardContent>
       </CardActionArea>
       {/* <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: "16px",  }}> */}
-        {/* <OperateButtons equipmentID={id} isOperate={isOperate} login={login} />
-        <FavoriteButtons equipmentID={id} isFavorite={isFavorite} isCardMode={isCardMode} /> */}
+      {/* <OperateButtons equipmentId={id} isOperate={isOperate} login={login} />
+        <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={isCardMode} /> */}
       {/* </CardActions> */}
     </Card>
   )

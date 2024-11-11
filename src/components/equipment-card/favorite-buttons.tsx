@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
-import type { EquipmentID } from '../../models/equipments'
+import type { equipmentId } from '../../models/equipments'
 import {
   useAddFavoriteEquipmentMutation,
   useDeleteFavoriteEquipmentMutation,
@@ -14,12 +14,12 @@ import { selectAccount, selectLogin } from '../../store/selectors'
 
 interface IFavoriteButtons {
   isFavorite?: boolean
-  equipmentID: EquipmentID
+  equipmentId: equipmentId
   isCardMode: boolean
 }
 
 export default function FavoriteButtons(props: IFavoriteButtons) {
-  const { isFavorite = false, equipmentID, isCardMode } = props
+  const { isFavorite = false, equipmentId, isCardMode } = props
 
   const [add] = useAddFavoriteEquipmentMutation()
   const [remove] = useDeleteFavoriteEquipmentMutation()
@@ -29,7 +29,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
 
   function handleAdd() {
     if (isAuth) {
-      add({ login, equipmentID })
+      add({ login, equipmentId })
     } else {
       navigate(routes.signIn)
     }
@@ -37,7 +37,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
 
   function handleDelete() {
     if (isAuth) {
-      remove({ login, equipmentID })
+      remove({ login, equipmentId })
     } else {
       navigate(routes.signIn)
     }
@@ -49,7 +49,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         <StarRoundedIcon />
       </IconButton>
     ) : (
-      <Button color="primary" onClick={handleDelete} sx={{padding: '8px 0'}}>
+      <Button color="primary" onClick={handleDelete} sx={{ padding: '8px 0' }}>
         Удалить из избранного
       </Button>
     )
@@ -61,7 +61,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         <StarBorderRoundedIcon />
       </IconButton>
     ) : (
-      <Button color="primary" onClick={handleAdd} sx={{padding: '8px 0'}}>
+      <Button color="primary" onClick={handleAdd} sx={{ padding: '8px 0' }}>
         В избранное
       </Button>
     )

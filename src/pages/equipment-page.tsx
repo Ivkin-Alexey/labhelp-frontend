@@ -14,11 +14,11 @@ import { selectLogin } from '../store/selectors'
 export default function EquipmentPage() {
   const location = useLocation()
 
-  const equipmentID = location.pathname.slice(1)
+  const equipmentId = location.pathname.slice(1)
 
   const { color } = useContext(ThemeContext)
 
-  const { isFetching, isError, data } = useFetchEquipmentByIDQuery(equipmentID)
+  const { isFetching, isError, data } = useFetchEquipmentByIDQuery(equipmentId)
 
   const accountLogin = useAppSelector(selectLogin)
 
@@ -31,14 +31,26 @@ export default function EquipmentPage() {
   }
 
   if (data) {
-    let { id, brand, name, model, imgUrl, description, isFavorite, isOperate, userName, login, userID } = data
+    let {
+      id,
+      brand,
+      name,
+      model,
+      imgUrl,
+      description,
+      isFavorite,
+      isOperate,
+      userName,
+      login,
+      userId,
+    } = data
 
-    let label;
+    let label
 
-    if (accountLogin === login || accountLogin === userID) { 
-      label = "Вы используете" 
-    } else if (userID) {
-      label = "В работе у пользователя " + userID 
+    if (accountLogin === login || accountLogin === userId) {
+      label = 'Вы используете'
+    } else if (userId) {
+      label = 'В работе у пользователя ' + userId
     }
 
     return (
@@ -51,7 +63,7 @@ export default function EquipmentPage() {
           backgroundColor: color,
         }}
       >
-        <Box sx={{position: "relative"}}>
+        <Box sx={{ position: 'relative' }}>
           <OperateStatus isOperate={isOperate} label={label} />
           <img
             height="400"
@@ -74,7 +86,7 @@ export default function EquipmentPage() {
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
             Описание: {toLowerCaseFirstChart(description)}
           </Typography>
-          <FavoriteButtons equipmentID={id} isFavorite={isFavorite} isCardMode={false} />
+          <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={false} />
         </Box>
       </Container>
     )
