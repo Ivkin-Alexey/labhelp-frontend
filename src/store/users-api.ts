@@ -10,7 +10,7 @@ import type {
 
 export const usersApi = api.injectEndpoints({
   endpoints: builder => ({
-    signIn: builder.mutation<{message: string, token: string}, IUserCredentials>({
+    signIn: builder.mutation<{ message: string; token: string }, IUserCredentials>({
       query: credentials => ({
         url: '/login',
         method: 'POST',
@@ -83,7 +83,7 @@ export const usersApi = api.injectEndpoints({
           const { data } = await queryFulfilled
           dispatch(setUserData(data))
         } catch (e) {
-          console.error('Failed to login: ', e)
+          console.error('Failed to get user data: ', e)
         }
       },
       providesTags: ['account'],

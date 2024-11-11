@@ -31,8 +31,14 @@ export const authMiddleware: Middleware<{}, State> = store => next => action => 
       case 'account/setUserData':
         if (typeof action.payload === 'object') {
           localStorage.setItem('accountData', JSON.stringify(action.payload))
+          localStorage.setItem('isAuth', JSON.stringify(true))
         }
         break
+      
+      case 'account/clearUserData':
+        console.log("Очиска")
+            localStorage.clear()
+          break
 
       default:
         break

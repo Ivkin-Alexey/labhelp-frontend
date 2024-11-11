@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useContext, useEffect } from 'react'
 
-import { FormControlLabel, Switch } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
@@ -15,7 +14,6 @@ import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import { selectAccount } from '../../store/selectors'
 import { ThemeContext } from '../root'
-import { accountSlice } from '../../store/users-slice'
 
 let pages = [
   { title: 'Избранное', path: routes.favorites },
@@ -23,9 +21,7 @@ let pages = [
   { title: 'Оборудование в работе', path: routes.operatingEquipments },
 ]
 
-const adminPages = [
-  { title: 'Администрирование', path: routes.admin },
-]
+const adminPages = [{ title: 'Администрирование', path: routes.admin }]
 
 const settings = [
   { title: 'Войти', path: routes.signIn },
@@ -39,12 +35,10 @@ function Header() {
 
   const location = useLocation()
 
-  const { color, toggle } = useContext(ThemeContext)
-
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
   const [pagesState, setPagesState] = React.useState(pages)
-  const {accountData} = useAppSelector(selectAccount)
+  const { accountData } = useAppSelector(selectAccount)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -54,7 +48,7 @@ function Header() {
   }
 
   useEffect(() => {
-    if(accountData?.role === "admin") {
+    if (accountData?.role === 'admin') {
       setPagesState(prev => Array.from(new Set([...prev, ...adminPages])))
     }
   }, [accountData])

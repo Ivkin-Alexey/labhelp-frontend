@@ -5,10 +5,11 @@ import { useErrorBoundary } from 'react-error-boundary'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '../app/constants/constants'
-import { useAppDispatch } from '../app/hooks/hooks'
+import { useAppDispatch, useAppSelector } from '../app/hooks/hooks'
 import SignForm from '../components/sign-form/sign-form'
 import { useLazyGetAccountDataQuery, useSignInMutation } from '../store/users-api'
 import { setUserData } from '../store/users-slice'
+import { selectToken } from '../store/selectors'
 
 export default function SignInPage() {
   const [signIn, { isError: isAuthError, isLoading: isAuthLoading, isSuccess: isAuthSuccess }] =
@@ -31,6 +32,7 @@ export default function SignInPage() {
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const token = useAppSelector(selectToken)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -46,10 +48,10 @@ export default function SignInPage() {
   }
 
   useEffect(() => {
-    if (isAuthSuccess && savedLogin) {
+    if (isAuthSuccess && savedLogin && token) {
       getAccountData(savedLogin?.toString())
     }
-  }, [isAuthSuccess])
+  }, [isAuthSuccess, token])
 
   useEffect(() => {
     if (isAccountSuccess) {

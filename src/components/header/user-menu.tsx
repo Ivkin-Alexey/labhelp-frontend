@@ -20,10 +20,10 @@ export default function UserMenu(props: IUserMenu): React.ReactElement {
   const dispatch = useAppDispatch()
 
   function handleClick(path: string): void {
-    navigate(path)
     if (path === routes.main) {
       dispatch(clearUserData())
     }
+    navigate(path)
   }
 
   return (

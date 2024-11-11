@@ -1,33 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { TAccountData } from '../models/users'
+import type { IAccountState } from '../models/users'
 
-interface AccountState {
-  isAuth: boolean
-  accountData: TAccountData | null
-  jwtToken: string | null
-}
-
-const initialState: AccountState = {
+const initialState: IAccountState = {
   isAuth: false,
   accountData: null,
-  jwtToken: null,
+  token: null,
 }
 
 export const accountSlice = createSlice({
   name: 'account',
   initialState,
   reducers: {
-    clearUserData: state => {
-      return { ...state, isAuth: false, accountData: null, jwtToken: null }
-    },
-    setUserData: (state, { payload: { accountData } }) => {
-      return { ...state, isAuth: true, accountData }
-    },
-    setToken: (state, action: { payload: string }) => {
-      state.jwtToken = action.payload
-    },
-  },
+    clearUserData: state => ({ ...state, ...initialState }),
+    setUserData: (state, { payload }) => ({ ...state, accountData: payload, isAuth: true }),
+    setToken: (state, { payload }) => ({ ...state, token: payload }),
+  }
 })
 
 export const { setUserData, clearUserData, setToken } = accountSlice.actions

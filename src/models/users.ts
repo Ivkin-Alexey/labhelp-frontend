@@ -6,12 +6,18 @@ export type TLogin = string
 
 export type TPersonRole = 'admin' | 'student' | 'employee'
 
+export interface IAccountState {
+  isAuth: boolean
+  accountData: TAccountData | null
+  token: string | null
+}
+
 export interface IUserCredentials {
   login: FormDataEntryValue | null
   password: FormDataEntryValue | null
 }
 
-export interface IUserRegistrationData extends IUserCredentials{
+export interface IUserRegistrationData extends IUserCredentials {
   role?: TPersonRole
 }
 
