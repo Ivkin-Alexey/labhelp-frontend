@@ -1,8 +1,8 @@
 # Лаборатория
 
-Деплой https://scmp-laboratory.netlify.app
+## Деплой https://scmp-laboratory.netlify.app
 
-Эндпоинты:
+## Эндпоинты:
 
 **GET**
 
