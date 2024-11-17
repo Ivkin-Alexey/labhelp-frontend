@@ -22,3 +22,43 @@ export const routes = {
   admin: '/admin',
   userProfile: '/admin/:login',
 }
+
+export const apiRoutes = {
+  get: {
+    users: {
+      userData: '/users/',
+      users: '/users',
+    },
+    equipments: {
+      equipments: '/equipments',
+      favorite: '/equipments/favorite/',
+      operate: '/equipments/operate/',
+      searchHistory: '/equipments/search-history/',
+    },
+  },
+  post: {
+    auth: {
+      signIn: '/auth/sign-in/',
+      signUp: '/auth/sign-up/',
+    },
+    users: {
+      signUp: '/users/',
+    },
+    equipments: {
+      favorite: '/equipments/favorite/',
+      operate: '/equipments/operate/',
+      searchHistory: '/equipments/search-history/',
+    },
+  },
+  delete: {
+    users: '/users/',
+    equipments: {
+      favorite: '/equipments/favorite/',
+      operate: '/equipments/operate/',
+      searchHistory: '/equipments/search-history/',
+    },
+  },
+  patch: {
+    users: '/users/',
+  },
+}

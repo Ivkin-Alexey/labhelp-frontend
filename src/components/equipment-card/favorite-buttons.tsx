@@ -9,7 +9,7 @@ import type { equipmentId } from '../../models/equipments'
 import {
   useAddFavoriteEquipmentMutation,
   useDeleteFavoriteEquipmentMutation,
-} from '../../store/equipments-api'
+} from '../../store/api/equipment/equipments-api'
 import { selectAccount, selectLogin } from '../../store/selectors'
 
 interface IFavoriteButtons {

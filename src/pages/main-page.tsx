@@ -5,7 +5,7 @@ import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
 import EquipmentCardList from '../components/equipment-card-list'
 import { Search } from '../components/search/search'
-import { useFetchEquipmentsBySearchTermQuery } from '../store/equipments-api'
+import { useFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 import { selectLogin } from '../store/selectors'
 
 export default function MainPage() {

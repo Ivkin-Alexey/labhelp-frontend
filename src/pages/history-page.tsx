@@ -6,7 +6,7 @@ import HistoryList from '../components/history-list'
 import {
   useDeleteTermFromHistoryMutation,
   useFetchSearchHistoryQuery,
-} from '../store/equipments-api'
+} from '../store/api/equipment/equipments-api'
 import { selectAccount } from '../store/selectors'
 
 export default function HistoryPage() {

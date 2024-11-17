@@ -7,7 +7,7 @@ import type { equipmentId } from '../../models/equipments'
 import {
   useAddOperatingEquipmentMutation,
   useDeleteOperatingEquipmentMutation,
-} from '../../store/equipments-api'
+} from '../../store/api/equipment/operate-equipment'
 import { selectAccount, selectLogin } from '../../store/selectors'
 
 interface IOperateButtons {
@@ -64,7 +64,4 @@ export default function OperateButtons(props: IOperateButtons) {
   }
 
   return isOperate ? renderEndBtn() : renderStartBtn()
-}
-function useAppDispath() {
-  throw new Error('Function not implemented.')
 }

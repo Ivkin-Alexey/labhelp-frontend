@@ -10,7 +10,7 @@ import { SEARCH_DELAY } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
 import type { IEquipmentItem } from '../../models/equipments'
-import { useAddTermToHistoryMutation } from '../../store/equipments-api'
+import { useAddTermToHistoryMutation } from '../../store/api/equipment/equipments-api'
 import { selectAccount, selectLogin } from '../../store/selectors'
 
 interface ISearch {

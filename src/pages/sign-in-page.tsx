@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../app/constants/constants'
 import { useAppDispatch, useAppSelector } from '../app/hooks/hooks'
 import SignForm from '../components/sign-form/sign-form'
-import { useLazyGetAccountDataQuery, useSignInMutation } from '../store/users-api'
-import { setUserData } from '../store/users-slice'
+import { useLazyGetAccountDataQuery, useSignInMutation } from '../store/api/users-api'
 import { selectToken } from '../store/selectors'
+import { setUserData } from '../store/users-slice'
 
 export default function SignInPage() {
   const [signIn, { isError: isAuthError, isLoading: isAuthLoading, isSuccess: isAuthSuccess }] =

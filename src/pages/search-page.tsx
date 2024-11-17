@@ -5,7 +5,7 @@ import { DEFAULT_SEARCH_TERM, SEARCH_SUGGEST_NUMBER } from '../app/constants/con
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
 import { Search } from '../components/search/search'
-import { useFetchEquipmentsBySearchTermQuery } from '../store/equipments-api'
+import { useFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 import { selectLogin } from '../store/selectors'
 
 export default function SearchPage() {

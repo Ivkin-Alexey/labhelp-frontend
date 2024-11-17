@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 
-import type { RootState } from './store'
-import { BASE_URL } from '../app/constants/constants'
+import { BASE_URL } from '../../app/constants/constants'
+import type { RootState } from '../store'
 
 const exceptions = ['signIn', 'signUp']
 
@@ -11,15 +11,10 @@ export const api = createApi({
     fetchBaseQuery({
       baseUrl: BASE_URL,
       prepareHeaders: (headers, { getState, endpoint }) => {
-        console.log(endpoint)
-        if (!exceptions.includes(endpoint)) {
-          const state = getState() as RootState
-          const token = state.account.token
-          console.log(token)
-          if (token) {
-            headers.set('authorization', `Bearer ${token}`)
-          }
-          console.error('JWT-токен отсутствует')
+        const state = getState() as RootState
+        const { token, isAuth } = state.account
+        if (!exceptions.includes(endpoint) && token) {
+          headers.set('authorization', `Bearer ${token}`)
           return headers
         }
       },

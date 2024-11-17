@@ -1,7 +1,7 @@
 import type { Action, Reducer, ThunkAction } from '@reduxjs/toolkit'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
-import { api } from './api'
+import { api } from './api/api'
 import { authMiddleware } from './auth-middleware'
 import { equipmentSlice } from './equipments-slice'
 import { preloadedState } from './preloaded-state'

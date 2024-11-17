@@ -16,7 +16,7 @@ import { IFormValues } from '../models/inputs'
 import type { IUserCard, TLogin } from '../models/users'
 import { IUserData } from '../models/users'
 import { selectLogin } from '../store/selectors'
-import { useDeletePersonMutation, useUpdatePersonDataMutation } from '../store/users-api'
+import { useDeletePersonMutation, useUpdatePersonDataMutation } from '../store/api/users-api'
 
 const EditPersonalDataPage = () => {
   const location = useLocation()

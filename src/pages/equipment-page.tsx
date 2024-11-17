@@ -8,7 +8,7 @@ import { toLowerCaseFirstChart } from '../app/utils/utils'
 import FavoriteButtons from '../components/equipment-card/favorite-buttons'
 import OperateStatus from '../components/equipment-card/operate-status'
 import { ThemeContext } from '../components/root'
-import { useFetchEquipmentByIDQuery } from '../store/equipments-api'
+import { useFetchEquipmentByIDQuery } from '../store/api/equipment/equipments-api'
 import { selectLogin } from '../store/selectors'
 
 export default function EquipmentPage() {

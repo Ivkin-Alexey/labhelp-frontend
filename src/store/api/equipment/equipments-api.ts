@@ -1,89 +1,33 @@
-import { api } from './api'
-import { DEFAULT_SEARCH_TERM } from '../app/constants/constants'
-import type { equipmentId, IEquipmentItem } from '../models/equipments'
+import { apiRoutes, DEFAULT_SEARCH_TERM } from '../../../app/constants/constants'
+import type { equipmentId, IEquipmentItem } from '../../../models/equipments'
+import { api } from '../api'
 
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentByID: builder.query<IEquipmentItem, string>({
-      query: equipmentId => `/equipmentList?equipmentId=${equipmentId}`,
+      query: equipmentId => apiRoutes.get.equipments.equipments + equipmentId,
       providesTags: ['Equipment'],
     }),
     fetchEquipmentsBySearchTerm: builder.query<
       IEquipmentItem[],
       { searchTerm: string; login: string }
     >({
-      query: data => `/equipmentList?search=${data.searchTerm}&login=${data.login}`,
+      query: data => apiRoutes.get.equipments.equipments + `?search=${data.searchTerm}&login=${data.login}`,
       providesTags: ['EquipmentList'],
     }),
     fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
-      query: login => `/favoriteEquipments?login=${login}`,
+      query: login => apiRoutes.get.equipments.favorite + login,
+      transformResponse: (response: IEquipmentItem[]) => {
+        return response.map(item => ({
+          ...item,
+          isFavorite: true,
+        }))
+      },
       providesTags: ['FavoriteEquipmentList'],
     }),
-    fetchOperatingEquipments: builder.query<IEquipmentItem[], void>({
-      query: login => `/workingEquipmentList?login=${login}`,
-      providesTags: ['OperatingEquipmentList'],
-    }),
-    addOperatingEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
-      query: data => ({
-        url: '/operateEquipment',
-        method: 'POST',
-        body: data,
-      }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
-      async onQueryStarted(data, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
-          equipmentsApi.util.updateQueryData(
-            'fetchEquipmentsBySearchTerm',
-            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
-            draft =>
-              draft.forEach(el => {
-                if (el.id === data.equipmentId) {
-                  el.isOperate = true
-                  el.login = data.login
-                }
-              }),
-          ),
-        )
-        try {
-          await queryFulfilled
-        } catch {
-          patchResult.undo()
-        }
-      },
-    }),
-    deleteOperatingEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>(
-      {
-        query: data => ({
-          url: '/operateEquipment',
-          method: 'DELETE',
-          body: data,
-        }),
-        invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
-        async onQueryStarted(data, { dispatch, queryFulfilled }) {
-          const patchResult = dispatch(
-            equipmentsApi.util.updateQueryData(
-              'fetchEquipmentsBySearchTerm',
-              { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
-              draft =>
-                draft.forEach(el => {
-                  if (el.id === data.equipmentId) {
-                    delete el.isOperate
-                    delete el.login
-                  }
-                }),
-            ),
-          )
-          try {
-            await queryFulfilled
-          } catch {
-            patchResult.undo()
-          }
-        },
-      },
-    ),
     addFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
       query: data => ({
-        url: '/favoriteEquipment?add=true',
+        url: apiRoutes.delete.equipments.favorite + data.equipmentId + `?login=${data.login}`,
         method: 'POST',
         body: data,
       }),
@@ -110,8 +54,8 @@ export const equipmentsApi = api.injectEndpoints({
     }),
     deleteFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
       query: data => ({
-        url: '/favoriteEquipment?remove=true',
-        method: 'POST',
+        url: apiRoutes.delete.equipments.favorite + data.equipmentId + `?login=${data.login}`,
+        method: 'DELETE',
         body: data,
       }),
       invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
@@ -137,13 +81,13 @@ export const equipmentsApi = api.injectEndpoints({
     }),
     fetchSearchHistory: builder.query<string, string>({
       query: login => ({
-        url: `/equipmentSearchHistory?login=${login}`,
+        url: apiRoutes.get.equipments.searchHistory + login,
       }),
       providesTags: ['HistoryList'],
     }),
     addTermToHistory: builder.mutation<string, { login: string; term: string }>({
       query: data => ({
-        url: '/equipmentSearchHistory?add=true',
+        url: apiRoutes.post.equipments.searchHistory + data.login + `?term=${data.term}`,
         method: 'POST',
         body: data,
       }),
@@ -151,7 +95,7 @@ export const equipmentsApi = api.injectEndpoints({
     }),
     deleteTermFromHistory: builder.mutation<string, { login: string; term: string }>({
       query: data => ({
-        url: '/equipmentSearchHistory?remove=true',
+        url: apiRoutes.delete.equipments.searchHistory + data.login + `?term=${data.term}`,
         method: 'POST',
         body: data,
       }),
@@ -162,7 +106,6 @@ export const equipmentsApi = api.injectEndpoints({
 
 export const {
   useFetchEquipmentsBySearchTermQuery,
-  useFetchOperatingEquipmentsQuery,
   useFetchFavoriteEquipmentsQuery,
   useFetchEquipmentByIDQuery,
   useAddFavoriteEquipmentMutation,
@@ -170,6 +113,4 @@ export const {
   useAddTermToHistoryMutation,
   useDeleteTermFromHistoryMutation,
   useFetchSearchHistoryQuery,
-  useAddOperatingEquipmentMutation,
-  useDeleteOperatingEquipmentMutation,
 } = equipmentsApi
