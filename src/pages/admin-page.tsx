@@ -1,14 +1,14 @@
 import { Container } from '@mui/material'
+import { Outlet, useLocation } from 'react-router-dom'
 
 import { DEFAULT_SEARCH_TERM, routes } from '../app/constants/constants'
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
-import { Outlet, useLocation } from 'react-router-dom'
 import { Search } from '../components/search/search'
+import UserCardList from '../components/user-card-list'
+import type { IUserCard } from '../models/users'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 import { selectAccount } from '../store/selectors'
-import { IUserCard } from '../models/users'
-import UserCardList from '../components/user-card-list'
 
 export default function AdminPage() {
   const { login } = useAppSelector(selectAccount)
@@ -22,60 +22,86 @@ export default function AdminPage() {
     {
       login: '26594',
       password: '123456',
-      fullName: 'Иванов Иван Иванович',
+      firstName: 'Иван',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      lastName: '',
+      patronymic: '',
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: '',
     },
     {
       login: '26595',
       password: '123456',
-      fullName: 'Иванов Иван Иванович',
+      firstName: 'Иван',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      lastName: '',
+      patronymic: '',
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: '',
     },
     {
       login: '26596',
       password: '123456',
-      fullName: 'Иванов Иван Иванович',
+      firstName: 'Иван',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      lastName: '',
+      patronymic: '',
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: '',
     },
     {
       login: '26597',
       password: '123456',
-      fullName: 'Иванов Иван Иванович',
+      firstName: 'Иван',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      lastName: '',
+      patronymic: '',
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: '',
     },
     {
       login: '26598',
       password: '123456',
-      fullName: 'Иванов Иван Иванович',
+      firstName: 'Иван',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      lastName: '',
+      patronymic: '',
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: '',
     },
     {
       login: '26599',
       password: '123456',
-      fullName: 'Иванов Иван Иванович',
+      firstName: 'Иван',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      lastName: '',
+      patronymic: '',
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: '',
     },
   ]
 
-  if (pathname !== routes.admin) return <Outlet />
+  if (pathname !== routes.admin) {
+    return <Outlet />
+  }
 
   return (
     <Container

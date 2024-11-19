@@ -1,5 +1,3 @@
-import validateErrorMessages from '../constants/localizations/validateErrors'
-import { capitalize } from '../methods/methods'
 import type {
   TValidateCallback,
   TValidateResult,
@@ -7,6 +5,8 @@ import type {
   TValidateRules,
 } from '../../models/inputs'
 import { LOGIN_SPECIAL_CHARACTERS } from '../constants/constants'
+import validateErrorMessages from '../constants/localizations/validateErrors'
+import { capitalize } from '../methods/methods'
 const cyrillicWithSpaceRegExp = /[^а-яёА-ЯЁ ]/gi
 const cyrillicRegExp = /[^а-яёА-ЯЁ]/gi
 const userIdRegExp = /^[a-zA-Z0-9][a-zA-Z0-9-_@]*$/
@@ -89,8 +89,8 @@ export default function validateInputValue(
 
   function checkIsCyrillicOnly() {
     if (rules?.includes('spaceBetweenWordsOnly'))
-      value = value?.replace(cyrillicWithSpaceRegExp, '')
-    else value = value.replace(cyrillicRegExp, '')
+      {value = value?.replace(cyrillicWithSpaceRegExp, '')}
+    else {value = value.replace(cyrillicRegExp, '')}
   }
 
   function checkIsSpaceBetweenWords() {

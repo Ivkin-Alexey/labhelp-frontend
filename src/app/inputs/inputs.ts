@@ -1,5 +1,5 @@
-import { IFormSettigs } from "../../models/inputs";
 import personalData from "./personalData";
+import type { IFormSettigs } from "../../models/inputs";
 
 const inputsSettings: IFormSettigs = Object.assign({}, personalData)
 

@@ -8,15 +8,15 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
-import FavoriteButtons from './favorite-buttons'
 import CardStatus from './card-status'
+import FavoriteButtons from './favorite-buttons'
 import OperateButtons from './operating-buttons'
-import type { TLogin, IUserCard } from '../../models/users'
 import { routes } from '../../app/constants/constants'
 import { createPersonName } from '../../app/methods/methods'
+import type { TLogin, IUserCard } from '../../models/users'
 
 export function UserCard(props: IUserCard) {
-  const { imgUrl = '#', login: login, password, position, department, isVerified } = props
+  const { imgUrl = '#', login, password, position, department, isVerified } = props
 
   const navigate = useNavigate()
 

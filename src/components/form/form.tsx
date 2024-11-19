@@ -1,21 +1,25 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import { MenuItem, Stack, TextField } from '@mui/material'
-import ListSubheader from '@mui/material/ListSubheader'
 import Button from '@mui/material/Button'
-import validateInputValue from '../../app/inputs/validators'
-import inputsSettings from '../../app/inputs/inputs'
+import ListSubheader from '@mui/material/ListSubheader'
 import { useNavigate } from 'react-router-dom'
+
 import localisations from '../../app/constants/localizations/localizations'
-import { IUserData, TLogin } from '../../models/users'
-import {
+import { useAppSelector } from '../../app/hooks/hooks'
+import inputsSettings from '../../app/inputs/inputs'
+import validateInputValue from '../../app/inputs/validators'
+import type {
   IInputSettings,
   TInputArray,
   IStudentCategoryFilteringRule,
   TInputValue,
   IFormValues,
 } from '../../models/inputs'
-import { IUserForm } from '../../models/users'
-import { useAppSelector } from '../../app/hooks/hooks'
+import { TLogin } from '../../models/users'
+import type { IUserData} from '../../models/users';
+import type { IUserForm } from '../../models/users'
 import { selectLogin } from '../../store/selectors'
 import CircularButton from '../circular-button'
 
@@ -129,7 +133,7 @@ const Form = (props: IFormProps) => {
     for (let rule in filteringRules) {
       const arr = filteringRules[rule]
       const obj = arr.find(el => el.inputValue === formState[rule].value)
-      if (obj) hiddenInputs = [...hiddenInputs, ...obj.hiddenFormFields]
+      if (obj) {hiddenInputs = [...hiddenInputs, ...obj.hiddenFormFields]}
     }
     return inputLabelList.filter(el => !hiddenInputs.includes(el))
   }
@@ -182,7 +186,6 @@ const Form = (props: IFormProps) => {
     >
       <ListSubheader component="div">{header}</ListSubheader>
       {renderTextFields()}
-      <CircularButton isLoading>{btnText}</CircularButton>
       <Button variant="contained" disabled={isDisabled} onClick={onSendData}>
         {btnText}
       </Button>

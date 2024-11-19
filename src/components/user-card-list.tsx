@@ -1,7 +1,8 @@
 import { Stack } from "@mui/material"
-import { IEquipmentItem } from "../models/equipments"
+
 import { UserCard } from "./user-card/user-card"
-import { IUserCard } from "../models/users"
+import { IEquipmentItem } from "../models/equipments"
+import type { IUserCard } from "../models/users"
 
 interface IUserCardList {
   list?: IUserCard[]
@@ -9,7 +10,7 @@ interface IUserCardList {
 
 export default function UserCardList({list}: IUserCardList) {
 
-  if(!list) return null
+  if(!list) {return null}
   
      return (
       <Stack
@@ -20,7 +21,7 @@ export default function UserCardList({list}: IUserCardList) {
       justifyContent="center"
       marginBottom="40px"
     >{list.map(el => {
-            const { login: login, ...props } = el
+            const { login, ...props } = el
   
             return (
               <UserCard

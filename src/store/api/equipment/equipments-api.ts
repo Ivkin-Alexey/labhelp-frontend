@@ -5,7 +5,7 @@ import { api } from '../api'
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentByID: builder.query<IEquipmentItem, string>({
-      query: equipmentId => apiRoutes.get.equipments.equipments + equipmentId,
+      query: equipmentId => apiRoutes.get.equipments.equipments + "/" + equipmentId,
       providesTags: ['Equipment'],
     }),
     fetchEquipmentsBySearchTerm: builder.query<

@@ -2,12 +2,9 @@ import { Container } from '@mui/material'
 
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
-import {
-  useFetchFavoriteEquipmentsQuery,
-  useFetchOperatingEquipmentsQuery,
-} from '../store/api/equipment/equipments-api'
-import { selectLogin } from '../store/selectors'
 import EquipmentCardList from '../components/equipment-card-list'
+import { useFetchOperatingEquipmentsQuery } from '../store/api/equipment/operate-equipment'
+import { selectLogin } from '../store/selectors'
 
 export default function OperatingEquipmentsPage() {
   const login = useAppSelector(selectLogin)

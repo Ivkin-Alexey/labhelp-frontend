@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
-import { ConstructionOutlined } from '@mui/icons-material'
 import { Container } from '@mui/material'
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 
 import { routes } from '../app/constants/constants'
@@ -12,11 +11,9 @@ import { categoryFilteringRules } from '../app/inputs/filteringRules'
 import forms from '../app/inputs/forms'
 import Form from '../components/form/form'
 import OptionalUserFormButtons from '../components/form/option-buttons'
-import { IFormValues } from '../models/inputs'
 import type { IUserCard, TLogin } from '../models/users'
-import { IUserData } from '../models/users'
-import { selectLogin } from '../store/selectors'
 import { useDeletePersonMutation, useUpdatePersonDataMutation } from '../store/api/users-api'
+import { selectLogin } from '../store/selectors'
 
 const EditPersonalDataPage = () => {
   const location = useLocation()
@@ -36,6 +33,12 @@ const EditPersonalDataPage = () => {
     { isSuccess: isSuccessDelete, isError: isErrorDelete, isLoading: isLoadingDelete },
   ] = useDeletePersonMutation()
 
+  useEffect(() => {
+    if (isSuccessDelete) {
+      navigate(routes.admin)
+    }
+  }, [isSuccessDelete])
+
   const userList: IUserCard[] = [
     {
       login: '26594',
@@ -45,8 +48,10 @@ const EditPersonalDataPage = () => {
       patronymic: 'Иванович',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: ''
     },
     {
       login: '26595',
@@ -56,8 +61,10 @@ const EditPersonalDataPage = () => {
       patronymic: 'Иванович',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: ''
     },
     {
       login: '26596',
@@ -67,8 +74,10 @@ const EditPersonalDataPage = () => {
       patronymic: 'Иванович',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: ''
     },
     {
       login: '26597',
@@ -78,8 +87,10 @@ const EditPersonalDataPage = () => {
       patronymic: 'Иванович',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: ''
     },
     {
       login: '26598',
@@ -89,8 +100,10 @@ const EditPersonalDataPage = () => {
       patronymic: 'Иванович',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: ''
     },
     {
       login: '26599',
@@ -100,8 +113,10 @@ const EditPersonalDataPage = () => {
       patronymic: 'Иванович',
       position: 'научный сотрудник',
       department: 'НЦ Переработки ресурсов',
-      equipments: { inaccessible: [1, 2, 3], available: [4, 5, 6] },
       isVerified: false,
+      studentsEducationYear: '',
+      postGraduateEducationYear: '',
+      category: ''
     },
   ]
 
@@ -124,11 +139,6 @@ const EditPersonalDataPage = () => {
     }
   }
 
-  useEffect(() => {
-    if (isSuccessDelete) {
-      navigate(routes.admin)
-    }
-  }, [isSuccessDelete])
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

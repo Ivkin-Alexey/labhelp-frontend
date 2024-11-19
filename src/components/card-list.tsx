@@ -8,7 +8,7 @@ import type { IUserCard } from '../models/users'
 interface ICardList {
   isLoading: boolean
   isError: boolean
-  Component: React.ElementType
+  Component?: React.ElementType
   list?: IEquipmentItem[] | IUserCard[]
 }
 

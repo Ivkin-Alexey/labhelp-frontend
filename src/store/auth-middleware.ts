@@ -36,7 +36,6 @@ export const authMiddleware: Middleware<{}, State> = store => next => action => 
         break
       
       case 'account/clearUserData':
-        console.log("Очиска")
             localStorage.clear()
           break
 

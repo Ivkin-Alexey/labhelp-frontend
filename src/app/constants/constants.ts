@@ -41,9 +41,6 @@ export const apiRoutes = {
       signIn: '/auth/sign-in/',
       signUp: '/auth/sign-up/',
     },
-    users: {
-      signUp: '/users/',
-    },
     equipments: {
       favorite: '/equipments/favorite/',
       operate: '/equipments/operate/',

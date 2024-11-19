@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import type { equipmentId } from '../../models/equipments'
-import { useAddOperatingEquipmentMutation } from '../../store/api/equipment/operate-equipment'
+import { useAddOperatingEquipmentMutation, useDeleteOperatingEquipmentMutation } from '../../store/api/equipment/operate-equipment'
 import { useDeletePersonMutation } from '../../store/api/users-api'
 import { selectAccount } from '../../store/selectors'
 
@@ -18,7 +18,7 @@ export default function OperateButtons(props: IOperateButtons) {
   const { isOperate, equipmentId, login } = props
 
   const [add] = useAddOperatingEquipmentMutation()
-  const [remove] = useDeletePersonMutation()
+  const [remove] = useDeleteOperatingEquipmentMutation()
   const { isAuth, accountData } = useAppSelector(selectAccount)
   const { login: accountLogin } = accountData
   const navigate = useNavigate()

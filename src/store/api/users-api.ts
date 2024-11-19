@@ -35,7 +35,7 @@ export const usersApi = api.injectEndpoints({
       { userData: IUserRegistrationData }
     >({
       query: userData => ({
-        url: apiRoutes.post.users.signUp + userData.userData.login,
+        url: apiRoutes.post.auth.signUp + userData.userData.login,
         method: 'POST',
         body: userData,
       }),

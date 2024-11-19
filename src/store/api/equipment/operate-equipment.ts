@@ -6,7 +6,7 @@ import { api } from '../api'
 export const operateEquipmentApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchOperatingEquipments: builder.query<IEquipmentItem[], void>({
-      query: login => `/workingEquipmentList?login=${login}`,
+      query: login => apiRoutes.get.equipments.operate + `?login=${login}`,
       providesTags: ['OperatingEquipmentList'],
     }),
     addOperatingEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
@@ -74,4 +74,4 @@ export const {
   useFetchOperatingEquipmentsQuery,
   useAddOperatingEquipmentMutation,
   useDeleteOperatingEquipmentMutation,
-} = equipmentsApi
+} = operateEquipmentApi

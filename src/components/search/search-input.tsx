@@ -9,7 +9,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 
-import type { EquipmentItem } from '../../models/equipments'
+import type { IEquipmentItem } from '../../models/equipments'
 
 interface ISearchInput {
   handleInputChange(
@@ -19,14 +19,14 @@ interface ISearchInput {
   ): void
   handleChange(
     e: SyntheticEvent<Element, Event>,
-    value: EquipmentItem | null | string,
+    value: IEquipmentItem | null | string,
     reason: AutocompleteChangeReason,
   ): void
   handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>): void
-  list: EquipmentItem[]
+  list: IEquipmentItem[]
   isLoading: boolean
   inputValue: string
-  value: EquipmentItem | null
+  value: IEquipmentItem | null
 }
 
 export default function SearchInput(props: ISearchInput) {
@@ -35,7 +35,7 @@ export default function SearchInput(props: ISearchInput) {
 
   const [isOpen, setIsopen] = useState(!!inputValue)
 
-  function createLabel(equipment: EquipmentItem | string) {
+  function createLabel(equipment: IEquipmentItem | string) {
     if (typeof equipment === 'string') {
       return equipment
     }
