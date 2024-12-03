@@ -1,8 +1,10 @@
 import type { RootState } from './store'
 
-export const selectAccount = (state: RootState) => state.account
-
 export const selectLogin = (state: RootState) => state.account.accountData?.login
+
+export const selectAccount = (state: RootState) => state.account.accountData
+
+export const selectIsAuth = (state: RootState) => state.account.isAuth
 
 export const selectToken = (state: RootState) => state.account.token
 

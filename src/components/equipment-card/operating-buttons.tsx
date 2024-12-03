@@ -8,7 +8,7 @@ import {
   useAddOperatingEquipmentMutation,
   useDeleteOperatingEquipmentMutation,
 } from '../../store/api/equipment/operate-equipment'
-import { selectAccount, selectLogin } from '../../store/selectors'
+import { selectIsAuth, selectLogin } from '../../store/selectors'
 
 interface IOperateButtons {
   isOperate?: boolean
@@ -21,7 +21,7 @@ export default function OperateButtons(props: IOperateButtons) {
 
   const [add] = useAddOperatingEquipmentMutation()
   const [remove] = useDeleteOperatingEquipmentMutation()
-  const { isAuth } = useAppSelector(selectAccount)
+  const isAuth = useAppSelector(selectIsAuth)
   const accountLogin = useAppSelector(selectLogin)
   const navigate = useNavigate()
 

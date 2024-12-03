@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
@@ -12,8 +12,7 @@ import HeaderNavigation from './header-navigation'
 import UserMenu from './user-menu'
 import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
-import { selectAccount } from '../../store/selectors'
-import { ThemeContext } from '../root'
+import { selectAccount, selectIsAuth } from '../../store/selectors'
 
 let pages = [
   { title: 'Избранное', path: routes.favorites },
@@ -31,14 +30,14 @@ const settings = [
 
 function Header() {
   const navigate = useNavigate()
-  const { isAuth } = useAppSelector(selectAccount)
+  const isAuth = useAppSelector(selectIsAuth)
 
   const location = useLocation()
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
   const [pagesState, setPagesState] = React.useState(pages)
-  const { accountData } = useAppSelector(selectAccount)
+  const accountData = useAppSelector(selectAccount)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)

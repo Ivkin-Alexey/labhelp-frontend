@@ -12,7 +12,7 @@ export const api = createApi({
       baseUrl: BASE_URL,
       prepareHeaders: (headers, { getState, endpoint }) => {
         const state = getState() as RootState
-        const { token, isAuth } = state.account
+        const { token } = state.account
         if (!exceptions.includes(endpoint) && token) {
           headers.set('authorization', `Bearer ${token}`)
           return headers

@@ -96,7 +96,7 @@ export const equipmentsApi = api.injectEndpoints({
     deleteTermFromHistory: builder.mutation<string, { login: string; term: string }>({
       query: data => ({
         url: apiRoutes.delete.equipments.searchHistory + data.login + `?term=${data.term}`,
-        method: 'POST',
+        method: 'DELETE',
         body: data,
       }),
       invalidatesTags: ['HistoryList'],

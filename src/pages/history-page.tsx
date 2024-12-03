@@ -7,10 +7,10 @@ import {
   useDeleteTermFromHistoryMutation,
   useFetchSearchHistoryQuery,
 } from '../store/api/equipment/equipments-api'
-import { selectAccount } from '../store/selectors'
+import { selectLogin } from '../store/selectors'
 
 export default function HistoryPage() {
-  const { login } = useAppSelector(selectAccount)
+  const login = useAppSelector(selectLogin)
 
   const { data: list } = useFetchSearchHistoryQuery(login)
 

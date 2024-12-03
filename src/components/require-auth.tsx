@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom'
 
 import Fallback from './Fallback'
 import { useAppSelector } from '../app/hooks/hooks'
-import { selectAccount, selectRole } from '../store/selectors'
+import { selectIsAuth, selectRole } from '../store/selectors'
 
 interface IRequireAuth {
   redirectTo: string
@@ -12,7 +12,7 @@ interface IRequireAuth {
 }
 
 export function RequireAuth(props: IRequireAuth) {
-  const { isAuth } = useAppSelector(selectAccount)
+  const isAuth = useAppSelector(selectIsAuth)
 
   if (!isAuth) {
     return <Navigate to={props.redirectTo} />
