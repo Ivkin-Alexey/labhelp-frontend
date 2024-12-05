@@ -12,8 +12,7 @@ function isAction(obj: any): obj is IAction {
   return (
     typeof obj === 'object' &&
     obj !== null &&
-    typeof obj.type === 'string' &&
-    (typeof obj.payload === 'string' || typeof obj.payload === 'object')
+    typeof obj.type === 'string'
   )
 }
 
