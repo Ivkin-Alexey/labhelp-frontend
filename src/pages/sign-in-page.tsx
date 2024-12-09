@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../app/constants/constants'
 import { useAppDispatch, useAppSelector } from '../app/hooks/hooks'
 import SignForm from '../components/sign-form/sign-form'
+import type { IFormValues } from '../models/inputs'
 import { useLazyGetAccountDataQuery, useSignInMutation } from '../store/api/users-api'
 import { selectToken } from '../store/selectors'
 import { setUserData } from '../store/users-slice'
@@ -34,12 +35,8 @@ export default function SignInPage() {
   const dispatch = useAppDispatch()
   const token = useAppSelector(selectToken)
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    const login = data.get('login')
-    const password = data.get('password')
-
+  const handleSubmit = (data: IFormValues) => {
+    const { login, password } = data
     setSavedLogin(login)
     signIn({
       login,
@@ -70,6 +67,6 @@ export default function SignInPage() {
   }
 
   return (
-    <SignForm handleSubmit={handleSubmit} isLoading={isAuthLoading} title="Войти" isSignIn={true} />
+    <SignForm handleSubmit={handleSubmit} isLoading={isAuthLoading} title="Вход" isSignIn={true} />
   )
 }

@@ -18,7 +18,7 @@ export interface IUserCredentials {
 }
 
 export interface IUserRegistrationData extends IUserCredentials {
-  role?: TPersonRole
+  data?: Partial<IUserForm>
 }
 
 export interface IUserData {

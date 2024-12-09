@@ -28,6 +28,7 @@ export const apiRoutes = {
     users: {
       userData: '/users/',
       users: '/users',
+      isTokenValid: '/users/token'
     },
     equipments: {
       equipments: '/equipments',

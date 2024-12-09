@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../app/constants/constants'
 import { useAppDispatch } from '../app/hooks/hooks'
 import SignForm from '../components/sign-form/sign-form'
+import type { IFormValues } from '../models/inputs'
 import { useSignUpMutation } from '../store/api/users-api'
 import { setUserData as loginAction } from '../store/users-slice'
 
@@ -17,18 +18,10 @@ export default function SignUpPage() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    const login = data.get('login')
-    const password = data.get('password')
+  const handleSubmit = (data: IFormValues) => {
+    const { login, password }  = data
     setSavedLogin(login)
-    signup({
-      userData: {
-        login,
-        password,
-      },
-    })
+    signup({ login, password, data })
   }
 
   useEffect(() => {
@@ -38,5 +31,5 @@ export default function SignUpPage() {
     }
   }, [isSuccess])
 
-  return <SignForm handleSubmit={handleSubmit} title="Зарегистрироваться" isLoading={isLoading} />
+  return <SignForm handleSubmit={handleSubmit} title="Регистрация" isLoading={isLoading} />
 }

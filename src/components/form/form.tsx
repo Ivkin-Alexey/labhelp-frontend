@@ -25,9 +25,9 @@ import CircularButton from '../circular-button'
 
 interface IFormProps {
   inputList: TInputArray
-  defaultInputValues: IUserForm
+  defaultInputValues?: IUserForm
   filteringRules: { [key: string]: IStudentCategoryFilteringRule[] }
-  submit: (formData: IUserData) => void
+  onSendData: (formData: IFormValues) => void
   confirmMessage?: string
   btnText?: string
   header?: string
@@ -52,9 +52,9 @@ const Form = (props: IFormProps) => {
     defaultInputValues,
     filteringRules,
     confirmMessage,
-    submit,
+    onSendData: onSend,
     btnText = 'Отправить',
-    header = localisations.components.form.header,
+    header,
     optionalButtons,
   } = props
 
@@ -66,7 +66,12 @@ const Form = (props: IFormProps) => {
         let inputSettings: IInputSettings = inputsSettings[cur]
 
         const { required, initValue, validateRules } = inputSettings
-        const value: TInputValue = defaultInputValues[cur as keyof IUserForm] || initValue
+        let value: TInputValue
+        if (defaultInputValues) {
+          value = defaultInputValues[cur as keyof IUserForm]
+        } else {
+          value = initValue
+        }
 
         return {
           ...acc,
@@ -89,12 +94,14 @@ const Form = (props: IFormProps) => {
     for (let key in formState) {
       formValues[key] = formState[key].value
     }
+    console.log(formState)
     return formValues
+
   }, [formState])
 
   const onSendData = useCallback(() => {
-    console.log(formState)
-    submit({ login: accountLogin, data: formValues })
+
+    onSend(formValues)
   }, [formState])
 
   // function popupCallback() {
@@ -132,7 +139,7 @@ const Form = (props: IFormProps) => {
     let hiddenInputs: string[] = []
     for (let rule in filteringRules) {
       const arr = filteringRules[rule]
-      const obj = arr.find(el => el.inputValue === formState[rule].value)
+      const obj = arr.find(el => el.inputValue === formState[rule]?.value)
       if (obj) {hiddenInputs = [...hiddenInputs, ...obj.hiddenFormFields]}
     }
     return inputLabelList.filter(el => !hiddenInputs.includes(el))
@@ -184,7 +191,7 @@ const Form = (props: IFormProps) => {
       noValidate
       autoComplete="off"
     >
-      <ListSubheader component="div">{header}</ListSubheader>
+      {header && <ListSubheader component="div">{header}</ListSubheader>}
       {renderTextFields()}
       <Button variant="contained" disabled={isDisabled} onClick={onSendData}>
         {btnText}

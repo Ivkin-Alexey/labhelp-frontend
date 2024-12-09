@@ -11,6 +11,17 @@ import { setToken, setUserData } from '../users-slice'
 
 export const usersApi = api.injectEndpoints({
   endpoints: builder => ({
+    checkToken: builder.query<{ message: string; data: boolean }, void>({
+      query: () => apiRoutes.get.users.isTokenValid,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          console.log(data)
+        } catch (e) {
+          console.error('Failed to get user data: ', e)
+        }
+      },
+    }),
     signIn: builder.mutation<{ message: string; token: string }, IUserCredentials>({
       query: credentials => ({
         url: apiRoutes.post.auth.signIn + credentials.login,
@@ -30,12 +41,9 @@ export const usersApi = api.injectEndpoints({
         }
       },
     }),
-    signUp: builder.mutation<
-      { message: string; token: string },
-      { userData: IUserRegistrationData }
-    >({
+    signUp: builder.mutation<{ message: string; token: string }, IUserRegistrationData>({
       query: userData => ({
-        url: apiRoutes.post.auth.signUp + userData.userData.login,
+        url: apiRoutes.post.auth.signUp + userData.login,
         method: 'POST',
         body: userData,
       }),
@@ -105,4 +113,5 @@ export const {
   useLazyGetAccountDataQuery,
   useUpdatePersonDataMutation,
   useDeletePersonMutation,
+  useLazyCheckTokenQuery
 } = usersApi
