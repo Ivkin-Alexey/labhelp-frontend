@@ -81,7 +81,7 @@ export default function validateInputValue(
       result.isValid = false
       result.errorText = emptyError
     }
-    if (!rules?.includes('spaceBetweenWordsOnly')) {
+    if (!rules?.includes('spaceBetweenWordsOnly') && !rules?.includes('login') && !rules?.includes('password')) {
       value = capitalize(value.toLowerCase())
     }
     result.value = value

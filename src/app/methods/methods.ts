@@ -6,11 +6,11 @@ export function createPersonName(person: IUserForm) {
     let name = "";
     if(lastName) {
         name+=lastName;
-        if(firstName) {name+= " " + firstName[0] + ".";}
-        if(patronymic) {name+=patronymic[0] + ".";}
+        if(firstName) {name+= " " + firstName}
+        if(patronymic) {name+= " " + patronymic}
     } else if (firstName) {
         name+=firstName;
-        if(patronymic) {name+= " " + patronymic;}
+        if(patronymic) {name+= " " + patronymic}
     }
     return name;
 }

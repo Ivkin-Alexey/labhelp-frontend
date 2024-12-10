@@ -1,12 +1,10 @@
-import type React from 'react';
+import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { MenuItem, Stack, TextField } from '@mui/material'
 import Button from '@mui/material/Button'
 import ListSubheader from '@mui/material/ListSubheader'
-import { useNavigate } from 'react-router-dom'
 
-import localisations from '../../app/constants/localizations/localizations'
 import { useAppSelector } from '../../app/hooks/hooks'
 import inputsSettings from '../../app/inputs/inputs'
 import validateInputValue from '../../app/inputs/validators'
@@ -17,11 +15,8 @@ import type {
   TInputValue,
   IFormValues,
 } from '../../models/inputs'
-import { TLogin } from '../../models/users'
-import type { IUserData} from '../../models/users';
 import type { IUserForm } from '../../models/users'
 import { selectLogin } from '../../store/selectors'
-import CircularButton from '../circular-button'
 
 interface IFormProps {
   inputList: TInputArray
@@ -31,6 +26,7 @@ interface IFormProps {
   confirmMessage?: string
   btnText?: string
   header?: string
+  disabledInputs?: TInputArray
   optionalButtons?: React.ReactNode | undefined
 }
 
@@ -56,6 +52,7 @@ const Form = (props: IFormProps) => {
     btnText = 'Отправить',
     header,
     optionalButtons,
+    disabledInputs
   } = props
 
   const accountLogin = useAppSelector(selectLogin)
@@ -85,6 +82,8 @@ const Form = (props: IFormProps) => {
     [],
   )
 
+  // В formState хранится состояние формы, необходимое для ее валидации, а также отправки данных на сервер.
+  // В textInputs хранятся параметры для разметки
   const [formState, setFormState] = useState<IFormState>(defaultFormState)
   const [textInputs, setTextInputs] = useState(filterInputs())
   const [isDisabled, setIsDisabled] = useState(true)
@@ -92,9 +91,8 @@ const Form = (props: IFormProps) => {
   const formValues = useMemo(() => {
     const formValues: IFormValues = {}
     for (let key in formState) {
-      formValues[key] = formState[key].value
-    }
-    console.log(formState)
+        formValues[key] = formState[key].value
+      }
     return formValues
 
   }, [formState])
@@ -163,6 +161,7 @@ const Form = (props: IFormProps) => {
       const { selectOptions, id, label, select, required } = inputsSettings[el]
       return (
         <TextField
+          disabled={disabledInputs?.includes(el)}
           error={!isValid}
           required={required}
           name={el}
@@ -181,6 +180,12 @@ const Form = (props: IFormProps) => {
     })
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLFormElement>) {
+    if (e.key === 'Enter') {
+      onSendData()
+    }
+  }
+
   return (
     <Stack
       direction="column"
@@ -190,6 +195,7 @@ const Form = (props: IFormProps) => {
       component="form"
       noValidate
       autoComplete="off"
+      onKeyDown={handleKeyDown}
     >
       {header && <ListSubheader component="div">{header}</ListSubheader>}
       {renderTextFields()}

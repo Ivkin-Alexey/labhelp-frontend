@@ -69,15 +69,10 @@ export const usersApi = api.injectEndpoints({
     updatePersonData: builder.mutation<string, IUserData>({
       query: userFormData => ({
         url: apiRoutes.patch.users + userFormData.login,
-        method: 'POST',
+        method: 'PATCH',
         body: userFormData,
       }),
-      invalidatesTags: [
-        'Equipment',
-        'EquipmentList',
-        'FavoriteEquipmentList',
-        'OperatingEquipmentList',
-      ],
+      invalidatesTags: ["userList"],
     }),
     deletePerson: builder.mutation<string, { login: TLogin; deletedPersonLogin: TLogin }>({
       query: userFormData => ({
@@ -85,12 +80,7 @@ export const usersApi = api.injectEndpoints({
         method: 'DELETE',
         body: userFormData,
       }),
-      invalidatesTags: [
-        'Equipment',
-        'EquipmentList',
-        'FavoriteEquipmentList',
-        'OperatingEquipmentList',
-      ],
+      invalidatesTags: ["userList"],
     }),
     getAccountData: builder.query<TAccountData, TLogin>({
       query: login => apiRoutes.get.users.userData + login,
@@ -104,6 +94,10 @@ export const usersApi = api.injectEndpoints({
       },
       providesTags: ['account'],
     }),
+    getUserList: builder.query<TAccountData[], TLogin>({
+      query: login => apiRoutes.get.users.users + "?login=" + login,
+      providesTags: ['userList'],
+    }),
   }),
 })
 
@@ -113,5 +107,6 @@ export const {
   useLazyGetAccountDataQuery,
   useUpdatePersonDataMutation,
   useDeletePersonMutation,
-  useLazyCheckTokenQuery
+  useLazyCheckTokenQuery,
+  useGetUserListQuery
 } = usersApi

@@ -30,7 +30,7 @@ export default function CardList(props: ICardList) {
   if (list && list?.length === 0) {
     return (
       <Typography gutterBottom variant="body1" component="div" marginTop="40px">
-        Оборудование не найдено
+        Список пуст
       </Typography>
     )
   }

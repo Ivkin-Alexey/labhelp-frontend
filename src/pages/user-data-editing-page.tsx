@@ -12,7 +12,11 @@ import forms from '../app/inputs/forms'
 import Form from '../components/form/form'
 import OptionalUserFormButtons from '../components/form/option-buttons'
 import type { IUserCard, TLogin } from '../models/users'
-import { useDeletePersonMutation, useUpdatePersonDataMutation } from '../store/api/users-api'
+import {
+  useDeletePersonMutation,
+  useGetUserListQuery,
+  useUpdatePersonDataMutation,
+} from '../store/api/users-api'
 import { selectLogin } from '../store/selectors'
 
 const EditPersonalDataPage = () => {
@@ -20,9 +24,11 @@ const EditPersonalDataPage = () => {
   const navigate = useNavigate()
   const accountLogin = useAppSelector(selectLogin)
 
-  const login: TLogin | undefined = location.pathname.split('/').at(-1)
+  const login: TLogin | undefined= location.pathname.split('/').at(-1)
 
   const message = localisations.pages.editPersonalData.confirmMsg
+
+  const { data: userList, isFetching, isError } = useGetUserListQuery(accountLogin)
 
   const [
     sendData,
@@ -34,93 +40,12 @@ const EditPersonalDataPage = () => {
   ] = useDeletePersonMutation()
 
   useEffect(() => {
-    if (isSuccessDelete) {
+    if (isSuccessDelete || isSuccessUpdate) {
       navigate(routes.admin)
     }
-  }, [isSuccessDelete])
+  }, [isSuccessDelete, isSuccessUpdate])
 
-  const userList: IUserCard[] = [
-    {
-      login: '26594',
-      password: '123456',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      patronymic: 'Иванович',
-      position: 'научный сотрудник',
-      department: 'НЦ Переработки ресурсов',
-      isVerified: false,
-      studentsEducationYear: '',
-      postGraduateEducationYear: '',
-      category: ''
-    },
-    {
-      login: '26595',
-      password: '123456',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      patronymic: 'Иванович',
-      position: 'научный сотрудник',
-      department: 'НЦ Переработки ресурсов',
-      isVerified: false,
-      studentsEducationYear: '',
-      postGraduateEducationYear: '',
-      category: ''
-    },
-    {
-      login: '26596',
-      password: '123456',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      patronymic: 'Иванович',
-      position: 'научный сотрудник',
-      department: 'НЦ Переработки ресурсов',
-      isVerified: false,
-      studentsEducationYear: '',
-      postGraduateEducationYear: '',
-      category: ''
-    },
-    {
-      login: '26597',
-      password: '123456',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      patronymic: 'Иванович',
-      position: 'научный сотрудник',
-      department: 'НЦ Переработки ресурсов',
-      isVerified: false,
-      studentsEducationYear: '',
-      postGraduateEducationYear: '',
-      category: ''
-    },
-    {
-      login: '26598',
-      password: '123456',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      patronymic: 'Иванович',
-      position: 'научный сотрудник',
-      department: 'НЦ Переработки ресурсов',
-      isVerified: false,
-      studentsEducationYear: '',
-      postGraduateEducationYear: '',
-      category: ''
-    },
-    {
-      login: '26599',
-      password: '123456',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      patronymic: 'Иванович',
-      position: 'научный сотрудник',
-      department: 'НЦ Переработки ресурсов',
-      isVerified: false,
-      studentsEducationYear: '',
-      postGraduateEducationYear: '',
-      category: ''
-    },
-  ]
-
-  const userData: IUserCard | undefined = userList.find(el => el.login === login)
+  const userData: IUserCard | undefined = userList?.find(el => el.login === login)
   if (!userData) {
     return null
   }
@@ -129,7 +54,6 @@ const EditPersonalDataPage = () => {
     if (!login) {
       return
     }
-    console.log(login)
     deleteMutation({ login: accountLogin, deletedPersonLogin: login })
   }
 
@@ -139,7 +63,6 @@ const EditPersonalDataPage = () => {
     }
   }
 
-
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Form
@@ -147,7 +70,8 @@ const EditPersonalDataPage = () => {
         defaultInputValues={userData}
         confirmMessage={message}
         filteringRules={categoryFilteringRules}
-        submit={sendData}
+        disabledInputs={["login"]}
+        onSendData={sendData}
         btnText="Подтвердить"
         header="Данные пользователя:"
         optionalButtons={optionalButtons()}

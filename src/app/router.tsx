@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { routes } from './constants/constants'
-import {RequireAuth, RequireAdminRole} from '../components/require-auth'
+import { RequireAuth, RequireAdminRole } from '../components/require-auth'
 import Root from '../components/root'
 import AdminPage from '../pages/admin-page'
 import EquipmentPage from '../pages/equipment-page'
@@ -75,12 +75,14 @@ const router = createBrowserRouter([
           </RequireAdminRole>
         ),
       },
-          {
-            path: routes.userProfile,
-            element: (
-                <EditPersonalDataPage />
-            ),
-          },
+      {
+        path: routes.userProfile,
+        element: (
+          <RequireAdminRole redirectTo={routes.signIn}>
+            <EditPersonalDataPage />
+          </RequireAdminRole>
+        ),
+      },
     ],
   },
 ])

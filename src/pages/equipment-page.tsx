@@ -15,12 +15,11 @@ export default function EquipmentPage() {
   const location = useLocation()
 
   const equipmentId = location.pathname.slice(1)
+  const accountLogin = useAppSelector(selectLogin)
 
   const { color } = useContext(ThemeContext)
 
-  const { isFetching, isError, data } = useFetchEquipmentByIDQuery(equipmentId)
-
-  const accountLogin = useAppSelector(selectLogin)
+  const { isFetching, isError, data } = useFetchEquipmentByIDQuery({ equipmentId, login: accountLogin })
 
   if (isFetching) {
     return <CircularProgress size="60px" />

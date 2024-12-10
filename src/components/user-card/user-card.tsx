@@ -16,7 +16,7 @@ import { createPersonName } from '../../app/methods/methods'
 import type { TLogin, IUserCard } from '../../models/users'
 
 export function UserCard(props: IUserCard) {
-  const { imgUrl = '#', login, password, position, department, isVerified } = props
+  const { imgUrl = '#', login, position, department, isVerified = true, firstName, lastName, patronymic} = props
 
   const navigate = useNavigate()
 
@@ -55,12 +55,6 @@ export function UserCard(props: IUserCard) {
           </Typography>
           <Typography variant="body2" color="text.secondary" marginBottom="5px">
             {department}
-          </Typography>
-          <Typography variant="body2" color="text.primary" marginBottom="5px">
-            логин: {login}
-          </Typography>
-          <Typography variant="body2" color="text.primary" marginBottom="5px">
-            пароль: {password}
           </Typography>
         </CardContent>
       </CardActionArea>

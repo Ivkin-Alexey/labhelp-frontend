@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { useEffect } from 'react'
+import type * as React from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
@@ -14,7 +14,7 @@ import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import { selectAccount, selectIsAuth } from '../../store/selectors'
 
-let pages = [
+let defaultPages = [
   { title: 'Избранное', path: routes.favorites },
   { title: 'История поиска', path: routes.history },
   { title: 'Оборудование в работе', path: routes.operatingEquipments },
@@ -34,10 +34,16 @@ function Header() {
 
   const location = useLocation()
 
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
-  const [pagesState, setPagesState] = React.useState(pages)
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const accountData = useAppSelector(selectAccount)
+  const pages = useMemo(() => {
+    if (accountData?.role === 'admin') {
+      return [...defaultPages, ...adminPages]
+    } else {
+      return defaultPages
+    }
+  }, [accountData])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -45,12 +51,6 @@ function Header() {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
-
-  useEffect(() => {
-    if (accountData?.role === 'admin') {
-      setPagesState(prev => Array.from(new Set([...prev, ...adminPages])))
-    }
-  }, [accountData])
 
   const handleCloseNavMenu = (path: string) => {
     setAnchorElNav(null)
@@ -89,11 +89,11 @@ function Header() {
               handleOpenNavMenu={handleOpenNavMenu}
               anchorElNav={anchorElNav}
               handleCloseNavMenu={handleCloseNavMenu}
-              list={pagesState}
+              list={pages}
             />
           )}
           <HeaderNavigation
-            list={pagesState}
+            list={pages}
             isAuth={isAuth}
             handleCloseNavMenu={handleCloseNavMenu}
             navigateToMainPage={navigateToMainPage}

@@ -23,6 +23,7 @@ export const api = createApi({
   ),
   tagTypes: [
     'account',
+    'userList',
     'EquipmentList',
     'FavoriteEquipmentList',
     'OperatingEquipmentList',

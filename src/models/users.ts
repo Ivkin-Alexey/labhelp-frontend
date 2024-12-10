@@ -29,8 +29,8 @@ export interface IUserData {
 export interface IUserCard extends IUserForm {
   imgUrl?: string
   equipments?: 'all' | IAvailableEquipments
-  isVerified: boolean
-  role?: TPersonRole
+  isVerified?: boolean
+  role: TPersonRole
 }
 
 export type TAccountData = IUserCard
