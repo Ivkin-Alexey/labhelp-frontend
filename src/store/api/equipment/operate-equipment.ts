@@ -15,7 +15,7 @@ export const operateEquipmentApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
+      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList'],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
@@ -44,7 +44,7 @@ export const operateEquipmentApi = api.injectEndpoints({
           method: 'DELETE',
           body: data,
         }),
-        invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
+        invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList'],
         async onQueryStarted(data, { dispatch, queryFulfilled }) {
           const patchResult = dispatch(
             equipmentsApi.util.updateQueryData(

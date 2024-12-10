@@ -1,18 +1,21 @@
 import { apiRoutes, DEFAULT_SEARCH_TERM } from '../../../app/constants/constants'
 import type { equipmentId, IEquipmentItem } from '../../../models/equipments'
+import type { TLogin } from '../../../models/users'
 import { api } from '../api'
 
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
-    fetchEquipmentByID: builder.query<IEquipmentItem, string>({
-      query: equipmentId => apiRoutes.get.equipments.equipments + "/" + equipmentId,
+    fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login: TLogin }>({
+      query: data =>
+        apiRoutes.get.equipments.equipments + '/' + data.equipmentId + '?login=' + data.login,
       providesTags: ['Equipment'],
     }),
     fetchEquipmentsBySearchTerm: builder.query<
       IEquipmentItem[],
       { searchTerm: string; login: string }
     >({
-      query: data => apiRoutes.get.equipments.equipments + `?search=${data.searchTerm}&login=${data.login}`,
+      query: data =>
+        apiRoutes.get.equipments.equipments + `?search=${data.searchTerm}&login=${data.login}`,
       providesTags: ['EquipmentList'],
     }),
     fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
@@ -31,7 +34,7 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
+      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList'],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
@@ -58,7 +61,7 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'DELETE',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment'],
+      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList'],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
