@@ -1,10 +1,10 @@
 import { api } from './api'
 import { apiRoutes } from '../../app/constants/constants'
+import type { IFormValues } from '../../models/inputs'
 import type {
   TAccountData,
   TLogin,
   IUserCredentials,
-  IUserData,
   IUserRegistrationData,
 } from '../../models/users'
 import { setToken, setUserData } from '../users-slice'
@@ -66,13 +66,13 @@ export const usersApi = api.injectEndpoints({
         'OperatingEquipmentList',
       ],
     }),
-    updatePersonData: builder.mutation<string, IUserData>({
+    updatePersonData: builder.mutation<string, IFormValues>({
       query: userFormData => ({
         url: apiRoutes.patch.users + userFormData.login,
         method: 'PATCH',
         body: userFormData,
       }),
-      invalidatesTags: ["userList"],
+      invalidatesTags: ['userList'],
     }),
     deletePerson: builder.mutation<string, { login: TLogin; deletedPersonLogin: TLogin }>({
       query: userFormData => ({
@@ -80,7 +80,7 @@ export const usersApi = api.injectEndpoints({
         method: 'DELETE',
         body: userFormData,
       }),
-      invalidatesTags: ["userList"],
+      invalidatesTags: ['userList'],
     }),
     getAccountData: builder.query<TAccountData, TLogin>({
       query: login => apiRoutes.get.users.userData + login,
@@ -95,7 +95,7 @@ export const usersApi = api.injectEndpoints({
       providesTags: ['account'],
     }),
     getUserList: builder.query<TAccountData[], TLogin>({
-      query: login => apiRoutes.get.users.users + "?login=" + login,
+      query: login => apiRoutes.get.users.users + '?login=' + login,
       providesTags: ['userList'],
     }),
   }),
@@ -108,5 +108,5 @@ export const {
   useUpdatePersonDataMutation,
   useDeletePersonMutation,
   useLazyCheckTokenQuery,
-  useGetUserListQuery
+  useGetUserListQuery,
 } = usersApi

@@ -4,11 +4,10 @@ import { useSearchParams } from 'react-router-dom'
 import { DEFAULT_SEARCH_TERM, SEARCH_SUGGEST_NUMBER } from '../app/constants/constants'
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
-import { EquipmentCard } from '../components/equipment-card/equipment-card'
+import EquipmentCardList from '../components/equipment-card-list'
 import { Search } from '../components/search/search'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 import { selectLogin } from '../store/selectors'
-import EquipmentCardList from '../components/equipment-card-list'
 
 export default function SearchPage() {
   const [searchParams] = useSearchParams()
