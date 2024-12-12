@@ -1,4 +1,4 @@
 # Лаборатория
 
-## Деплой https://scmp-laboratory.netlify.app
+## Деплой https://laboratory-equipment.netlify.app/
 
