@@ -52,6 +52,7 @@ export default function SignForm(props: ISignForm) {
           inputList={isSignIn ? forms.signIn : forms.createUser}
           filteringRules={categoryFilteringRules}
           onSendData={handleSubmit}
+          isLoading={isLoading}
           btnText={isSignIn ? 'Войти' : 'Зарегистрироваться'}
           optionalButtons={<Grid container>{isSignIn && <SignUpLink />}</Grid>}
         />

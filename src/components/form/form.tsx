@@ -23,6 +23,7 @@ interface IFormProps {
   defaultInputValues?: IUserForm
   filteringRules: { [key: string]: IStudentCategoryFilteringRule[] }
   onSendData: (formData: IFormValues) => void
+  isLoading?: boolean, 
   confirmMessage?: string
   btnText?: string
   header?: string
@@ -49,6 +50,7 @@ const Form = (props: IFormProps) => {
     filteringRules,
     confirmMessage,
     onSendData,
+    isLoading = false, 
     btnText = 'Отправить',
     header,
     optionalButtons,
@@ -83,7 +85,7 @@ const Form = (props: IFormProps) => {
   )
 
   // В formState хранится состояние формы, необходимое для ее валидации, а также отправки данных на сервер.
-  // В textInputs хранятся параметры для разметки
+  // В textInputs хранятся только имена инпутом для разметки
   const [formState, setFormState] = useState<IFormState>(defaultFormState)
   const [textInputs, setTextInputs] = useState(filterInputs())
   const [isDisabled, setIsDisabled] = useState(true)
@@ -206,7 +208,7 @@ const Form = (props: IFormProps) => {
     >
       {header && <ListSubheader component="div">{header}</ListSubheader>}
       {renderTextFields()}
-      <Button variant="contained" disabled={isDisabled} onClick={() => onSendData(getFormValues())}>
+      <Button variant="contained" disabled={isDisabled || isLoading} onClick={() => onSendData(getFormValues())}>
         {btnText}
       </Button>
       {optionalButtons ?? null}
