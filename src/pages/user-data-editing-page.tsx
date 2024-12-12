@@ -59,7 +59,7 @@ const EditPersonalDataPage = () => {
 
   const optionalButtons = () => {
     if (userData.role !== 'admin') {
-      return <OptionalUserFormButtons handleOnClick={() => handleDeletePerson(login)} />
+      return <OptionalUserFormButtons handleOnClick={() => handleDeletePerson(login)} isLoading={isLoadingDelete}/>
     }
   }
 
@@ -72,6 +72,7 @@ const EditPersonalDataPage = () => {
         filteringRules={categoryFilteringRules}
         disabledInputs={["login"]}
         onSendData={sendData}
+        isLoading={isLoadingUpdate}
         btnText="Подтвердить"
         header="Данные пользователя:"
         optionalButtons={optionalButtons()}
