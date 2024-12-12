@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   equipmentList: [],
+  searchTerm: null
 }
 
 export const equipmentSlice = createSlice({
@@ -9,9 +10,10 @@ export const equipmentSlice = createSlice({
   initialState,
   reducers: {
     setEquipmentList: (state, { payload: list }) => (state.equipmentList = list),
+    setSearchTerm: (state, {payload: searchTerm}) => (state.searchTerm = searchTerm)
   },
 })
 
-export const { setEquipmentList } = equipmentSlice.actions
+export const { setEquipmentList, setSearchTerm} = equipmentSlice.actions
 
 export default equipmentSlice.reducer

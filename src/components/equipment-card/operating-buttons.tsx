@@ -19,6 +19,7 @@ interface IOperateButtons {
 export default function OperateButtons(props: IOperateButtons) {
   const { isOperate, equipmentId, login: operatePersonLogin } = props
 
+  const { searchTerm } = useAppSelector(selectEquipments)
   const [add] = useAddOperatingEquipmentMutation()
   const [remove] = useDeleteOperatingEquipmentMutation()
   const isAuth = useAppSelector(selectIsAuth)
