@@ -52,10 +52,8 @@ const Form = (props: IFormProps) => {
     btnText = 'Отправить',
     header,
     optionalButtons,
-    disabledInputs
+    disabledInputs,
   } = props
-
-  const accountLogin = useAppSelector(selectLogin)
 
   const defaultFormState: IFormState = useMemo(
     () =>
@@ -64,10 +62,10 @@ const Form = (props: IFormProps) => {
 
         const { required, initValue, validateRules } = inputSettings
         let value: TInputValue
-        if (defaultInputValues) {
+        if (defaultInputValues && defaultInputValues[cur as keyof IUserForm]) {
           value = defaultInputValues[cur as keyof IUserForm]
         } else {
-          value = initValue
+          value = initValue ?? ""
         }
 
         return {
@@ -91,14 +89,12 @@ const Form = (props: IFormProps) => {
   const formValues = useMemo(() => {
     const formValues: IFormValues = {}
     for (let key in formState) {
-        formValues[key] = formState[key].value
-      }
+      formValues[key] = formState[key].value
+    }
     return formValues
-
   }, [formState])
 
   const onSendData = useCallback(() => {
-
     onSend(formValues)
   }, [formState])
 
@@ -138,7 +134,9 @@ const Form = (props: IFormProps) => {
     for (let rule in filteringRules) {
       const arr = filteringRules[rule]
       const obj = arr.find(el => el.inputValue === formState[rule]?.value)
-      if (obj) {hiddenInputs = [...hiddenInputs, ...obj.hiddenFormFields]}
+      if (obj) {
+        hiddenInputs = [...hiddenInputs, ...obj.hiddenFormFields]
+      }
     }
     return inputLabelList.filter(el => !hiddenInputs.includes(el))
   }

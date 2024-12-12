@@ -15,8 +15,6 @@ export default function AdminPage() {
 
   const { data: userList, isFetching, isError } = useGetUserListQuery(login)
 
-  console.log(userList)
-
   if (pathname !== routes.admin) {
     return <Outlet />
   }
