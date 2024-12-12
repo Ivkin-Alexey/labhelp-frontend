@@ -48,7 +48,7 @@ const Form = (props: IFormProps) => {
     defaultInputValues,
     filteringRules,
     confirmMessage,
-    onSendData: onSend,
+    onSendData,
     btnText = 'Отправить',
     header,
     optionalButtons,
@@ -88,19 +88,15 @@ const Form = (props: IFormProps) => {
   const [textInputs, setTextInputs] = useState(filterInputs())
   const [isDisabled, setIsDisabled] = useState(true)
 
-  const formValues = useMemo(() => {
+  function getFormValues() {
+    const trimmedFormState = trimFormState()
     const formValues: IFormValues = {}
-    for (let key in formState) {
-        formValues[key] = formState[key].value
+    for (let key in trimmedFormState) {
+        formValues[key] = trimmedFormState[key].value
       }
     return formValues
 
-  }, [formState])
-
-  const onSendData = useCallback(() => {
-
-    onSend(formValues)
-  }, [formState])
+  }
 
   // function popupCallback() {
   //     if(accountData.role === "superAdmin") navigate(-1);
@@ -133,6 +129,16 @@ const Form = (props: IFormProps) => {
     })
   }
 
+  function trimFormState() {
+    const trimmedFormState = Object.assign({}, formState)
+    for(let key in trimmedFormState) {
+      if (!textInputs.includes(key)) {
+        delete trimmedFormState[key]
+      }
+    }
+    return trimmedFormState
+  }
+
   function filterInputs() {
     let hiddenInputs: string[] = []
     for (let rule in filteringRules) {
@@ -144,7 +150,8 @@ const Form = (props: IFormProps) => {
   }
 
   function validateFormData() {
-    return Object.values(formState).find(el => el.isValid === false)
+    const trimmedFormState = trimFormState()
+    return Object.values(trimmedFormState).find(el => el.isValid === false)
   }
 
   function renderSelectOptions(options: string[]) {
@@ -182,7 +189,7 @@ const Form = (props: IFormProps) => {
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLFormElement>) {
     if (e.key === 'Enter') {
-      onSendData()
+      onSendData(getFormValues())
     }
   }
 
@@ -199,7 +206,7 @@ const Form = (props: IFormProps) => {
     >
       {header && <ListSubheader component="div">{header}</ListSubheader>}
       {renderTextFields()}
-      <Button variant="contained" disabled={isDisabled} onClick={onSendData}>
+      <Button variant="contained" disabled={isDisabled} onClick={() => onSendData(getFormValues())}>
         {btnText}
       </Button>
       {optionalButtons ?? null}
