@@ -36,7 +36,7 @@ function Header() {
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
-  const accountData = useAppSelector(selectAccount)
+  const { accountData } = useAppSelector(selectAccount)
   const pages = useMemo(() => {
     if (accountData?.role === 'admin') {
       return [...defaultPages, ...adminPages]

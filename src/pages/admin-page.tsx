@@ -6,10 +6,10 @@ import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
 import UserCardList from '../components/user-card-list'
 import { useGetUserListQuery } from '../store/api/users-api'
-import { selectAccount } from '../store/selectors'
+import { selectLogin } from '../store/selectors'
 
 export default function AdminPage() {
-  const { login } = useAppSelector(selectAccount)
+  const login = useAppSelector(selectLogin)
 
   const { pathname } = useLocation()
 

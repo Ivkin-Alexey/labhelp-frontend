@@ -2,7 +2,7 @@ import type { RootState } from './store'
 
 export const selectLogin = (state: RootState) => state.account.accountData?.login
 
-export const selectAccount = (state: RootState) => state.account.accountData
+export const selectAccount = (state: RootState) => state.account
 
 export const selectIsAuth = (state: RootState) => state.account.isAuth
 

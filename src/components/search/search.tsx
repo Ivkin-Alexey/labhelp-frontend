@@ -23,7 +23,6 @@ export function Search(props: ISearch) {
 
   const [searchParams] = useSearchParams()
   const term = searchParams.get('term')
-  const dispatch = useAppDispatch()
 
   const [inputValue, setInputValue] = useState<string>(term || '')
 

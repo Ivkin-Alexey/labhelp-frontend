@@ -3,7 +3,6 @@ import React, { Suspense, useMemo } from 'react'
 import { Typography, Box } from '@mui/material'
 
 import type { Route } from '../../models/routes'
-import Fallback from '../Fallback'
 
 interface IHeaderNavigation {
   handleCloseNavMenu: (path: string) => void
