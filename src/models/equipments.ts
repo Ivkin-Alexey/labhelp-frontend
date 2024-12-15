@@ -17,6 +17,16 @@ export interface IEquipmentItem {
   inventoryNumber: string
 }
 
+export type TEquipmentFilters = IEquipmentFilter[]
+
+export interface IEquipmentFilter {
+  label: string, name: string, options: string[]
+}
+
+export interface IEquipmentFilterState {
+  [key: string]: string[]
+}
+
 export type TEquipmentCard = IEquipmentItem & {
   isCardMode: boolean
 }

@@ -2,7 +2,7 @@ import type { SyntheticEvent } from 'react'
 import { useEffect, useState } from 'react'
 
 import type { AutocompleteInputChangeReason } from '@mui/material'
-import { Button, Stack } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import SearchInput from './search-input'
@@ -12,6 +12,7 @@ import { useDebounce } from '../../app/hooks/useDebounce'
 import type { IEquipmentItem } from '../../models/equipments'
 import { useAddTermToHistoryMutation } from '../../store/api/equipment/equipments-api'
 import { selectIsAuth, selectLogin } from '../../store/selectors'
+import EquipmentFilters from '../equipment-filters/equipment-filters'
 
 interface ISearch {
   list?: IEquipmentItem[] | undefined
@@ -87,19 +88,25 @@ export function Search(props: ISearch) {
   }
 
   return (
-    <Stack spacing={2} direction="row">
-      <SearchInput
-        handleInputChange={handleInputChange}
-        handleChange={handleSuggestChange}
-        handleKeyDown={handleKeyDown}
-        list={list}
-        isLoading={isLoading}
-        inputValue={inputValue}
-        value={null}
-      />
-      <Button onClick={handleClick} variant="outlined" sx={{ marginTop: '20px', height: '40px' }}>
-        Искать
-      </Button>
+    <Stack spacing={2} direction="column">
+      <Typography variant="h5" align='center'>
+        Единый каталог учебного и научного лабораторного оборудования
+      </Typography>
+      <Stack spacing={2} direction="row" sx={{ justifyContent: 'center' }}>
+        <SearchInput
+          handleInputChange={handleInputChange}
+          handleChange={handleSuggestChange}
+          handleKeyDown={handleKeyDown}
+          list={list}
+          isLoading={isLoading}
+          inputValue={inputValue}
+          value={null}
+        />
+        <Button onClick={handleClick} variant="outlined" sx={{ marginTop: '20px', height: '40px' }}>
+          Искать
+        </Button>
+      </Stack>
+      <EquipmentFilters />
     </Stack>
   )
 }

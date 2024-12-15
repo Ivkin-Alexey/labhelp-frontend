@@ -1,5 +1,5 @@
 import { apiRoutes, DEFAULT_SEARCH_TERM } from '../../../app/constants/constants'
-import type { equipmentId, IEquipmentItem } from '../../../models/equipments'
+import type { equipmentId, IEquipmentItem, TEquipmentFilters } from '../../../models/equipments'
 import type { TLogin } from '../../../models/users'
 import { api } from '../api'
 
@@ -12,10 +12,11 @@ export const equipmentsApi = api.injectEndpoints({
     }),
     fetchEquipmentsBySearchTerm: builder.query<
       IEquipmentItem[],
-      { searchTerm: string; login: string }
+      { searchTerm?: string; login: string; filters?: TEquipmentFilters }
     >({
       query: data =>
-        apiRoutes.get.equipments.equipments + `?search=${data.searchTerm}&login=${data.login}`,
+        apiRoutes.get.equipments.equipments +
+        `?search=${data.searchTerm}&login=${data.login}&filters=${data.filters}`,
       providesTags: ['EquipmentList'],
     }),
     fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
@@ -27,6 +28,9 @@ export const equipmentsApi = api.injectEndpoints({
         }))
       },
       providesTags: ['FavoriteEquipmentList'],
+    }),
+    fetchFilters: builder.query<TEquipmentFilters, void>({
+      query: () => apiRoutes.get.equipments.filters,
     }),
     addFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
       query: data => ({
@@ -116,4 +120,5 @@ export const {
   useAddTermToHistoryMutation,
   useDeleteTermFromHistoryMutation,
   useFetchSearchHistoryQuery,
+  useFetchFiltersQuery,
 } = equipmentsApi

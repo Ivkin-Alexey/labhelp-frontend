@@ -35,6 +35,7 @@ export const apiRoutes = {
       favorite: '/equipments/favorite/',
       operate: '/equipments/operate/',
       searchHistory: '/equipments/search-history/',
+      filters: '/equipments/filters',
     },
   },
   post: {

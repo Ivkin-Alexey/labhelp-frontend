@@ -80,7 +80,7 @@ function Header() {
   }
 
   return (
-    <AppBar position="static" sx={{ marginBottom: '40px' }}>
+    <AppBar position="static" sx={{ marginBottom: '20px' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <HeaderLogo navigateToMainPage={navigateToMainPage} />
