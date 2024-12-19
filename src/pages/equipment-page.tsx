@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom'
 
 import { useAppSelector } from '../app/hooks/hooks'
 import { toLowerCaseFirstChart } from '../app/utils/utils'
+import Circular from '../components/circular'
 import FavoriteButtons from '../components/equipment-card/favorite-buttons'
 import OperateStatus from '../components/equipment-card/operate-status'
 import { ThemeContext } from '../components/root'
@@ -19,10 +20,13 @@ export default function EquipmentPage() {
 
   const { color } = useContext(ThemeContext)
 
-  const { isFetching, isError, data } = useFetchEquipmentByIDQuery({ equipmentId, login: accountLogin })
+  const { isFetching, isLoading, isError, data } = useFetchEquipmentByIDQuery({
+    equipmentId,
+    login: accountLogin,
+  })
 
-  if (isFetching) {
-    return <CircularProgress size="60px" />
+  if (isLoading || isLoading) {
+    return <Circular />
   }
 
   if (isError) {

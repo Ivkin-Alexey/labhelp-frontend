@@ -1,7 +1,8 @@
 import type React from 'react'
 
-import { CircularProgress, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 
+import Circular from './circular'
 import type { IEquipmentItem } from '../models/equipments'
 import type { IUserCard } from '../models/users'
 
@@ -16,7 +17,7 @@ export default function CardList(props: ICardList) {
   const { isError, isLoading, list, Component } = props
 
   if (isLoading || !Component) {
-    return <CircularProgress size="60px" />
+    return <Circular/>
   }
 
   if (isError || !list) {
@@ -36,6 +37,6 @@ export default function CardList(props: ICardList) {
   }
 
   if (Array.isArray(list)) {
-    return <Component list={list}/>
+    return <Component list={list} />
   }
 }
