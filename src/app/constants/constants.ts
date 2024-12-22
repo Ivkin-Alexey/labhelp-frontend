@@ -33,6 +33,7 @@ export const apiRoutes = {
     equipments: {
       equipments: '/equipments',
       favorite: '/equipments/favorite/',
+      search: '/equipments/search',
       operate: '/equipments/operate/',
       searchHistory: '/equipments/search-history/',
       filters: '/equipments/filters',

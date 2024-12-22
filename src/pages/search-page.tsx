@@ -11,10 +11,11 @@ import { selectLogin } from '../store/selectors'
 
 export default function SearchPage() {
   const [searchParams] = useSearchParams()
-  const term = searchParams.get('term')
+  const searchTerm = searchParams.get('term') || DEFAULT_SEARCH_TERM
+  const filters = searchParams.get('filters') || undefined
 
   const login = useAppSelector(selectLogin)
-  const arg = { login, searchTerm: term || DEFAULT_SEARCH_TERM }
+  const arg = { login, searchTerm, filters}
 
   const { isFetching, isError, data: equipmentList } = useFetchEquipmentsBySearchTermQuery(arg)
 

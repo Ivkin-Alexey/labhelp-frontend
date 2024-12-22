@@ -59,7 +59,6 @@ export default function EquipmentFilters(props: IProps) {
     } = event
     const arr = typeof value === 'string' ? value.split(', ') : value
     setSearchFilters((prev: IEquipmentFilterState) => ({ ...prev, [name]: arr }))
-    console.log(filterState)
   }
 
   function renderSelects() {
@@ -76,7 +75,7 @@ export default function EquipmentFilters(props: IProps) {
       >
         {filters.map((el: IEquipmentFilter) => {
           const { name, label, options } = el
-          const selectedList = filterState[name]
+          const selectedList = filterState ? filterState[name] : []
 
           return (
             <Select

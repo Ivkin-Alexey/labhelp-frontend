@@ -14,9 +14,13 @@ export const equipmentsApi = api.injectEndpoints({
       IEquipmentItem[],
       { searchTerm?: string; login: string; filters?: TEquipmentFilters }
     >({
-      query: data =>
-        apiRoutes.get.equipments.equipments +
-        `?search=${data.searchTerm}&login=${data.login}&filters=${data.filters}`,
+      query: data => {
+        const loginPart = data.login ? `&login=${data.login}` : ''
+        const filtersPart = data.filters ? `&filters=${data.filters}` : ''
+        const searchTermPart = data.searchTerm ? `&term=${data.searchTerm}` : ''
+        const query = loginPart + filtersPart + searchTermPart
+        return apiRoutes.get.equipments.search + (query === "" ? "" : "?" + query)
+      },
       providesTags: ['EquipmentList'],
     }),
     fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({

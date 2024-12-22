@@ -30,7 +30,7 @@ export default function Select(props: IProps) {
         name={name}
         id={name}
         multiple
-        value={selectedList.join(', ')}
+        value={selectedList}
         onChange={handleChange}
         input={<OutlinedInput label={label} />}
         renderValue={selected => selected}

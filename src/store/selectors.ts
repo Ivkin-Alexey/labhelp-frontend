@@ -9,3 +9,5 @@ export const selectIsAuth = (state: RootState) => state.account.isAuth
 export const selectToken = (state: RootState) => state.account.token
 
 export const selectRole = (state: RootState) => state.account.accountData?.role
+
+export const selectEquipmentSearchFilters = (state: RootState) => state.equipments.filters
