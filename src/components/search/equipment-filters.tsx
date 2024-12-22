@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import type React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import type { SelectChangeEvent } from '@mui/material'
-import { FormControl, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 
 import Select from './select'
-import type {
-  IEquipmentFilter,
-  IEquipmentFilterState,
-  TEquipmentFilters,
-} from '../../models/equipments'
+import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
+import type { IEquipmentFilter, IEquipmentFilterState } from '../../models/equipments'
 import { useFetchFiltersQuery } from '../../store/api/equipment/equipments-api'
+import { setSearchFilters } from '../../store/equipments-slice'
+import { selectEquipmentSearchFilters } from '../../store/selectors'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -24,8 +24,15 @@ const MenuProps = {
 
 export const type = typeof MenuProps
 
-export default function EquipmentFilters() {
+interface IProps {
+  state: IEquipmentFilterState
+  setState: React.Dispatch<React.SetStateAction<IEquipmentFilterState>>
+}
+
+export default function EquipmentFilters(props: IProps) {
   const { data: filters, isError, isSuccess } = useFetchFiltersQuery()
+  const dispatch = useAppDispatch()
+  const filterState = useAppSelector(selectEquipmentSearchFilters)
 
   const createInitState = useCallback(() => {
     const initState: IEquipmentFilterState = {}
@@ -39,21 +46,10 @@ export default function EquipmentFilters() {
     return initState
   }, [filters])
 
-  const [state, setState] = useState<IEquipmentFilterState>({})
-
-  const queryParams = new URLSearchParams();
-  
-  for (const [key, value] of Object.entries(state)) {
-    queryParams.append(key, JSON.stringify(value));
-  }
-  
-  const url = `/api/endpoint?${queryParams.toString()}`;
-  
-
   useEffect(() => {
     if (isSuccess) {
       const initState = createInitState()
-      setState(initState)
+      dispatch(setSearchFilters(initState))
     }
   }, [isSuccess])
 
@@ -62,11 +58,12 @@ export default function EquipmentFilters() {
       target: { value, name },
     } = event
     const arr = typeof value === 'string' ? value.split(', ') : value
-    setState((prev: IEquipmentFilterState) => ({ ...prev, [name]: arr }))
+    setSearchFilters((prev: IEquipmentFilterState) => ({ ...prev, [name]: arr }))
+    console.log(filterState)
   }
 
   function renderSelects() {
-    if (!filters || filters?.length === 0 || Object.keys(state).length === 0) {
+    if (!filters || filters?.length === 0) {
       return null
     }
 
@@ -79,7 +76,7 @@ export default function EquipmentFilters() {
       >
         {filters.map((el: IEquipmentFilter) => {
           const { name, label, options } = el
-          const selectedList = state[name]
+          const selectedList = filterState[name]
 
           return (
             <Select
