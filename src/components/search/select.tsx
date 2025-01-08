@@ -14,7 +14,7 @@ interface IProps {
   handleChange(event: SelectChangeEvent): void
   options: string[]
   menuProps: any
-  selectedList: string[]
+  selectedList: string
   label: string
   name: string
 }

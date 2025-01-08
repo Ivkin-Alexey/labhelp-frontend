@@ -1,12 +1,10 @@
-import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
-
 import type { SelectChangeEvent } from '@mui/material'
 import { Stack } from '@mui/material'
 
 import Select from './select'
 import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
-import type { IEquipmentFilter, IEquipmentFilterState } from '../../models/equipments'
+import { checkIsFiltered } from '../../app/utils/utils'
+import type { IEquipmentFilter } from '../../models/equipments'
 import { useFetchFiltersQuery } from '../../store/api/equipment/equipments-api'
 import { setSearchFilters } from '../../store/equipments-slice'
 import { selectEquipmentSearchFilters } from '../../store/selectors'
@@ -24,41 +22,35 @@ const MenuProps = {
 
 export const type = typeof MenuProps
 
-interface IProps {
-  state: IEquipmentFilterState
-  setState: React.Dispatch<React.SetStateAction<IEquipmentFilterState>>
-}
-
-export default function EquipmentFilters(props: IProps) {
+export default function EquipmentFilters() {
   const { data: filters, isError, isSuccess } = useFetchFiltersQuery()
   const dispatch = useAppDispatch()
   const filterState = useAppSelector(selectEquipmentSearchFilters)
-
-  const createInitState = useCallback(() => {
-    const initState: IEquipmentFilterState = {}
-    if (filters) {
-      filters.forEach((el: IEquipmentFilter) => {
-        if (!initState[el.name]) {
-          initState[el.name] = []
-        }
-      })
-    }
-    return initState
-  }, [filters])
-
-  useEffect(() => {
-    if (isSuccess) {
-      const initState = createInitState()
-      dispatch(setSearchFilters(initState))
-    }
-  }, [isSuccess])
 
   const handleChange = (event: SelectChangeEvent) => {
     const {
       target: { value, name },
     } = event
     const arr = typeof value === 'string' ? value.split(', ') : value
-    setSearchFilters((prev: IEquipmentFilterState) => ({ ...prev, [name]: arr }))
+
+    let changedFilters
+    if (!filterState) {
+      changedFilters = {
+        [name]: arr
+      }
+    } else {
+      changedFilters = { ...filterState, [name]: arr }
+      if (arr.length === 0) {
+        delete changedFilters[name]
+      }
+    }
+
+    const isFiltered = checkIsFiltered(changedFilters)
+    if (!isFiltered) {
+      dispatch(setSearchFilters(null))
+    } else {
+      dispatch(setSearchFilters(changedFilters))
+    }
   }
 
   function renderSelects() {
@@ -75,12 +67,12 @@ export default function EquipmentFilters(props: IProps) {
       >
         {filters.map((el: IEquipmentFilter) => {
           const { name, label, options } = el
-          const selectedList = filterState ? filterState[name] : []
+          const selectedList = filterState && filterState[name] ? filterState[name] : []
 
           return (
             <Select
               key={name}
-              name={name}
+              name={name} 
               options={options}
               handleChange={handleChange}
               menuProps={MenuProps}

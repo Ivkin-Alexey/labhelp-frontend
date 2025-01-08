@@ -1,3 +1,5 @@
+import type { TLogin } from './users'
+
 export type equipmentId = string
 
 export interface IEquipmentItem {
@@ -20,11 +22,23 @@ export interface IEquipmentItem {
 export type TEquipmentFilters = IEquipmentFilter[]
 
 export interface IEquipmentFilter {
-  label: string, name: string, options: string[]
+  label: string
+  name: string
+  options: string[]
 }
 
 export interface IEquipmentFilterState {
   [key: string]: string[]
+}
+
+export interface ISearchArg {
+  login?: TLogin
+  searchTerm: string
+  filters?: IEquipmentFilterState
+}
+
+export interface IQueriesObject {
+  [key: string]: string[] | string
 }
 
 export type TEquipmentCard = IEquipmentItem & {

@@ -1,29 +1,20 @@
 import { Box, Container } from '@mui/material'
-import { useSearchParams } from 'react-router-dom'
 
-import { DEFAULT_SEARCH_TERM, SEARCH_SUGGEST_NUMBER } from '../app/constants/constants'
-import { useAppSelector } from '../app/hooks/hooks'
+import { SEARCH_SUGGEST_NUMBER } from '../app/constants/constants'
 import CardList from '../components/card-list'
 import EquipmentCardList from '../components/equipment-card-list'
 import { Search } from '../components/search/search'
-import { useFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
-import { selectLogin } from '../store/selectors'
+import { useLazyFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 
 export default function SearchPage() {
-  const [searchParams] = useSearchParams()
-  const searchTerm = searchParams.get('term') || DEFAULT_SEARCH_TERM
-  const filters = searchParams.get('filters') || undefined
 
-  const login = useAppSelector(selectLogin)
-  const arg = { login, searchTerm, filters}
-
-  const { isFetching, isError, data: equipmentList } = useFetchEquipmentsBySearchTermQuery(arg)
+  const [fetchEquipments, { isFetching, isLoading, isError, data: equipmentList }] = useLazyFetchEquipmentsBySearchTermQuery()
 
   const suggestList = equipmentList?.slice(0, SEARCH_SUGGEST_NUMBER)
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Search list={suggestList} isLoading={isFetching} />
+      <Search list={suggestList} isLoading={isFetching} fetchEquipments={fetchEquipments} isError={isError} />
       <Box
         sx={{
           display: 'flex',
@@ -35,10 +26,11 @@ export default function SearchPage() {
         <CardList
           Component={EquipmentCardList}
           list={equipmentList}
-          isLoading={isFetching}
+          isLoading={isFetching || isLoading}
           isError={isError}
         />
       </Box>
     </Container>
   )
 }
+

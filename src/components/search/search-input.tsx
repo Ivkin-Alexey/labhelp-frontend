@@ -33,7 +33,7 @@ export default function SearchInput(props: ISearchInput) {
   const { handleInputChange, handleChange, handleKeyDown, list, isLoading, inputValue, value } =
     props
 
-  const [isOpen, setIsopen] = useState(!!inputValue)
+  const [isOpen, setIsOpen] = useState(!!inputValue)
 
   function createLabel(equipment: IEquipmentItem | string) {
     if (typeof equipment === 'string') {
@@ -43,11 +43,11 @@ export default function SearchInput(props: ISearchInput) {
   }
 
   function handleBlur() {
-    setIsopen(false)
+    setIsOpen(false)
   }
 
   function handleFocus() {
-    setIsopen(true)
+    setIsOpen(true)
   }
 
   return (

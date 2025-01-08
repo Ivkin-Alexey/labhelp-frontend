@@ -20,7 +20,7 @@ export default function CardList(props: ICardList) {
     return <Circular/>
   }
 
-  if (isError || !list) {
+  if (isError) {
     return (
       <Typography gutterBottom variant="body1" component="div" marginTop="40px">
         Произошла ошибка

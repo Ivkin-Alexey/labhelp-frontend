@@ -1,5 +1,11 @@
 import { apiRoutes, DEFAULT_SEARCH_TERM } from '../../../app/constants/constants'
-import type { equipmentId, IEquipmentItem, TEquipmentFilters } from '../../../models/equipments'
+import { encodeQueryParams } from '../../../app/utils/utils'
+import type {
+  equipmentId,
+  IEquipmentItem,
+  ISearchArg,
+  TEquipmentFilters,
+} from '../../../models/equipments'
 import type { TLogin } from '../../../models/users'
 import { api } from '../api'
 
@@ -10,16 +16,18 @@ export const equipmentsApi = api.injectEndpoints({
         apiRoutes.get.equipments.equipments + '/' + data.equipmentId + '?login=' + data.login,
       providesTags: ['Equipment'],
     }),
-    fetchEquipmentsBySearchTerm: builder.query<
-      IEquipmentItem[],
-      { searchTerm?: string; login: string; filters?: TEquipmentFilters }
-    >({
+    fetchEquipmentsBySearchTerm: builder.query<IEquipmentItem[], ISearchArg>({
       query: data => {
-        const loginPart = data.login ? `&login=${data.login}` : ''
-        const filtersPart = data.filters ? `&filters=${data.filters}` : ''
-        const searchTermPart = data.searchTerm ? `&term=${data.searchTerm}` : ''
-        const query = loginPart + filtersPart + searchTermPart
-        return apiRoutes.get.equipments.search + (query === "" ? "" : "?" + query)
+        const { login, filters = {}, searchTerm} = data
+
+        const params = {
+          ...(login && { login }),
+          ...filters,
+          ...(searchTerm && { term: searchTerm }),
+        }
+        console.log(filters)
+
+        return apiRoutes.get.equipments.search + encodeQueryParams(params)
       },
       providesTags: ['EquipmentList'],
     }),
@@ -117,6 +125,7 @@ export const equipmentsApi = api.injectEndpoints({
 
 export const {
   useFetchEquipmentsBySearchTermQuery,
+  useLazyFetchEquipmentsBySearchTermQuery,
   useFetchFavoriteEquipmentsQuery,
   useFetchEquipmentByIDQuery,
   useAddFavoriteEquipmentMutation,
