@@ -71,7 +71,7 @@ export function EquipmentCard(props: TEquipmentCard) {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: '16px' }}>
-        <OperateButtons equipmentId={id} isOperate={isOperate} login={login} />
+        {/* <OperateButtons equipmentId={id} isOperate={isOperate} login={login} /> */}
         <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={isCardMode} />
       </CardActions>
     </Card>
