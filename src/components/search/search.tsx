@@ -123,10 +123,7 @@ export function Search(props: ISearch) {
   }, [filters, inputValue])
 
   return (
-    <Stack spacing={2} direction="column">
-      <Typography variant="h5" align="center">
-        Единый каталог учебного и научного лабораторного оборудования
-      </Typography>
+    <Stack spacing={2} direction="column" mt="20px">
       <Stack spacing={2} direction="row" sx={{ justifyContent: 'center' }}>
         <SearchInput
           handleInputChange={handleInputChange}

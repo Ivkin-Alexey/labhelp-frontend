@@ -14,7 +14,7 @@ export default function Root() {
 
   return (
     <ThemeContext.Provider value={memoized}>
-      <Header />
+      {/* <Header /> */}
       <Outlet />
     </ThemeContext.Provider>
   )

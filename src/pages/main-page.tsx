@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { Container } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 
 import { DEFAULT_SEARCH_TERM } from '../app/constants/constants'
 import { useAppSelector } from '../app/hooks/hooks'
@@ -33,6 +33,9 @@ export default function MainPage() {
         alignItems: 'center',
       }}
     >
+      <Typography variant="h5" align="center" mb="20px" mt="20px">
+        Единый каталог учебного и научного лабораторного оборудования
+      </Typography>
       <Search />
       <CardList
         Component={EquipmentCardList}
