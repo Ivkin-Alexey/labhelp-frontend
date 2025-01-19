@@ -7,14 +7,19 @@ import { Search } from '../components/search/search'
 import { useLazyFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 
 export default function SearchPage() {
-
-  const [fetchEquipments, { isFetching, isLoading, isError, data: equipmentList }] = useLazyFetchEquipmentsBySearchTermQuery()
+  const [fetchEquipments, { isFetching, isLoading, isError, data: equipmentList }] =
+    useLazyFetchEquipmentsBySearchTermQuery()
 
   const suggestList = equipmentList?.slice(0, SEARCH_SUGGEST_NUMBER)
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Search list={suggestList} isLoading={isFetching} fetchEquipments={fetchEquipments} isError={isError} />
+      <Search
+        list={suggestList}
+        isLoading={isFetching}
+        fetchEquipments={fetchEquipments}
+        isError={isError}
+      />
       <Box
         sx={{
           display: 'flex',
@@ -33,4 +38,3 @@ export default function SearchPage() {
     </Container>
   )
 }
-
