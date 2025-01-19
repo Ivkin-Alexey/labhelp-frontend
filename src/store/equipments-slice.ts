@@ -2,20 +2,24 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   equipmentList: [],
-  searchTerm: "",
-  searchFilters: null
+  searchTerm: '',
+  searchFilters: null,
 }
 
 export const equipmentSlice = createSlice({
   name: 'equipments',
   initialState,
   reducers: {
-    setEquipmentList: (state, { payload: list }) => void(state.equipmentList = list),
-    setSearchTerm: (state, { payload: searchTerm }) => void(state.searchTerm = searchTerm),
-    setSearchFilters: (state, { payload: filterState }) => void (state.searchFilters = filterState)
+    setEquipmentList: (state, { payload: list }) => (state.equipmentList = list),
+    setSearchTerm: (state, { payload: searchTerm }) => {
+      state.searchTerm = searchTerm
+    },
+    setSearchFilters: (state, { payload: filterState }) => { state.searchFilters = filterState },
+    clearEquipmentSearch: () => initialState ,
   },
 })
 
-export const { setEquipmentList, setSearchTerm, setSearchFilters} = equipmentSlice.actions
+export const { setEquipmentList, setSearchTerm, setSearchFilters, clearEquipmentSearch } =
+  equipmentSlice.actions
 
 export default equipmentSlice.reducer

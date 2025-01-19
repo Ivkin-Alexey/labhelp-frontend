@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
 import type { IEquipmentItem, ISearchArg } from '../../models/equipments'
 import { useAddTermToHistoryMutation } from '../../store/api/equipment/equipments-api'
-import { setSearchTerm } from '../../store/equipments-slice'
+import { clearEquipmentSearch, setSearchTerm } from '../../store/equipments-slice'
 import {
   selectEquipmentSearchFilters,
   selectEquipmentSearchTerm,
@@ -28,7 +28,7 @@ interface ISearch {
 }
 
 export function Search(props: ISearch) {
-  const { list = [], isLoading = false, fetchEquipments, isError = false} = props
+  const { list = [], isLoading = false, fetchEquipments, isError = false } = props
 
   const inputValue = useAppSelector(selectEquipmentSearchTerm)
   const filters = useAppSelector(selectEquipmentSearchFilters)
@@ -40,14 +40,27 @@ export function Search(props: ISearch) {
   const [add] = useAddTermToHistoryMutation()
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
 
-  // const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
-
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleBackButton = (event: PopStateEvent) => {
+      navigate(-1)
+      dispatch(clearEquipmentSearch())
+    }
+
+    window.addEventListener('popstate', handleBackButton)
+
+    return () => {
+      window.removeEventListener('popstate', handleBackButton)
+    }
+  }, [navigate])
+
+  // const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
 
   function navigateHelper(term: string) {
     navigate(routes.search)
     if (fetchEquipments) {
-      fetchEquipments({login, filters, searchTerm: inputValue})
+      fetchEquipments({ login, filters, searchTerm: inputValue })
     }
     if (isAuth && term) {
       add({ login, term })
@@ -113,9 +126,9 @@ export function Search(props: ISearch) {
   // }, [filters, inputValue])
 
   const btnText = useMemo(() => {
-    if (filters && inputValue !== "") {
+    if (filters && inputValue !== '') {
       return 'Искать с фильтрами'
-    } else if (filters && inputValue === "") {
+    } else if (filters && inputValue === '') {
       return 'Применить фильтры'
     } else {
       return 'Искать'
