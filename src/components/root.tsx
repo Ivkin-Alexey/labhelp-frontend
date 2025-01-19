@@ -2,6 +2,7 @@ import { createContext, useEffect, useMemo } from 'react'
 
 import { Outlet, useLocation } from 'react-router-dom'
 
+import Circular from './circular'
 import Header from './header/header'
 import useTheme from '../app/hooks/useTheme'
 
@@ -22,6 +23,10 @@ export default function Root() {
     <ThemeContext.Provider value={memoized}>
       {/* <Header /> */}
       <Outlet />
+
+  return (
+    <ThemeContext.Provider value={memoized}>
+      {/* <Header /> */ <Outlet />}
     </ThemeContext.Provider>
   )
 }
