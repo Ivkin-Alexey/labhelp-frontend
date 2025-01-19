@@ -1,0 +1,17 @@
+.slider-container {
+    margin-bottom: 30px;
+}
+
+.slick-prev {
+    left: 30px;
+    z-index: 2;
+}
+
+.slick-next {
+    right: 30px;
+    z-index: 2;
+}
+
+.slick-prev:before, .slick-next:before {
+    font-size: 30px;
+}
