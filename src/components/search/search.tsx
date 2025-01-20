@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import type { AutocompleteInputChangeReason } from '@mui/material'
 import { Button, Stack, Typography } from '@mui/material'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 import EquipmentFilters from './equipment-filters'
 import SearchInput from './search-input'
@@ -41,10 +41,11 @@ export function Search(props: ISearch) {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     const handleBackButton = (event: PopStateEvent) => {
-      navigate(-1)
+      // event.preventDefault()
       dispatch(clearEquipmentSearch())
     }
 
@@ -53,17 +54,20 @@ export function Search(props: ISearch) {
     return () => {
       window.removeEventListener('popstate', handleBackButton)
     }
-  }, [navigate])
+  }, [])
 
   // const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
 
-  function navigateHelper(term: string) {
-    navigate(routes.search)
+  function navigateHelper() {
+    if(location.pathname !== routes.search) {
+      navigate(routes.search)
+      return
+    }
     if (fetchEquipments) {
       fetchEquipments({ login, filters, searchTerm: inputValue })
     }
-    if (isAuth && term) {
-      add({ login, term })
+    if (isAuth && inputValue) {
+      add({ login, term: inputValue })
     }
   }
 
@@ -83,7 +87,7 @@ export function Search(props: ISearch) {
 
   function handleClick() {
     if (inputValue !== '' || filters) {
-      navigateHelper(inputValue)
+      navigateHelper()
       setIsDisabled(true)
     }
   }
@@ -104,9 +108,10 @@ export function Search(props: ISearch) {
   }, [isError])
 
   useEffect(() => {
-    if (inputValue) {
-      navigateHelper(inputValue)
+    if (inputValue || filters) {
+      navigateHelper()
     }
+    setIsDisabled(true)
   }, [])
 
   // useEffect(() => {
@@ -117,7 +122,7 @@ export function Search(props: ISearch) {
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Enter') {
-      navigateHelper(inputValue)
+      navigateHelper()
     }
   }
 
