@@ -21,6 +21,7 @@ export const routes = {
   operatingEquipments: '/operating-equipments',
   admin: '/admin',
   userProfile: '/admin/:login',
+  "404": '/404'
 }
 
 export const apiRoutes = {

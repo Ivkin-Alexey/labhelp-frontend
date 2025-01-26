@@ -28,9 +28,6 @@ export default function MainPage() {
 
   return (
     <>
-      <Typography variant="h5" align="center" mb="20px" mt="20px">
-        Единый каталог учебного и научного лабораторного оборудования
-      </Typography>
       <Carousel />
       <Container
         sx={{

@@ -1,0 +1,29 @@
+.title {
+    color: #cc9900;
+    font-size: 20px;
+    line-height: 1.55;
+    font-weight: 400;
+    background-position: center center;
+    padding-top: 5px;
+    border-color: transparent;
+    border-style: solid;
+}
+
+.logo {
+    height: 70px;
+}
+
+.logo_ckp {
+    height: 50px;
+    width: 150px;
+}
+
+.logo_company {
+    align-items: center;
+    margin: auto;
+    text-align: center;
+}
+
+.app_bar {
+    color: #cc9900;
+}

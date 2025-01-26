@@ -12,6 +12,7 @@ import SearchPage from '../pages/search-page'
 import SignInPage from '../pages/sign-in-page'
 import SignUpPage from '../pages/sign-up-page'
 import EditPersonalDataPage from '../pages/user-data-editing-page'
+import NotExistPage from '../pages/404-page'
 
 const FavoritesPage = React.lazy(() => import('../pages/favorites-page'))
 const HistoryPage = React.lazy(() => import('../pages/history-page'))
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: routes.search,
         element: <SearchPage />,
+      },
+      {
+        path: routes[404],
+        element: <NotExistPage />,
       },
       {
         path: routes.favorites,
