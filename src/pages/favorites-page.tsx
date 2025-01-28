@@ -21,34 +21,32 @@ export default function FavoritesPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
 
-  const equipmentQueries = ids.map(id => useFetchEquipmentByIDQuery(id))
+  const equipmentQueries = favoriteIds.map(id => useFetchEquipmentByIDQuery(id));
 
-  const loading = equipmentQueries.some(query => query.isLoading)
-  const error = equipmentQueries.find(query => query.error)
+const loading = equipmentQueries.some(query => query.isLoading);
+const error = equipmentQueries.find(query => query.error);
 
-  const equipmentData = equipmentQueries.map(query => query.data).filter(data => data)
+const equipmentData = equipmentQueries.map(query => query.data).filter(data => data);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchEquipmentData = async () => {
-      try {
-        setIsLoading(true)
-        const fetchedData = []
+        try {
+            setIsLoading(true);
+            const fetchedData = equipmentData; // Используем данные из equipmentData для установки
 
-        for (const id of favoriteIds) {
-          const result = await useFetchEquipmentByIDQuery({ equipmentId: id }).unwrap()
-          fetchedData.push(result)
+            setEquipmentList(fetchedData);
+        } catch (err) {
+            setIsError(true);
+        } finally {
+            setIsLoading(false);
         }
+    };
 
-        setEquipmentList(fetchedData)
-      } catch (err) {
-        setIsError(true)
-      } finally {
-        setIsLoading(false)
-      }
+    if (favoriteIds.length > 0) {
+        fetchEquipmentData();
     }
+}, [favoriteIds, equipmentData]); // Добавляем equipmentData в зависимости
 
-    fetchEquipmentData()
-  }, [favoriteIds])
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

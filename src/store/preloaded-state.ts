@@ -1,16 +1,20 @@
-import type { TAccountData } from '../models/users'
+import { names } from '../app/constants/localStorage'
+import type { IState } from '../models/store'
+const {equipment, account} = names
 
-const accountData = localStorage.getItem('accountData')
-const token = localStorage.getItem('token')
-const favorite = localStorage.getItem('favoriteEquipment')
+const accountData = localStorage.getItem(account.accountData)
+const token = localStorage.getItem(account.token)
+const favoriteList = localStorage.getItem(equipment.favoriteEquipments)
 
-export const preloadedState: State = {
+export const preloadedState: IState = {
   account: {
     accountData: accountData ? JSON.parse(accountData) : null,
     token: token ? token : null,
     isAuth: Boolean(accountData),
   },
   equipments: {
-    favorite: favorite ? JSON.parse(favorite) : null,
-  }
+    favoriteList: favoriteList ? JSON.parse(favoriteList) : [],
+    searchFilters: null,
+    searchTerm: '',
+  },
 }

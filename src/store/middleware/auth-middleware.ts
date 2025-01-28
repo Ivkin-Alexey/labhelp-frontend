@@ -1,6 +1,7 @@
 import type { Middleware } from 'redux'
 
-import type { State } from '../preloaded-state'
+import { names } from '../../app/constants/localStorage'
+import type { IState } from '../../models/store'
 import type { IUserData } from '../../models/users'
 
 interface IAction {
@@ -12,21 +13,21 @@ function isAction(obj: any): obj is IAction {
   return typeof obj === 'object' && obj !== null && typeof obj.type === 'string'
 }
 
-export const authMiddleware: Middleware<{}, State> = store => next => action => {
+export const authMiddleware: Middleware<{}, IState> = store => next => action => {
   const result = next(action)
 
   if (isAction(action)) {
     switch (action.type) {
       case 'account/setToken':
         if (typeof action.payload === 'string') {
-          localStorage.setItem('token', action.payload)
+          localStorage.setItem(names.token, action.payload)
         }
         break
 
       case 'account/setUserData':
         if (typeof action.payload === 'object') {
-          localStorage.setItem('accountData', JSON.stringify(action.payload))
-          localStorage.setItem('isAuth', JSON.stringify(true))
+          localStorage.setItem(names.accountData, JSON.stringify(action.payload))
+          localStorage.setItem(names.isAuth, JSON.stringify(true))
         }
         break
 
