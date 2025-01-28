@@ -11,7 +11,7 @@ import { api } from '../api'
 
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
-    fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login: TLogin }>({
+    fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login?: TLogin }>({
       query: data =>
         apiRoutes.get.equipments.equipments + '/' + data.equipmentId + '?login=' + data.login,
       providesTags: ['Equipment'],

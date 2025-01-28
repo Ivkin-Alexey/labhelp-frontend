@@ -1,15 +1,8 @@
 import type { TAccountData } from '../models/users'
 
-export interface State {
-  account: {
-    accountData: TAccountData | null
-    token: string | null
-    isAuth: boolean
-  }
-}
-
 const accountData = localStorage.getItem('accountData')
 const token = localStorage.getItem('token')
+const favorite = localStorage.getItem('favoriteEquipment')
 
 export const preloadedState: State = {
   account: {
@@ -17,4 +10,7 @@ export const preloadedState: State = {
     token: token ? token : null,
     isAuth: Boolean(accountData),
   },
+  equipments: {
+    favorite: favorite ? JSON.parse(favorite) : null,
+  }
 }

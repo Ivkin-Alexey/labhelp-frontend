@@ -1,7 +1,7 @@
 import type { Middleware } from 'redux'
 
-import type { State } from './preloaded-state'
-import type { IUserData } from '../models/users'
+import type { State } from '../preloaded-state'
+import type { IUserData } from '../../models/users'
 
 interface IAction {
   type: string
@@ -9,11 +9,7 @@ interface IAction {
 }
 
 function isAction(obj: any): obj is IAction {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    typeof obj.type === 'string'
-  )
+  return typeof obj === 'object' && obj !== null && typeof obj.type === 'string'
 }
 
 export const authMiddleware: Middleware<{}, State> = store => next => action => {
@@ -33,10 +29,10 @@ export const authMiddleware: Middleware<{}, State> = store => next => action => 
           localStorage.setItem('isAuth', JSON.stringify(true))
         }
         break
-      
+
       case 'account/clearUserData':
-            localStorage.clear()
-          break
+        localStorage.clear()
+        break
 
       default:
         break
