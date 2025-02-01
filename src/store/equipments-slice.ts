@@ -26,8 +26,9 @@ export const equipmentSlice = createSlice({
     setSearchFilters: (state, { payload: filterState }) => {
       state.searchFilters = filterState
     },
-    clearEquipmentSearch: () => {
-      return initialState
+    clearEquipmentSearch: (state) => {
+      state.searchFilters = null
+      state.searchTerm = ""
     },
   },
 })

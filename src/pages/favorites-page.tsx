@@ -9,6 +9,7 @@ import {
   useFetchEquipmentByIDQuery,
   useFetchEquipmentByIDsQuery,
   useFetchFavoriteEquipmentsQuery,
+  useLazyFetchEquipmentByIDsQuery,
 } from '../store/api/equipment/equipments-api'
 import { selectFavoriteEquipmentsFromLS, selectLogin } from '../store/selectors'
 
@@ -19,14 +20,31 @@ export default function FavoritesPage() {
 
   const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
 
-  const { isFetching, isLoading, isError, data: equipmentList } = useFetchEquipmentByIDsQuery({equipmentIds})
+  const [fetch, {
+    isFetching,
+    isLoading,
+    isError,
+    data: equipmentList,
+  }] = useLazyFetchEquipmentByIDsQuery()
+
+  useEffect(() => {
+    if (Array.isArray(equipmentIds) && equipmentIds.length > 0) {
+      fetch({ equipmentIds })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (Array.isArray(equipmentIds) && equipmentIds.length > 0) {
+      fetch({ equipmentIds })
+    }
+  }, [equipmentIds])
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <CardList
         Component={EquipmentCardList}
-        list={(Array.isArray(equipmentIds) && equipmentIds.length > 0) ? equipmentList : []}
-        isLoading={isFetching}
+        list={equipmentIds.length > 0 ? equipmentList : []}
+        isLoading={isLoading}
         isError={isError}
       />
     </Container>

@@ -143,6 +143,7 @@ export const {
   useFetchEquipmentsBySearchTermQuery,
   useLazyFetchEquipmentsBySearchTermQuery,
   useFetchFavoriteEquipmentsQuery,
+  useLazyFetchEquipmentByIDsQuery,
   useFetchEquipmentByIDQuery,
   useFetchEquipmentByIDsQuery,
   useAddFavoriteEquipmentMutation,
