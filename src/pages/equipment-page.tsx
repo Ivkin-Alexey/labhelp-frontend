@@ -10,13 +10,14 @@ import FavoriteButtons from '../components/equipment-card/favorite-buttons'
 import OperateStatus from '../components/equipment-card/operate-status'
 import { ThemeContext } from '../components/root'
 import { useFetchEquipmentByIDQuery } from '../store/api/equipment/equipments-api'
-import { selectLogin } from '../store/selectors'
+import { selectFavoriteEquipmentsFromLS, selectLogin } from '../store/selectors'
 
 export default function EquipmentPage() {
   const location = useLocation()
 
   const equipmentId = location.pathname.slice(1)
   const accountLogin = useAppSelector(selectLogin)
+  const favoriteIds = useAppSelector(selectFavoriteEquipmentsFromLS)
 
   const { color } = useContext(ThemeContext)
 
@@ -41,12 +42,14 @@ export default function EquipmentPage() {
       model,
       imgUrl,
       description,
-      isFavorite,
+      // isFavorite,
       isOperate,
       userName,
       login,
       userId,
     } = data
+
+    const isFavorite = favoriteIds.includes(equipmentId)
 
     let label
 
