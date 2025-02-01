@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { Container, Typography } from '@mui/material'
 
@@ -10,11 +10,11 @@ import EquipmentCardList from '../components/equipment-card-list'
 import { Search } from '../components/search/search'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 import { useLazyCheckTokenQuery } from '../store/api/users-api'
-import { selectIsAuth, selectLogin } from '../store/selectors'
+import { selectFavoriteEquipmentsFromLS, selectIsAuth, selectLogin } from '../store/selectors'
 
 export default function MainPage() {
   const login = useAppSelector(selectLogin)
-  const arg = { login, searchTerm: DEFAULT_SEARCH_TERM }
+
   const isAuth = useAppSelector(selectIsAuth)
   const [checkToken, { data, isSuccess }] = useLazyCheckTokenQuery()
 
@@ -24,7 +24,17 @@ export default function MainPage() {
   //   }
   // }, [])
 
+  const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
+  const arg = { login, searchTerm: DEFAULT_SEARCH_TERM }
+
   const { isFetching, isError, data: equipmentList } = useFetchEquipmentsBySearchTermQuery(arg)
+
+    const transformedList = equipmentList ? equipmentList.map(el => {
+          return {
+            ...el,
+            isFavorite: equipmentIds.includes(el.id)
+          }
+      }) : []
 
   return (
     <>
@@ -39,7 +49,7 @@ export default function MainPage() {
         <Search />
         <CardList
           Component={EquipmentCardList}
-          list={equipmentList}
+          list={transformedList}
           isLoading={isFetching}
           isError={isError}
         />

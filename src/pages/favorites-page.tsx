@@ -7,6 +7,7 @@ import CardList from '../components/card-list'
 import EquipmentCardList from '../components/equipment-card-list'
 import {
   useFetchEquipmentByIDQuery,
+  useFetchEquipmentByIDsQuery,
   useFetchFavoriteEquipmentsQuery,
 } from '../store/api/equipment/equipments-api'
 import { selectFavoriteEquipmentsFromLS, selectLogin } from '../store/selectors'
@@ -16,44 +17,16 @@ export default function FavoritesPage() {
 
   // const { isFetching, isError, data: equipmentList } = useFetchFavoriteEquipmentsQuery(login)
 
-  const favoriteIds = useAppSelector(selectFavoriteEquipmentsFromLS)
-  const [equipmentList, setEquipmentList] = useState([])
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isError, setIsError] = useState<boolean>(false)
+  const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
 
-  const equipmentQueries = favoriteIds.map(id => useFetchEquipmentByIDQuery(id));
-
-const loading = equipmentQueries.some(query => query.isLoading);
-const error = equipmentQueries.find(query => query.error);
-
-const equipmentData = equipmentQueries.map(query => query.data).filter(data => data);
-
-useEffect(() => {
-    const fetchEquipmentData = async () => {
-        try {
-            setIsLoading(true);
-            const fetchedData = equipmentData; // Используем данные из equipmentData для установки
-
-            setEquipmentList(fetchedData);
-        } catch (err) {
-            setIsError(true);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    if (favoriteIds.length > 0) {
-        fetchEquipmentData();
-    }
-}, [favoriteIds, equipmentData]); // Добавляем equipmentData в зависимости
-
+  const { isFetching, isLoading, isError, data: equipmentList } = useFetchEquipmentByIDsQuery({equipmentIds})
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <CardList
         Component={EquipmentCardList}
-        list={equipmentList}
-        isLoading={isLoading}
+        list={(Array.isArray(equipmentIds) && equipmentIds.length > 0) ? equipmentList : []}
+        isLoading={isFetching}
         isError={isError}
       />
     </Container>

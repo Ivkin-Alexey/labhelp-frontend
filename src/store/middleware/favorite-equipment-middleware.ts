@@ -35,7 +35,7 @@ export const favoriteEquipmentMiddleware: Middleware<{}, State> = store => next 
         }
         break
 
-      case 'equipments/removeFromFavorite':
+      case 'equipments/deleteFromFavorite':
         if (typeof payload === 'string') {
           const favoriteList = localStorage.getItem(favoriteEquipments)
           if (favoriteList) {

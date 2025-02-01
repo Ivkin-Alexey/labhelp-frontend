@@ -58,7 +58,7 @@ function Header() {
       isRedirect: true,
     },
     { title: 'Контакты', path: routes[404] },
-    { title: 'Избранное оборудование', path: routes[404] },
+    { title: 'Избранное оборудование', path: routes.favorites },
   ]
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {

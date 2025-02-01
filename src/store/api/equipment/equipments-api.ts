@@ -16,21 +16,30 @@ export const equipmentsApi = api.injectEndpoints({
         apiRoutes.get.equipments.equipments + '/' + data.equipmentId + '?login=' + data.login,
       providesTags: ['Equipment'],
     }),
-    fetchEquipmentByIDs: builder.query<IEquipmentItem, { equipmentId: string; login?: TLogin }>({
-      query: data => ({
-        url: apiRoutes.get.equipments.equipments + '/' + data.equipmentId + '?login=' + data.login,
-        params: {},
-      }),
+    fetchEquipmentByIDs: builder.query<IEquipmentItem[], { equipmentIds: string[]; login?: TLogin }>({ 
+      query: ({ login, equipmentIds }) => ({ 
+        url: apiRoutes.get.equipments.equipments, 
+        params: { 
+          ...{login}, 
+          ...{equipmentIds}, 
+        }, 
+      }), 
+      transformResponse: (response: IEquipmentItem[]) => response.map(item => ({
+          ...item,
+          isFavorite: true
+        })),
     }),
     fetchEquipmentsBySearchTerm: builder.query<IEquipmentItem[], ISearchArg>({
-      query: ({ login, filters = {}, searchTerm }) => ({
-        url: apiRoutes.get.equipments.search,
-        params: {
+      query: data => {
+        const { login, filters = {}, searchTerm} = data
+
+        const params = {
           ...(login && { login }),
           ...filters,
           ...(searchTerm && { term: searchTerm }),
-        },
-      }),
+        }
+        return apiRoutes.get.equipments.search + encodeQueryParams(params)
+      },
       providesTags: ['EquipmentList'],
     }),
     fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
@@ -52,12 +61,12 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList'],
+      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList', 'EquipmentList'],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
             'fetchEquipmentsBySearchTerm',
-            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
+            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login }, 
             draft =>
               draft.forEach(el => {
                 if (el.id === data.equipmentId) {
@@ -79,7 +88,7 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'DELETE',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList'],
+      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList', 'EquipmentList'],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
@@ -130,6 +139,7 @@ export const {
   useLazyFetchEquipmentsBySearchTermQuery,
   useFetchFavoriteEquipmentsQuery,
   useFetchEquipmentByIDQuery,
+  useFetchEquipmentByIDsQuery,
   useAddFavoriteEquipmentMutation,
   useDeleteFavoriteEquipmentMutation,
   useAddTermToHistoryMutation,

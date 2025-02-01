@@ -18,8 +18,9 @@ export default function NavButtons(props: INavButtons) {
       key={page.title}
       href={page.path}
       
-      onClick={() => {
+      onClick={(e) => {
         if (!page?.isRedirect) {
+          e.preventDefault()
           handleCloseNavMenu(page.path)
         }
 
