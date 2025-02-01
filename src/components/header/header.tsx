@@ -99,7 +99,7 @@ function Header() {
     <AppBar position="static" sx={{boxShadow: "none", backgroundColor: "white" }}>
       <Container maxWidth="xl" sx={{pt: "10px"}}>
         <Logo />
-        <Typography variant="h5" align="center" mt="10px" color="textPrimary">
+        <Typography variant="h5" align="center" mt="10px" color="textPrimary" sx={{cursor: "pointer"}} onClick={navigateToMainPage}>
           Единый каталог учебного и научного лабораторного оборудования
         </Typography>
         <Toolbar disableGutters>
