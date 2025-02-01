@@ -13,10 +13,11 @@ import HeaderNavigation from './header-navigation'
 import Logo from './logo'
 import UserMenu from './user-menu'
 import { routes } from '../../app/constants/constants'
-import { useAppSelector } from '../../app/hooks/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
 import { selectAccount, selectIsAuth } from '../../store/selectors'
 
 import "./style.css"
+import { clearEquipmentSearch } from '../../store/equipments-slice'
 
 // let defaultPages = [
 //   { title: 'Избранное', path: routes.favorites },
@@ -34,6 +35,7 @@ const settings = [
 
 function Header() {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const isAuth = useAppSelector(selectIsAuth)
 
   const location = useLocation()
@@ -78,6 +80,7 @@ function Header() {
   }
 
   function navigateToMainPage() {
+    dispatch(clearEquipmentSearch())
     navigate(routes.main)
   }
 
