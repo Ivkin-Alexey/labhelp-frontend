@@ -70,6 +70,7 @@ export default function EquipmentPage() {
         }}
       >
         <Box sx={{ position: 'relative' }}>
+        <Box sx={{ padding: "0 8px" }}>
           <OperateStatus isOperate={isOperate} label={label} />
           <img
             height="400"
@@ -92,6 +93,7 @@ export default function EquipmentPage() {
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
             Описание: {toLowerCaseFirstChart(description)}
           </Typography>
+          </Box>
           <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={false} />
         </Box>
       </Container>
