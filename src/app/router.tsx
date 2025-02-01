@@ -5,15 +5,15 @@ import { createBrowserRouter } from 'react-router-dom'
 import { routes } from './constants/constants'
 import { RequireAuth, RequireAdminRole } from '../components/require-auth'
 import Root from '../components/root'
+import NotExistPage from '../pages/404-page'
 import AdminPage from '../pages/admin-page'
 import EquipmentPage from '../pages/equipment-page'
+import FavoritesPage from '../pages/favorites-page'
 import MainPage from '../pages/main-page'
 import SearchPage from '../pages/search-page'
 import SignInPage from '../pages/sign-in-page'
 import SignUpPage from '../pages/sign-up-page'
 import EditPersonalDataPage from '../pages/user-data-editing-page'
-import NotExistPage from '../pages/404-page'
-import FavoritesPage from '../pages/favorites-page'
 
 // const FavoritesPage = React.lazy(() => import('../pages/favorites-page'))
 const HistoryPage = React.lazy(() => import('../pages/history-page'))

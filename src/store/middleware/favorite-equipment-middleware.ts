@@ -2,7 +2,6 @@ import type { Middleware } from 'redux'
 
 import { names } from '../../app/constants/localStorage'
 import type { IUserData } from '../../models/users'
-import type { State } from '../preloaded-state'
 
 interface IAction {
   type: string
@@ -13,7 +12,7 @@ function isAction(obj: any): obj is IAction {
   return typeof obj === 'object' && obj !== null && typeof obj.type === 'string'
 }
 
-export const favoriteEquipmentMiddleware: Middleware<{}, State> = store => next => action => {
+export const favoriteEquipmentMiddleware: Middleware<{}> = store => next => action => {
   const result = next(action)
 
   const { favoriteEquipments } = names.equipment

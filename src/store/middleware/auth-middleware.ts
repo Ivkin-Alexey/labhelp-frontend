@@ -20,14 +20,14 @@ export const authMiddleware: Middleware<{}, IState> = store => next => action =>
     switch (action.type) {
       case 'account/setToken':
         if (typeof action.payload === 'string') {
-          localStorage.setItem(names.token, action.payload)
+          localStorage.setItem(names.account.token, action.payload)
         }
         break
 
       case 'account/setUserData':
         if (typeof action.payload === 'object') {
-          localStorage.setItem(names.accountData, JSON.stringify(action.payload))
-          localStorage.setItem(names.isAuth, JSON.stringify(true))
+          localStorage.setItem(names.account.accountData, JSON.stringify(action.payload))
+          localStorage.setItem(names.account.isAuth, JSON.stringify(true))
         }
         break
 

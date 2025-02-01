@@ -3,7 +3,6 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded'
 import { Button, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
-import { routes } from '../../app/constants/constants'
 import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
 import type { equipmentId } from '../../models/equipments'
 import {
@@ -22,11 +21,11 @@ interface IFavoriteButtons {
 export default function FavoriteButtons(props: IFavoriteButtons) {
   const { isFavorite = false, equipmentId, isCardMode } = props
 
-  const [add] = useAddFavoriteEquipmentMutation()
-  const [remove] = useDeleteFavoriteEquipmentMutation()
-  const isAuth = useAppSelector(selectIsAuth)
-  const login = useAppSelector(selectLogin)
-  const navigate = useNavigate()
+  // const [add] = useAddFavoriteEquipmentMutation()
+  // const [remove] = useDeleteFavoriteEquipmentMutation()
+  // const isAuth = useAppSelector(selectIsAuth)
+  // const login = useAppSelector(selectLogin)
+  // const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   function handleAdd() {

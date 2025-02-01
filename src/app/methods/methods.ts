@@ -1,5 +1,4 @@
 import type { IUserForm } from "../../models/users";
-import { IUserCard } from "../../models/users";
 
 export function createPersonName(person: IUserForm) {
     const {firstName, lastName, patronymic} = person;

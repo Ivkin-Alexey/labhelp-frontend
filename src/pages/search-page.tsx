@@ -1,13 +1,12 @@
 import { Box, Container } from '@mui/material'
 
 import { SEARCH_SUGGEST_NUMBER } from '../app/constants/constants'
+import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
 import EquipmentCardList from '../components/equipment-card-list'
 import { Search } from '../components/search/search'
 import { useLazyFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
-import { useAppSelector } from '../app/hooks/hooks'
 import { selectFavoriteEquipmentsFromLS } from '../store/selectors'
-import { useMemo } from 'react'
 
 export default function SearchPage() {
   const [fetchEquipments, { isFetching, isLoading, isError, data: equipmentList }] =
