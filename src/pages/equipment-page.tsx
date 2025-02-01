@@ -49,7 +49,7 @@ export default function EquipmentPage() {
       userId,
     } = data
 
-    const isFavorite = favoriteIds.includes(equipmentId)
+    const isFavorite = favoriteIds.includes(id)
 
     let label
 

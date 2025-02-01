@@ -13,7 +13,12 @@ export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login?: TLogin }>({
       query: data =>
-        apiRoutes.get.equipments.equipments + '/' + data.equipmentId + '?login=' + data.login,
+        ({
+          url: apiRoutes.get.equipments.equipments + '/' + data.equipmentId,
+          params: {
+            login: data.login
+          }
+        }),
       providesTags: ['Equipment'],
     }),
     fetchEquipmentByIDs: builder.query<IEquipmentItem[], { equipmentIds: string[]; login?: TLogin }>({ 

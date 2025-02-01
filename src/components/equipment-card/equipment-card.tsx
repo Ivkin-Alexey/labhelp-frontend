@@ -30,7 +30,7 @@ export function EquipmentCard(props: TEquipmentCard) {
   const navigate = useNavigate()
 
   function handleClick(e: React.MouseEvent, id: equipmentId) {
-    navigate('/' + id)
+    navigate('/' + encodeURIComponent(id))
   }
 
   return (

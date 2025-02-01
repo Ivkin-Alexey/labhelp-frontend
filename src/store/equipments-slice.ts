@@ -16,7 +16,9 @@ export const equipmentSlice = createSlice({
       state.searchTerm = searchTerm
     },
     addToFavorite: (state, { payload: equipmentId }: { payload: string }) => {
-      state.favoriteList.push(equipmentId)
+      if (!state.favoriteList.includes(equipmentId)) {
+        state.favoriteList.push(equipmentId)
+      }
     },
     deleteFromFavorite: (state, { payload: equipmentId }: { payload: string }) => {
       state.favoriteList = state.favoriteList.filter(el => el !== equipmentId)
