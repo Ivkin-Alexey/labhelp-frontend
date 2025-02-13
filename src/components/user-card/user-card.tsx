@@ -16,7 +16,16 @@ import { createPersonName } from '../../app/methods/methods'
 import type { TLogin, IUserCard } from '../../models/users'
 
 export function UserCard(props: IUserCard) {
-  const { imgUrl = '#', login, position, department, isVerified = true, firstName, lastName, patronymic} = props
+  const {
+    imgUrl = '#',
+    login,
+    position,
+    department,
+    isVerified = true,
+    firstName,
+    lastName,
+    patronymic,
+  } = props
 
   const navigate = useNavigate()
 

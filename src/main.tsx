@@ -18,9 +18,9 @@ if (container) {
 
   root.render(
     <ErrorBoundary FallbackComponent={FallbackRender}>
-        <Provider store={store}>
-          <RouterProvider router={router} />
-        </Provider>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </ErrorBoundary>,
   )
 } else {

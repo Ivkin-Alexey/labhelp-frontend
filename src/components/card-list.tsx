@@ -17,7 +17,7 @@ export default function CardList(props: ICardList) {
   const { isError, isLoading, list, Component } = props
 
   if (isLoading || !Component) {
-    return <Circular/>
+    return <Circular />
   }
 
   if (isError) {
@@ -29,7 +29,6 @@ export default function CardList(props: ICardList) {
   }
 
   if (list && list?.length === 0) {
-
     return (
       <Typography gutterBottom variant="body1" component="div" marginTop="40px">
         Список пуст

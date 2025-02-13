@@ -15,7 +15,7 @@ export const accountSlice = createSlice({
     clearUserData: state => ({ ...state, ...initialState }),
     setUserData: (state, { payload }) => ({ ...state, accountData: payload, isAuth: true }),
     setToken: (state, { payload }) => ({ ...state, token: payload }),
-  }
+  },
 })
 
 export const { setUserData, clearUserData, setToken } = accountSlice.actions

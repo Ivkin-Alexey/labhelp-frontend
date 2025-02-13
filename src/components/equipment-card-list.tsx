@@ -21,7 +21,7 @@ export default function EquipmentCardList({ list }: IEquipmentCardList) {
       justifyContent="center"
       marginBottom="40px"
     >
-      {list.map((el,i) => {
+      {list.map((el, i) => {
         return <EquipmentCard key={i} {...el} isCardMode={true} />
       })}
     </Stack>

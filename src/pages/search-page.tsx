@@ -16,15 +16,19 @@ export default function SearchPage() {
 
   const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
 
-  const transformedList = data ? data.results.map(el => {
+  const transformedList = data
+    ? data.results.map(el => {
         return {
           ...el,
-          isFavorite: equipmentIds.includes(el.id)
+          isFavorite: equipmentIds.includes(el.id),
         }
-      }) : []
+      })
+    : []
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}>
+    <Container
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}
+    >
       <Search
         // list={suggestList}
         isLoading={isFetching}

@@ -1,6 +1,6 @@
 import { names } from '../app/constants/localStorage'
 import type { IState } from '../models/store'
-const {equipment, account} = names
+const { equipment, account } = names
 
 const accountData = localStorage.getItem(account.accountData)
 const token = localStorage.getItem(account.token)

@@ -35,7 +35,7 @@ export default function EquipmentFilters() {
     let changedFilters
     if (!filterState) {
       changedFilters = {
-        [name]: arr
+        [name]: arr,
       }
     } else {
       changedFilters = { ...filterState, [name]: arr }
@@ -71,7 +71,7 @@ export default function EquipmentFilters() {
           return (
             <Select
               key={name}
-              name={name} 
+              name={name}
               options={options}
               handleChange={handleChange}
               menuProps={MenuProps}

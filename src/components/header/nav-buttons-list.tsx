@@ -17,19 +17,17 @@ export default function NavButtons(props: INavButtons) {
     <Button
       key={page.title}
       href={page.path}
-      
-      onClick={(e) => {
+      onClick={e => {
         if (!page?.isRedirect) {
           e.preventDefault()
           handleCloseNavMenu(page.path)
         }
-
       }}
       sx={{
         color: 'textPrimary',
         display: 'block',
-        textAlign: "center",
-        textJustify: "center",
+        textAlign: 'center',
+        textJustify: 'center',
         // backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
         // '&:hover': {
         //   backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',

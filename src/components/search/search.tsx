@@ -59,7 +59,7 @@ export function Search(props: ISearch) {
   // const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
 
   function navigateHelper() {
-    if(location.pathname !== routes.search) {
+    if (location.pathname !== routes.search) {
       navigate(routes.search)
       return
     }

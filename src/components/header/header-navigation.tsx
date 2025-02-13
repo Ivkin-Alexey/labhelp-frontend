@@ -39,10 +39,17 @@ export default function HeaderNavigation(props: IHeaderNavigation) {
         LOGO
       </Typography>
 
-      <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex'  }, justifyContent: "center", maxHeight: "40px"}} >
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: { xs: 'none', md: 'flex' },
+          justifyContent: 'center',
+          maxHeight: '40px',
+        }}
+      >
         <Suspense fallback={null}>
           {/* {isAuth && <NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu} />} */}
-          {<NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu}/>}
+          {<NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu} />}
         </Suspense>
       </Box>
     </>

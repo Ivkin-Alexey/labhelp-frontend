@@ -23,7 +23,7 @@ interface IFormProps {
   defaultInputValues?: IUserForm
   filteringRules: { [key: string]: IStudentCategoryFilteringRule[] }
   onSendData: (formData: IFormValues) => void
-  isLoading?: boolean, 
+  isLoading?: boolean
   confirmMessage?: string
   btnText?: string
   header?: string
@@ -50,7 +50,7 @@ const Form = (props: IFormProps) => {
     filteringRules,
     confirmMessage,
     onSendData,
-    isLoading = false, 
+    isLoading = false,
     btnText = 'Отправить',
     header,
     optionalButtons,
@@ -67,7 +67,7 @@ const Form = (props: IFormProps) => {
         if (defaultInputValues && defaultInputValues[cur as keyof IUserForm]) {
           value = defaultInputValues[cur as keyof IUserForm]
         } else {
-          value = initValue ?? ""
+          value = initValue ?? ''
         }
 
         return {
@@ -125,7 +125,7 @@ const Form = (props: IFormProps) => {
 
   function trimFormState() {
     const trimmedFormState = Object.assign({}, formState)
-    for(let key in trimmedFormState) {
+    for (let key in trimmedFormState) {
       if (!textInputs.includes(key)) {
         delete trimmedFormState[key]
       }
@@ -202,7 +202,11 @@ const Form = (props: IFormProps) => {
     >
       {header && <ListSubheader component="div">{header}</ListSubheader>}
       {renderTextFields()}
-      <Button variant="contained" disabled={isDisabled || isLoading} onClick={() => onSendData(getFormValues())}>
+      <Button
+        variant="contained"
+        disabled={isDisabled || isLoading}
+        onClick={() => onSendData(getFormValues())}
+      >
         {btnText}
       </Button>
       {optionalButtons ?? null}

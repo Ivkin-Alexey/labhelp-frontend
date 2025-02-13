@@ -24,7 +24,7 @@ const EditPersonalDataPage = () => {
   const navigate = useNavigate()
   const accountLogin = useAppSelector(selectLogin)
 
-  const login: TLogin | undefined= location.pathname.split('/').at(-1)
+  const login: TLogin | undefined = location.pathname.split('/').at(-1)
 
   const message = localisations.pages.editPersonalData.confirmMsg
 
@@ -59,7 +59,12 @@ const EditPersonalDataPage = () => {
 
   const optionalButtons = () => {
     if (userData.role !== 'admin') {
-      return <OptionalUserFormButtons handleOnClick={() => handleDeletePerson(login)} isLoading={isLoadingDelete}/>
+      return (
+        <OptionalUserFormButtons
+          handleOnClick={() => handleDeletePerson(login)}
+          isLoading={isLoadingDelete}
+        />
+      )
     }
   }
 
@@ -70,7 +75,7 @@ const EditPersonalDataPage = () => {
         defaultInputValues={userData}
         confirmMessage={message}
         filteringRules={categoryFilteringRules}
-        disabledInputs={["login"]}
+        disabledInputs={['login']}
         onSendData={sendData}
         isLoading={isLoadingUpdate}
         btnText="Подтвердить"

@@ -47,8 +47,8 @@ export interface ISearchArg {
   login?: TLogin
   searchTerm: string
   filters?: IEquipmentFilterState
-  page: number
-  pageSize: number
+  page?: number
+  pageSize?: number
 }
 
 export interface IQueriesObject {

@@ -16,7 +16,7 @@ import { routes } from '../../app/constants/constants'
 import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
 import { selectAccount, selectIsAuth } from '../../store/selectors'
 
-import "./style.css"
+import './style.css'
 import { clearEquipmentSearch } from '../../store/equipments-slice'
 
 // let defaultPages = [
@@ -99,10 +99,17 @@ function Header() {
   }
 
   return (
-    <AppBar position="static" sx={{boxShadow: "none", backgroundColor: "white" }}>
-      <Container maxWidth="xl" sx={{pt: "10px"}}>
+    <AppBar position="static" sx={{ boxShadow: 'none', backgroundColor: 'white' }}>
+      <Container maxWidth="xl" sx={{ pt: '10px' }}>
         <Logo />
-        <Typography variant="h5" align="center" mt="10px" color="textPrimary" sx={{cursor: "pointer"}} onClick={navigateToMainPage}>
+        <Typography
+          variant="h5"
+          align="center"
+          mt="10px"
+          color="textPrimary"
+          sx={{ cursor: 'pointer' }}
+          onClick={navigateToMainPage}
+        >
           Единый каталог учебного и научного лабораторного оборудования
         </Typography>
         <Toolbar disableGutters>

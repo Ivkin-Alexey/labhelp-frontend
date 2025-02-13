@@ -13,43 +13,46 @@ import { api } from '../api'
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login?: TLogin }>({
-      query: data =>
-        ({
-          url: apiRoutes.get.equipments.equipments + '/' + data.equipmentId,
-          params: {
-            login: data.login
-          }
-        }),
+      query: data => ({
+        url: apiRoutes.get.equipments.equipments + '/' + data.equipmentId,
+        params: {
+          login: data.login,
+        },
+      }),
       providesTags: ['Equipment'],
     }),
-    fetchEquipmentByIDs: builder.query<IEquipmentItem[], { equipmentIds: string[]; login?: TLogin }>({ 
-      query: ({ login, equipmentIds }) => ({ 
-        url: apiRoutes.get.equipments.equipments, 
-        params: { 
-          ...{login}, 
-          ...{equipmentIds}, 
-        }, 
-      }), 
-      transformResponse: (response: IEquipmentItem[]) => response.map(item => ({
+    fetchEquipmentByIDs: builder.query<
+      IEquipmentItem[],
+      { equipmentIds: string[]; login?: TLogin }
+    >({
+      query: ({ login, equipmentIds }) => ({
+        url: apiRoutes.get.equipments.equipments,
+        params: {
+          ...{ login },
+          ...{ equipmentIds },
+        },
+      }),
+      transformResponse: (response: IEquipmentItem[]) =>
+        response.map(item => ({
           ...item,
-          isFavorite: true
+          isFavorite: true,
         })),
     }),
     fetchEquipmentsBySearchTerm: builder.query<IEquipmentSearchResult, ISearchArg>({
       query: data => {
-        const { login, filters = {}, searchTerm, page, pageSize} = data
+        const { login, filters = {}, searchTerm, page, pageSize } = data
 
         const params = {
           ...(login && { login }),
           ...filters,
           ...(searchTerm && { term: searchTerm }),
           ...(page && { page }),
-          ...(pageSize && {pageSize})
+          ...(pageSize && { pageSize }),
         }
         return apiRoutes.get.equipments.search + encodeQueryParams(params)
       },
       providesTags: ['EquipmentList'],
-  }),
+    }),
     fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
       query: login => apiRoutes.get.equipments.favorite + login,
       transformResponse: (response: IEquipmentItem[]) => {
@@ -69,14 +72,19 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList', 'EquipmentList'],
+      invalidatesTags: [
+        'FavoriteEquipmentList',
+        'Equipment',
+        'OperatingEquipmentList',
+        'EquipmentList',
+      ],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
             'fetchEquipmentsBySearchTerm',
-            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login }, 
+            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
             draft =>
-              draft.forEach(el => {
+              draft.results.forEach(el => {
                 if (el.id === data.equipmentId) {
                   el.isFavorite = true
                 }
@@ -96,14 +104,19 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'DELETE',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList', 'EquipmentList'],
+      invalidatesTags: [
+        'FavoriteEquipmentList',
+        'Equipment',
+        'OperatingEquipmentList',
+        'EquipmentList',
+      ],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
             'fetchEquipmentsBySearchTerm',
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
             draft =>
-              draft.forEach(el => {
+              draft.results.forEach(el => {
                 if (el.id === data.equipmentId) {
                   delete el.isFavorite
                 }

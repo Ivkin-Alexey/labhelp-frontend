@@ -17,7 +17,6 @@ export default function MainPage() {
 
   const isAuth = useAppSelector(selectIsAuth)
 
-
   // useEffect(() => {
   //   if (isAuth) {
   //     checkToken()
@@ -29,12 +28,14 @@ export default function MainPage() {
 
   const { isFetching, isError, data } = useFetchEquipmentsBySearchTermQuery(arg)
 
-    const transformedList = data ? data.results.map(el => {
-          return {
-            ...el,
-            isFavorite: equipmentIds.includes(el.id)
-          }
-      }) : []
+  const transformedList = data
+    ? data.results.map(el => {
+        return {
+          ...el,
+          isFavorite: equipmentIds.includes(el.id),
+        }
+      })
+    : []
 
   return (
     <>
@@ -44,7 +45,7 @@ export default function MainPage() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          minWidth: '80vw'
+          minWidth: '80vw',
         }}
       >
         <Search />

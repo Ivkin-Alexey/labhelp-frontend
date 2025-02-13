@@ -10,22 +10,22 @@ export default function Logo() {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: "center",
+        alignItems: 'center',
         height: 70,
-        bgcolor: "white",
+        bgcolor: 'white',
         // bgcolor: 'primary.main',
         // '&:hover': {
         //   bgcolor: 'primary.dark',
         // },
       }}
     >
-      <img src={ckpLogo} alt="#" className='logo_ckp'/>
-      <Stack direction="row" spacing={2} className='logo_company'>
+      <img src={ckpLogo} alt="#" className="logo_ckp" />
+      <Stack direction="row" spacing={2} className="logo_company">
         <Typography className="title">САНКТ-ПЕТЕРБУРГСКИЙ ГОРНЫЙ УНИВЕРСИТЕТ</Typography>
-        <img src={companyLogo} alt="#" className='logo'/>
+        <img src={companyLogo} alt="#" className="logo" />
         <Typography className="title">SAINT-PETERSBURG MINING UNIVERSITY</Typography>
       </Stack>
-      <div className='logo_ckp'></div>
+      <div className="logo_ckp"></div>
     </Box>
   )
 }

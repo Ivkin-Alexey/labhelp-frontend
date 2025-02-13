@@ -20,12 +20,8 @@ export default function FavoritesPage() {
 
   const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
 
-  const [fetch, {
-    isFetching,
-    isLoading,
-    isError,
-    data: equipmentList,
-  }] = useLazyFetchEquipmentByIDsQuery()
+  const [fetch, { isFetching, isLoading, isError, data: equipmentList }] =
+    useLazyFetchEquipmentByIDsQuery()
 
   useEffect(() => {
     if (Array.isArray(equipmentIds) && equipmentIds.length > 0) {
@@ -40,7 +36,9 @@ export default function FavoritesPage() {
   }, [equipmentIds])
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}>
+    <Container
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}
+    >
       <CardList
         Component={EquipmentCardList}
         list={equipmentIds.length > 0 ? equipmentList : []}

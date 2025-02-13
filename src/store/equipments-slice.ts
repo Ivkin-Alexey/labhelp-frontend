@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { IEquipmentsState } from '../models/store'
 
 const initialState: IEquipmentsState = {
-  searchTerm: "",
+  searchTerm: '',
   searchFilters: null,
-  favoriteList: []
+  favoriteList: [],
 }
 
 export const equipmentSlice = createSlice({
@@ -26,9 +26,9 @@ export const equipmentSlice = createSlice({
     setSearchFilters: (state, { payload: filterState }) => {
       state.searchFilters = filterState
     },
-    clearEquipmentSearch: (state) => {
+    clearEquipmentSearch: state => {
       state.searchFilters = null
-      state.searchTerm = ""
+      state.searchTerm = ''
     },
   },
 })

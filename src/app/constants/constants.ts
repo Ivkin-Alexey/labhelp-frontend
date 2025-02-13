@@ -25,7 +25,7 @@ export const routes = {
   operatingEquipments: '/operating-equipments',
   admin: '/admin',
   userProfile: '/admin/:login',
-  "404": '/404'
+  '404': '/404',
 }
 
 export const apiRoutes = {
@@ -33,7 +33,7 @@ export const apiRoutes = {
     users: {
       userData: '/users/',
       users: '/users',
-      isTokenValid: '/users/token'
+      isTokenValid: '/users/token',
     },
     equipments: {
       equipments: '/equipments',
