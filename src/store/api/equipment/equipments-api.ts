@@ -3,6 +3,7 @@ import { encodeQueryParams } from '../../../app/utils/utils'
 import type {
   equipmentId,
   IEquipmentItem,
+  IEquipmentSearchResult,
   ISearchArg,
   TEquipmentFilters,
 } from '../../../models/equipments'
@@ -34,19 +35,21 @@ export const equipmentsApi = api.injectEndpoints({
           isFavorite: true
         })),
     }),
-    fetchEquipmentsBySearchTerm: builder.query<IEquipmentItem[], ISearchArg>({
+    fetchEquipmentsBySearchTerm: builder.query<IEquipmentSearchResult, ISearchArg>({
       query: data => {
-        const { login, filters = {}, searchTerm} = data
+        const { login, filters = {}, searchTerm, page, pageSize} = data
 
         const params = {
           ...(login && { login }),
           ...filters,
           ...(searchTerm && { term: searchTerm }),
+          ...(page && { page }),
+          ...(pageSize && {pageSize})
         }
         return apiRoutes.get.equipments.search + encodeQueryParams(params)
       },
       providesTags: ['EquipmentList'],
-    }),
+  }),
     fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
       query: login => apiRoutes.get.equipments.favorite + login,
       transformResponse: (response: IEquipmentItem[]) => {
