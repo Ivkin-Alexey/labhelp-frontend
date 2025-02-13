@@ -36,8 +36,8 @@ export function EquipmentCard(props: TEquipmentCard) {
   return (
     <Card
       sx={{
-        width: '10vw',
-        minWidth: '200px',
+        width: '15vw',
+        minWidth: '250px',
         marginTop: '40px',
         display: 'flex',
         justifyContent: 'space-between',
@@ -57,16 +57,8 @@ export function EquipmentCard(props: TEquipmentCard) {
           <Typography className="cardText" gutterBottom variant="body1" component="div">
             {name}
           </Typography>
-          {!isCardMode && (
-            <Typography variant="body2" color="text.secondary" marginBottom="5px">
-              {description}
-            </Typography>
-          )}
-          <Typography variant="body2" color="text.secondary">
-            Инвентарный № {inventoryNumber}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Заводской № {serialNumber}
+          <Typography variant="body2" color="text.secondary" marginBottom="5px">
+            {description}
           </Typography>
         </CardContent>
       </CardActionArea>

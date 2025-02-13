@@ -16,7 +16,7 @@ export default function MainPage() {
   const login = useAppSelector(selectLogin)
 
   const isAuth = useAppSelector(selectIsAuth)
-  const [checkToken, { data, isSuccess }] = useLazyCheckTokenQuery()
+
 
   // useEffect(() => {
   //   if (isAuth) {
@@ -25,11 +25,11 @@ export default function MainPage() {
   // }, [])
 
   const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
-  const arg = { login, searchTerm: DEFAULT_SEARCH_TERM }
+  const arg = { login, searchTerm: DEFAULT_SEARCH_TERM, page: 1, pageSize: 100 }
 
-  const { isFetching, isError, data: equipmentList } = useFetchEquipmentsBySearchTermQuery(arg)
+  const { isFetching, isError, data } = useFetchEquipmentsBySearchTermQuery(arg)
 
-    const transformedList = equipmentList ? equipmentList.map(el => {
+    const transformedList = data ? data.results.map(el => {
           return {
             ...el,
             isFavorite: equipmentIds.includes(el.id)
@@ -44,6 +44,7 @@ export default function MainPage() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          minWidth: '80vw'
         }}
       >
         <Search />

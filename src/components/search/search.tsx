@@ -7,7 +7,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 import EquipmentFilters from './equipment-filters'
 import SearchInput from './search-input'
-import { routes, SEARCH_DELAY } from '../../app/constants/constants'
+import { PAGE, PAGE_SIZE, routes, SEARCH_DELAY } from '../../app/constants/constants'
 import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
 import type { IEquipmentItem, ISearchArg } from '../../models/equipments'
@@ -64,7 +64,7 @@ export function Search(props: ISearch) {
       return
     }
     if (fetchEquipments) {
-      fetchEquipments({ login, filters, searchTerm: inputValue })
+      fetchEquipments({ login, filters, searchTerm: inputValue, page: PAGE, pageSize: PAGE_SIZE })
     }
     if (isAuth && inputValue) {
       add({ login, term: inputValue })

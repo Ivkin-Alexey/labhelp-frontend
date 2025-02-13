@@ -9,14 +9,14 @@ import { useLazyFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/
 import { selectFavoriteEquipmentsFromLS } from '../store/selectors'
 
 export default function SearchPage() {
-  const [fetchEquipments, { isFetching, isLoading, isError, data: equipmentList }] =
+  const [fetchEquipments, { isFetching, isLoading, isError, data }] =
     useLazyFetchEquipmentsBySearchTermQuery()
 
-  const suggestList = equipmentList?.slice(0, SEARCH_SUGGEST_NUMBER)
+  // const suggestList = equipmentList?.slice(0, SEARCH_SUGGEST_NUMBER)
 
   const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
 
-  const transformedList = equipmentList ? equipmentList.map(el => {
+  const transformedList = data ? data.results.map(el => {
         return {
           ...el,
           isFavorite: equipmentIds.includes(el.id)
@@ -24,9 +24,9 @@ export default function SearchPage() {
       }) : []
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}>
       <Search
-        list={suggestList}
+        // list={suggestList}
         isLoading={isFetching}
         fetchEquipments={fetchEquipments}
         isError={isError}

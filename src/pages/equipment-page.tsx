@@ -11,6 +11,7 @@ import OperateStatus from '../components/equipment-card/operate-status'
 import { ThemeContext } from '../components/root'
 import { useFetchEquipmentByIDQuery } from '../store/api/equipment/equipments-api'
 import { selectFavoriteEquipmentsFromLS, selectLogin } from '../store/selectors'
+import { KingBedSharp } from '@mui/icons-material'
 
 export default function EquipmentPage() {
   const location = useLocation()
@@ -42,6 +43,12 @@ export default function EquipmentPage() {
       model,
       imgUrl,
       description,
+      department,
+      measurements,
+      classification,
+      type,
+      kind,
+      sameList,
       // isFavorite,
       isOperate,
       userName,
@@ -65,11 +72,10 @@ export default function EquipmentPage() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: '40px',
           backgroundColor: color,
         }}
       >
-        <Box sx={{ position: 'relative' }}>
+        <Box sx={{ position: 'relative', marginBottom: "40px" }}>
         <Box sx={{ padding: "0 8px" }}>
           <OperateStatus isOperate={isOperate} label={label} />
           <img
@@ -79,20 +85,35 @@ export default function EquipmentPage() {
             style={{ margin: 'auto', display: 'block', marginBottom: '10px' }}
           />
           <Typography gutterBottom variant="h5" component="div">
-            {name}
+            {name + " " + model}
           </Typography>
-          <Typography variant="body1" color="text.secondary" marginBottom="10px">
+          {/* <Typography variant="body1" color="text.secondary" marginBottom="10px">
             Марка: {brand}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
             Модель: {model}
+          </Typography> */}
+          <Typography variant="body1" color="text.secondary" marginBottom="10px">
+            {description}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
-            Заводской №: {id}
+          <b>Наименование подразделения:</b> {department}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
-            Описание: {toLowerCaseFirstChart(description)}
+          <b>Тип оборудования:</b> {toLowerCaseFirstChart(type)}
           </Typography>
+          <Typography variant="body1" color="text.secondary" marginBottom="10px">
+          <b>Вид измерений:</b> {toLowerCaseFirstChart(measurements)}
+          </Typography>
+          <Typography variant="body1" color="text.secondary" marginBottom="10px">
+          <b>Вид оборудования:</b> {toLowerCaseFirstChart(kind)}
+          </Typography>
+          <Typography variant="body1" color="text.secondary" marginBottom="10px">
+          <b>Классификация оборудования:</b> {toLowerCaseFirstChart(classification)}
+          </Typography>
+          {sameList && <Typography variant="body1" color="text.secondary" marginBottom="10px">
+          <b>Количество:</b> {sameList.length + 1}
+          </Typography>}
           </Box>
           <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={false} />
         </Box>

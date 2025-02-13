@@ -40,7 +40,7 @@ export default function FavoritesPage() {
   }, [equipmentIds])
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}>
       <CardList
         Component={EquipmentCardList}
         list={equipmentIds.length > 0 ? equipmentList : []}

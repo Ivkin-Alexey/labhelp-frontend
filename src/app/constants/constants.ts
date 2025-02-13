@@ -1,8 +1,12 @@
 export const BASE_URL = 'https://scmp-bot-server.ru/'
 
-export const DEFAULT_SEARCH_TERM = 'Печи'
+export const DEFAULT_SEARCH_TERM = 'спектрометр'
 
 export const SEARCH_DELAY = 1000 // ms
+
+export const PAGE = 1
+
+export const PAGE_SIZE = 50
 
 export const SEARCH_SUGGEST_NUMBER = 5
 
