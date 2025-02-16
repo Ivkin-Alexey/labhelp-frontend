@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, useMediaQuery } from '@mui/material'
+import { Box, Stack, Theme, Typography, useMediaQuery } from '@mui/material'
 import './style.css'
 
 import ckpLogo from '../../images/ckp-logo.png'
@@ -7,7 +7,7 @@ import React from 'react'
 
 export default function Logo() {
 
-const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
 function renderLogoGroup() {
   if(!isMobile) {
