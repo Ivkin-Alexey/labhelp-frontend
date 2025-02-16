@@ -1,17 +1,28 @@
-import MenuIcon from '@mui/icons-material/Menu'
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu';
+import { Box, IconButton, Drawer, List, ListItem, Typography } from '@mui/material';
+import { useState } from 'react';
 
-import type { Route } from '../../models/routes'
+import type { Route } from '../../models/routes';
 
 interface IBurgerMenu {
-  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void
-  handleCloseNavMenu: (path: string) => void
+  handleCloseNavMenu: (path: string) => void;
+  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void;
   anchorElNav: null | HTMLElement
-  list: Route[]
+  list: Route[];
 }
 
 export default function BurgerMenu(props: IBurgerMenu) {
-  const { handleOpenNavMenu, anchorElNav, handleCloseNavMenu, list } = props
+  const { handleCloseNavMenu, handleOpenNavMenu, list } = props;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    handleOpenNavMenu(event)
+    setIsMenuOpen(true);
+  };
+
+  const handleCloseMenu = () => {
+    setIsMenuOpen(false);
+  };
 
   return (
     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -20,35 +31,39 @@ export default function BurgerMenu(props: IBurgerMenu) {
         aria-label="account of current user"
         aria-controls="menu-appbar"
         aria-haspopup="true"
-        onClick={handleOpenNavMenu}
-        color="inherit"
+        onClick={handleOpenMenu}
       >
         <MenuIcon />
       </IconButton>
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorElNav}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        open={Boolean(anchorElNav)}
-        onClose={handleCloseNavMenu}
+
+      <Drawer
+        anchor="left"
+        open={isMenuOpen}
+        onClose={handleCloseMenu}
         sx={{
-          display: { xs: 'block', md: 'none' },
+          width: '100%',
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: '100%',
+            boxSizing: 'border-box',
+          },
         }}
       >
-        {list.map(page => (
-          <MenuItem key={page.title} onClick={() => handleCloseNavMenu(page.path)}>
-            <Typography textAlign="center">{page.title}</Typography>
-          </MenuItem>
-        ))}
-      </Menu>
+        <List>
+          {list.map((page) => (
+            <ListItem
+              button
+              key={page.title}
+              onClick={() => {
+                handleCloseNavMenu(page.path)
+                handleCloseMenu()
+              }}
+            >
+              <Typography textAlign="center">{page.title}</Typography>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </Box>
-  )
+  );
 }

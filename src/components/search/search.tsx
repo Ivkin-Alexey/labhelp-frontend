@@ -141,7 +141,7 @@ export function Search(props: ISearch) {
   }, [filters, inputValue])
 
   return (
-    <Stack spacing={2} direction="column" mt="20px">
+    <Stack spacing={2} direction="column" sx={{marginTop: {xs: "10px", md: "20px"}}}>
       <Stack spacing={2} direction="row" sx={{ justifyContent: 'center' }}>
         <SearchInput
           handleInputChange={handleInputChange}
@@ -156,7 +156,7 @@ export function Search(props: ISearch) {
           onClick={handleClick}
           disabled={isDisabled}
           variant={filters ? 'contained' : 'outlined'}
-          sx={{ marginTop: '20px', height: '40px' }}
+          sx={{ marginTop: '20px', height: '40px'}}
         >
           {btnText}
         </Button>

@@ -1,7 +1,7 @@
 import type * as React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
-import { Typography } from '@mui/material'
+import { Typography, useMediaQuery } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
@@ -18,6 +18,7 @@ import { selectAccount, selectIsAuth } from '../../store/selectors'
 
 import './style.css'
 import { clearEquipmentSearch } from '../../store/equipments-slice'
+import theme from '../../theme'
 
 // let defaultPages = [
 //   { title: 'Избранное', path: routes.favorites },
@@ -43,6 +44,7 @@ function Header() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const { accountData } = useAppSelector(selectAccount)
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   // const pages = useMemo(() => {
   //   if (accountData?.role === 'admin') {
   //     return [...defaultPages, ...adminPages]
@@ -52,6 +54,7 @@ function Header() {
   // }, [accountData])
 
   const pages = [
+    { title: 'На главную', path: routes.main },
     { title: 'Санкт-Петербургский горный университет', path: 'https://spmi.ru/', isRedirect: true },
     { title: 'Учебные лаборатории', path: 'https://studlab.spmi.ru/', isRedirect: true },
     {
@@ -62,6 +65,10 @@ function Header() {
     { title: 'Контакты', path: routes[404] },
     { title: 'Избранное оборудование', path: routes.favorites },
   ]
+
+  if(!isMobile) {
+    pages.shift()
+  }
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -107,12 +114,14 @@ function Header() {
           align="center"
           mt="10px"
           color="textPrimary"
-          sx={{ cursor: 'pointer' }}
-          onClick={navigateToMainPage}
+          sx={{ cursor: 'pointer'}} onClick={navigateToMainPage}
         >
           Единый каталог учебного и научного лабораторного оборудования
         </Typography>
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{
+    position: { xs: 'absolute', sm: 'static' },
+    top: { xs: '10px', sm: '0' },
+  }}>
           {/* <HeaderLogo navigateToMainPage={navigateToMainPage} /> */}
           {/* {isAuth && (
             <BurgerMenu

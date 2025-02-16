@@ -69,9 +69,9 @@ export default function SearchInput(props: ISearchInput) {
       renderInput={params => (
         <TextField
           {...params}
-          label="Оборудование"
+          label="Поиск оборудования"
           variant="outlined"
-          sx={{ width: '40vw' }}
+          sx={{ width: {xs: '70vw', md: "60vw"} }}
           autoFocus={true}
           onKeyDown={handleKeyDown}
           size="small"

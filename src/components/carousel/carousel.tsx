@@ -12,6 +12,7 @@ import img4 from '../../images/4.jpeg'
 import img5 from '../../images/5.jpeg'
 import img6 from '../../images/6.jpeg'
 import img7 from '../../images/7.jpeg'
+import { Box } from '@mui/material'
 
 const images = [img0, img1, img2, img3, img4, img5, img6, img7]
 
@@ -49,13 +50,15 @@ function Carousel() {
   }
 
   return (
-    <div className="slider-container">
+    <Box className="slider-container" sx={{
+      display: { xs: 'none', sm: 'block' }, // Скрыть на маленьких экранах, показать на больших
+    }}>
       <Slider {...settings}>
         {images.map((el, i) => {
           return <CarouselItem src={el} key={i} alt="#" />
         })}
       </Slider>
-    </div>
+    </Box>
   )
 }
 
