@@ -156,7 +156,7 @@ export function Search(props: ISearch) {
           onClick={handleClick}
           disabled={isDisabled}
           variant={filters ? 'contained' : 'outlined'}
-          sx={{ marginTop: '20px', height: '40px'}}
+          sx={{ marginTop: '20px', height: '40px', display: {xs: "none", md: "inline-block"}}}
         >
           {btnText}
         </Button>

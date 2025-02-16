@@ -25,8 +25,8 @@ function renderLogoGroup() {
   } else {
     return (
       <Stack direction="row" spacing={2} className="logo_company" sx={{alignItems: "baseline"}}>
-        <img src={companyLogo} alt="#" className="logo" />
-        <img src={ckpLogo} alt="#" className="logo_ckp" />
+        <img src={companyLogo} alt="#" className="logo" style={{height: "40px"}}/>
+        <img src={ckpLogo} alt="#" className="logo_ckp" style={{height: "35px", width: "auto"}}/>
   </Stack>)
   }
 }

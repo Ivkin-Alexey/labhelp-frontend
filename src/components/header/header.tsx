@@ -112,9 +112,8 @@ function Header() {
         <Typography
           variant="h5"
           align="center"
-          mt="10px"
           color="textPrimary"
-          sx={{ cursor: 'pointer'}} onClick={navigateToMainPage}
+          sx={{ cursor: 'pointer', marginTop: {xs: 0, md: "10px"}}} onClick={navigateToMainPage}
         >
           Единый каталог учебного и научного лабораторного оборудования
         </Typography>
