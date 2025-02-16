@@ -1,7 +1,7 @@
 import type * as React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
-import { Typography, useMediaQuery } from '@mui/material'
+import { Theme, Typography, useMediaQuery } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
@@ -44,7 +44,7 @@ function Header() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const { accountData } = useAppSelector(selectAccount)
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   // const pages = useMemo(() => {
   //   if (accountData?.role === 'admin') {
   //     return [...defaultPages, ...adminPages]
