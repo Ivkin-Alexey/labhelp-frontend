@@ -50,9 +50,7 @@ function Carousel() {
   }
 
   return (
-    <Box className="slider-container" sx={{
-      display: { xs: 'none', sm: 'block' }, // Скрыть на маленьких экранах, показать на больших
-    }}>
+    <Box className="slider-container">
       <Slider {...settings}>
         {images.map((el, i) => {
           return <CarouselItem src={el} key={i} alt="#" />

@@ -36,9 +36,9 @@ export function EquipmentCard(props: TEquipmentCard) {
   return (
     <Card
       sx={{
-        width: '15vw',
-        minWidth: '250px',
-        marginTop: '40px',
+        width: {xs: "40vw", md: "15vw"},
+        minWidth: {xs: "120px", md: "250px"},
+        marginTop: {xs: "15px", md: "40px'"},
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'column',
@@ -51,13 +51,13 @@ export function EquipmentCard(props: TEquipmentCard) {
       >
         <CardStatus isVisible={isOperate} text={userName || 'В работе'} />
         <div className="cardMediaWrapper">
-          <CardMedia component="img" image={imgUrl} alt="Изображение карточки" />
+          <CardMedia component="img" image={imgUrl} alt="Изображение карточки" sx={{alignContent: "center"}}/>
         </div>
         <CardContent>
           <Typography className="cardText" gutterBottom variant="body1" component="div">
             {name}
           </Typography>
-          <Typography variant="body2" color="text.secondary" marginBottom="5px">
+          <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", md: "block"}}}>
             {description}
           </Typography>
         </CardContent>

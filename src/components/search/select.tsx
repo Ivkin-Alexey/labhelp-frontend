@@ -40,7 +40,13 @@ export default function Select(props: IProps) {
         {options.map(el => (
           <MenuItem key={el} value={el} sx={{ width: 'auto' }}>
             <Checkbox checked={selectedList.includes(el)} />
-            <ListItemText primary={el} />
+            <ListItemText primary={el} primaryTypographyProps={{
+    sx: { 
+      fontSize: {xs: '0.8rem', md: "1rem"},
+      whiteSpace: 'normal',  // Разрешаем перенос по словам
+    wordWrap: 'break-word'
+    }
+  }}/>
           </MenuItem>
         ))}
       </MUISelect>

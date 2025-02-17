@@ -1,16 +1,18 @@
-import { useEffect, useMemo } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 
-import { Container, Typography } from '@mui/material'
+import { Container, Theme, Typography, useMediaQuery } from '@mui/material'
 
 import { DEFAULT_SEARCH_TERM } from '../app/constants/constants'
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
-import Carousel from '../components/carousel/carousel'
 import EquipmentCardList from '../components/equipment-card-list'
 import { Search } from '../components/search/search'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 import { useLazyCheckTokenQuery } from '../store/api/users-api'
 import { selectFavoriteEquipmentsFromLS, selectIsAuth, selectLogin } from '../store/selectors'
+import React from 'react'
+import theme from '../theme'
+const Carousel = React.lazy(() => import('../components/carousel/carousel'))
 
 export default function MainPage() {
   const login = useAppSelector(selectLogin)
@@ -27,6 +29,7 @@ export default function MainPage() {
   const arg = { login, searchTerm: DEFAULT_SEARCH_TERM, page: 1, pageSize: 100 }
 
   const { isFetching, isError, data } = useFetchEquipmentsBySearchTermQuery(arg)
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
 
   const transformedList = data
     ? data.results.map(el => {
@@ -37,9 +40,16 @@ export default function MainPage() {
       })
     : []
 
+    function renderCarousel() {
+      if(isMobile) return null
+      return(<Suspense fallback={<div>Загрузка карусели...</div>}>
+       <Carousel />
+      </Suspense>)
+    }
+
   return (
     <>
-      <Carousel />
+      {renderCarousel()}
       <Container
         sx={{
           display: 'flex',
