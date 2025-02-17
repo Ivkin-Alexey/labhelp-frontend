@@ -9,7 +9,7 @@
 
 .cardActionArea {
   position: relative;
-  width: 200px;
+  /* width: 200px; */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -17,8 +17,9 @@
 
 .cardActionArea .cardMediaWrapper {
   display: flex;
-  width: 180px;
+  justify-content: center;
   height: 180px;
+  width: 100%;
   margin: 0 auto;
   padding: 5px;
 }

@@ -60,9 +60,8 @@ export default function EquipmentFilters() {
     return (
       <Stack
         direction="row"
-        spacing={2}
         useFlexGap
-        sx={{ flexWrap: 'wrap', justifyContent: 'center' }}
+        sx={{ flexWrap: 'wrap', justifyContent: 'center', gap: {xs: "2vw", md: "4vw"} }}
       >
         {filters.map((el: IEquipmentFilter) => {
           const { name, label, options } = el

@@ -1,6 +1,6 @@
 import './equipment-card.css'
 
-import { CardActionArea, CardActions } from '@mui/material'
+import { Box, CardActionArea, CardActions, Theme, useMediaQuery } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -46,23 +46,23 @@ export function EquipmentCard(props: TEquipmentCard) {
     >
       <CardActionArea
         onClick={e => handleClick(e, id)}
-        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
+        sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
         className="cardActionArea"
       >
         <CardStatus isVisible={isOperate} text={userName || 'В работе'} />
-        <div className="cardMediaWrapper">
-          <CardMedia component="img" image={imgUrl} alt="Изображение карточки" sx={{alignContent: "center"}}/>
-        </div>
-        <CardContent>
+        <Box className="cardMediaWrapper">
+          <CardMedia component="img" image={imgUrl} alt="Изображение карточки" sx={{alignContent: "center", width: {xs: "80%", sm: "100%"}}}/>
+        </Box>
+        <CardContent sx={{padding: {xs: "8px", sm: "16px"}}}>
           <Typography className="cardText" gutterBottom variant="body1" component="div">
             {name}
           </Typography>
-          <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", md: "block"}}}>
+          <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", sm: "block"}}}>
             {description}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: '16px' }}>
+      <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: {xs: "8px", sm: "16px"}}}>
         {/* <OperateButtons equipmentId={id} isOperate={isOperate} login={login} /> */}
         <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={isCardMode} />
       </CardActions>

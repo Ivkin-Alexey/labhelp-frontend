@@ -8,6 +8,12 @@ const theme = createTheme({
         fontSize: '1rem', // Размер шрифта для экранов меньше 600px
       },
     },
+    body1: {
+      fontSize: '1rem', // Размер шрифта по умолчанию для h5
+      '@media (max-width:600px)': {
+        fontSize: '0.8rem', // Размер шрифта для экранов меньше 600px
+      },
+    },
   },
   palette: {
     primary: {

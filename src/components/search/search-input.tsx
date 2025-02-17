@@ -71,7 +71,7 @@ export default function SearchInput(props: ISearchInput) {
           {...params}
           label="Поиск оборудования"
           variant="outlined"
-          sx={{ width: {xs: '85vw', md: "60vw"} }}
+          sx={{ width: {xs: '90vw', md: "60vw"} }}
           autoFocus={true}
           onKeyDown={handleKeyDown}
           size="small"
