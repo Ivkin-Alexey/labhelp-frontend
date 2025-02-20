@@ -59,7 +59,7 @@ export default function BurgerMenu(props: IBurgerMenu) {
                 handleCloseMenu()
               }}
             >
-              <Typography textAlign="center">{page.title}</Typography>
+              <Typography textAlign="left" variant='h5'>{page.title}</Typography>
             </ListItem>
           ))}
         </List>

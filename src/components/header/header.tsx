@@ -54,7 +54,7 @@ function Header() {
   // }, [accountData])
 
   const pages = [
-    { title: 'На главную', path: routes.main },
+    { title: 'Главная', path: routes.main },
     { title: 'Санкт-Петербургский горный университет', path: 'https://spmi.ru/', isRedirect: true },
     { title: 'Учебные лаборатории', path: 'https://studlab.spmi.ru/', isRedirect: true },
     {

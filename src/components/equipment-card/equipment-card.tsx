@@ -11,6 +11,7 @@ import FavoriteButtons from './favorite-buttons'
 import OperateButtons from './operating-buttons'
 import type { equipmentId, TEquipmentCard } from '../../models/equipments'
 import CardStatus from '../user-card/card-status'
+import { Padding } from '@mui/icons-material'
 
 export function EquipmentCard(props: TEquipmentCard) {
   const {
@@ -36,13 +37,14 @@ export function EquipmentCard(props: TEquipmentCard) {
   return (
     <Card
       sx={{
-        width: {xs: "40vw", md: "15vw"},
+        width: {xs: "43vw", md: "15vw"},
         minWidth: {xs: "120px", md: "250px"},
-        marginTop: {xs: "15px", md: "40px'"},
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'column',
+        marginTop: {xs: "15px", md: "40px"},
       }}
+
+      style={{display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'column'}}
     >
       <CardActionArea
         onClick={e => handleClick(e, id)}
@@ -50,8 +52,8 @@ export function EquipmentCard(props: TEquipmentCard) {
         className="cardActionArea"
       >
         <CardStatus isVisible={isOperate} text={userName || 'В работе'} />
-        <Box className="cardMediaWrapper">
-          <CardMedia component="img" image={imgUrl} alt="Изображение карточки" sx={{alignContent: "center", width: {xs: "80%", sm: "100%"}}}/>
+        <Box className="cardMediaWrapper" sx={{padding: {xs: 0, sm: 0, md: "5px"}}}>
+          <CardMedia component="img" image={imgUrl} alt="Изображение карточки" sx={{alignContent: "center", width: {xs: "85%", sm: "100%"}}}/>
         </Box>
         <CardContent sx={{padding: {xs: "8px", sm: "16px"}}}>
           <Typography className="cardText" gutterBottom variant="body1" component="div">

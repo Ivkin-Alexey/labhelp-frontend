@@ -1,7 +1,7 @@
 import type { SyntheticEvent } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
-import type { AutocompleteInputChangeReason } from '@mui/material'
+import { AutocompleteInputChangeReason, Theme, useMediaQuery } from '@mui/material'
 import { Button, Stack, Typography } from '@mui/material'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -19,6 +19,7 @@ import {
   selectIsAuth,
   selectLogin,
 } from '../../store/selectors'
+import zIndex from '@mui/material/styles/zIndex'
 
 interface ISearch {
   list?: IEquipmentItem[] | undefined
@@ -39,9 +40,11 @@ export function Search(props: ISearch) {
 
   const [add] = useAddTermToHistoryMutation()
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
+  const [isScrollLocked, setIsScrollLocked] = useState<boolean>(false);
 
   const navigate = useNavigate()
   const location = useLocation()
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
 
   useEffect(() => {
     const handleBackButton = (event: PopStateEvent) => {
@@ -89,23 +92,39 @@ export function Search(props: ISearch) {
     if (inputValue !== '' || filters) {
       navigateHelper()
       setIsDisabled(true)
+      setIsScrollLocked(false);
     }
   }
 
   useEffect(() => {
     if (inputValue === '' && !filters) {
-      navigate('/')
-      setIsDisabled(true)
+      navigate('/');
+      setIsDisabled(true);
+      setIsScrollLocked(false); // Разблокируем скролл, если фильтры и поисковый запрос отсутствуют
     } else {
-      setIsDisabled(false)
+      setIsDisabled(false);
+      setIsScrollLocked(true); // Блокируем скролл, если фильтры или поисковый запрос есть
     }
-  }, [inputValue, filters])
+  }, [inputValue, filters, navigate]);
 
   useEffect(() => {
     if (isError) {
       setIsDisabled(false)
     }
   }, [isError])
+
+  useEffect(() => {
+    if (isScrollLocked) {
+      document.body.style.overflow = 'hidden'; // Блокируем скролл
+    } else {
+      document.body.style.overflow = 'auto'; // Разблокируем скролл
+    }
+
+    // Очистка при размонтировании компонента
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isScrollLocked]);
 
   useEffect(() => {
     if (inputValue || filters) {
@@ -140,6 +159,12 @@ export function Search(props: ISearch) {
     }
   }, [filters, inputValue])
 
+  // const btnSx = isMobile ? { marginTop: '20px', height: '40px', position: "absolut"} : 
+  // { marginTop: '20px', height: '40px'}
+
+  const btnSx = { marginTop: '20px', height: '40px', position: "fixed", bottom: "10vh", zIndex: 3}
+  console.log(isMobile)
+
   return (
     <Stack spacing={2} direction="column" sx={{marginTop: {xs: "10px", md: "20px"}}}>
       <Stack spacing={2} direction="row" sx={{ justifyContent: 'center' }}>
@@ -156,7 +181,7 @@ export function Search(props: ISearch) {
           onClick={handleClick}
           disabled={isDisabled}
           variant={filters ? 'contained' : 'outlined'}
-          sx={{ marginTop: '20px', height: '40px', display: {xs: "none", md: "inline-block"}}}
+          sx={btnSx}
         >
           {btnText}
         </Button>

@@ -5,11 +5,13 @@ import type {
   AutocompleteChangeReason,
   AutocompleteInputChangeReason,
 } from '@mui/material/Autocomplete'
+import SearchIcon from '@mui/icons-material/Search';
 import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 
 import type { IEquipmentItem } from '../../models/equipments'
+import { InputAdornment } from '@mui/material'
 
 interface ISearchInput {
   handleInputChange(
@@ -69,14 +71,20 @@ export default function SearchInput(props: ISearchInput) {
       renderInput={params => (
         <TextField
           {...params}
-          label="Поиск оборудования"
+          // label="Поиск оборудования"
           variant="outlined"
           sx={{ width: {xs: '90vw', md: "60vw"} }}
           autoFocus={true}
           onKeyDown={handleKeyDown}
           size="small"
+          placeholder='Поиск оборудования'
           InputProps={{
             ...params.InputProps,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
             endAdornment: (
               <React.Fragment>
                 {isLoading ? <CircularProgress color="inherit" size={20} /> : null}

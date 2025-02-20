@@ -76,6 +76,7 @@ export default function EquipmentFilters() {
               menuProps={MenuProps}
               selectedList={selectedList}
               label={label}
+              // sx={{margin}}
             />
           )
         })}
