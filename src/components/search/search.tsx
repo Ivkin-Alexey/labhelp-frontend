@@ -1,7 +1,7 @@
 import type { SyntheticEvent } from 'react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
-import { AutocompleteInputChangeReason, Theme, useMediaQuery } from '@mui/material'
+import { AutocompleteInputChangeReason, SxProps, Theme, useMediaQuery } from '@mui/material'
 import { Button, Stack, Typography } from '@mui/material'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -38,13 +38,15 @@ export function Search(props: ISearch) {
   const isAuth = useAppSelector(selectIsAuth)
   const login = useAppSelector(selectLogin)
 
-  const [add] = useAddTermToHistoryMutation()
+  // const [add] = useAddTermToHistoryMutation()
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isScrollLocked, setIsScrollLocked] = useState<boolean>(false);
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+  const [isFiltersVisible, setIsFiltersVisible] = useState<boolean>(!isMobile);
 
   const navigate = useNavigate()
   const location = useLocation()
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+
 
   useEffect(() => {
     const handleBackButton = (event: PopStateEvent) => {
@@ -59,7 +61,7 @@ export function Search(props: ISearch) {
     }
   }, [])
 
-  // const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
+  const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
 
   function navigateHelper() {
     if (location.pathname !== routes.search) {
@@ -69,9 +71,9 @@ export function Search(props: ISearch) {
     if (fetchEquipments) {
       fetchEquipments({ login, filters, searchTerm: inputValue, page: PAGE, pageSize: PAGE_SIZE })
     }
-    if (isAuth && inputValue) {
-      add({ login, term: inputValue })
-    }
+    // if (isAuth && inputValue) {
+    //   add({ login, term: inputValue })
+    // }
   }
 
   function handleInputChange(
@@ -82,11 +84,11 @@ export function Search(props: ISearch) {
     dispatch(setSearchTerm(inputValue))
   }
 
-  function handleSuggestChange(_e: SyntheticEvent, value: IEquipmentItem | null | string) {
-    if (value && typeof value === 'object') {
-      navigate('/' + value.id)
-    }
-  }
+  // function handleSuggestChange(_e: SyntheticEvent, value: IEquipmentItem | null | string) {
+  //   if (value && typeof value === 'object') {
+  //     navigate('/' + value.id)
+  //   }
+  // }
 
   function handleClick() {
     if (inputValue !== '' || filters) {
@@ -96,14 +98,18 @@ export function Search(props: ISearch) {
     }
   }
 
-  useEffect(() => {
-    if (inputValue === '' && !filters) {
-      navigate('/');
+  useLayoutEffect(() => {
+    if (filters) {
+      setIsScrollLocked(true);
+    } else {
+      setIsScrollLocked(false);
+    }
+  
+    if (!inputValue && !filters) {
       setIsDisabled(true);
-      setIsScrollLocked(false); // Разблокируем скролл, если фильтры и поисковый запрос отсутствуют
+      navigate('/');
     } else {
       setIsDisabled(false);
-      setIsScrollLocked(true); // Блокируем скролл, если фильтры или поисковый запрос есть
     }
   }, [inputValue, filters, navigate]);
 
@@ -113,18 +119,19 @@ export function Search(props: ISearch) {
     }
   }, [isError])
 
-  useEffect(() => {
-    if (isScrollLocked) {
-      document.body.style.overflow = 'hidden'; // Блокируем скролл
-    } else {
-      document.body.style.overflow = 'auto'; // Разблокируем скролл
-    }
+  // useEffect(() => {
+  //   console.log(isScrollLocked)
+  //   if (isScrollLocked) {
+  //     document.body.style.overflow = 'hidden'; // Блокируем скролл
+  //   } else {
+  //     document.body.style.overflow = 'auto'; // Разблокируем скролл
+  //   }
 
-    // Очистка при размонтировании компонента
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isScrollLocked]);
+  //   // Очистка при размонтировании компонента
+  //   return () => {
+  //     document.body.style.overflow = 'auto';
+  //   };
+  // }, [isScrollLocked]);
 
   useEffect(() => {
     if (inputValue || filters) {
@@ -133,11 +140,11 @@ export function Search(props: ISearch) {
     setIsDisabled(true)
   }, [])
 
-  // useEffect(() => {
-  //   if (debouncedValue) {
-  //     navigateHelper(debouncedValue)
-  //   }
-  // }, [debouncedValue])
+  useEffect(() => {
+    if (debouncedValue) {
+      navigateHelper()
+    }
+  }, [debouncedValue])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Enter') {
@@ -145,46 +152,50 @@ export function Search(props: ISearch) {
     }
   }
 
+  function handleFiltersVisibility() {
+    setIsFiltersVisible(prev => !prev)
+  }
+
   // const isDisabled = useMemo(() => {
   //   return false
   // }, [filters, inputValue])
 
-  const btnText = useMemo(() => {
-    if (filters && inputValue !== '') {
-      return 'Искать с фильтрами'
-    } else if (filters && inputValue === '') {
-      return 'Применить фильтры'
-    } else {
-      return 'Искать'
-    }
-  }, [filters, inputValue])
+  const btnSx: SxProps<Theme> = useMemo(() => isMobile ? { display: isDisabled ? "none" : "inline-flex", height: '35px', position: "fixed", bottom: "10vh", zIndex: 3} : 
+  { marginTop: '20px', height: '40px'}, [isMobile, isDisabled])
 
-  // const btnSx = isMobile ? { marginTop: '20px', height: '40px', position: "absolut"} : 
-  // { marginTop: '20px', height: '40px'}
+  // const btnText = useMemo(() => {
+  //   if (filters && inputValue !== '') {
+  //     return 'Искать с фильтрами'
+  //   } else if (filters && inputValue === '') {
+  //     return 'Применить фильтры'
+  //   } else {
+  //     return 'Искать'
+  //   }
+  // }, [filters, inputValue])
 
-  const btnSx = { marginTop: '20px', height: '40px', position: "fixed", bottom: "10vh", zIndex: 3}
-  console.log(isMobile)
+  const btnText = "Применить фильтры"
 
   return (
     <Stack spacing={2} direction="column" sx={{marginTop: {xs: "10px", md: "20px"}}}>
       <Stack spacing={2} direction="row" sx={{ justifyContent: 'center' }}>
         <SearchInput
           handleInputChange={handleInputChange}
-          handleChange={handleSuggestChange}
+          // handleChange={handleSuggestChange}
           handleKeyDown={handleKeyDown}
           list={list}
           isLoading={isLoading}
           inputValue={inputValue}
           value={null}
         />
-        <Button
+              {/* <Button
           onClick={handleClick}
           disabled={isDisabled}
           variant={filters ? 'contained' : 'outlined'}
           sx={btnSx}
+          disableElevation
         >
           {btnText}
-        </Button>
+        </Button> */}
       </Stack>
       <EquipmentFilters />
     </Stack>

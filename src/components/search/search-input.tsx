@@ -19,11 +19,11 @@ interface ISearchInput {
     value: string,
     reason: AutocompleteInputChangeReason,
   ): void
-  handleChange(
-    e: SyntheticEvent<Element, Event>,
-    value: IEquipmentItem | null | string,
-    reason: AutocompleteChangeReason,
-  ): void
+  // handleChange(
+  //   e: SyntheticEvent<Element, Event>,
+  //   value: IEquipmentItem | null | string,
+  //   reason: AutocompleteChangeReason,
+  // ): void
   handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>): void
   list: IEquipmentItem[]
   isLoading: boolean
@@ -32,7 +32,7 @@ interface ISearchInput {
 }
 
 export default function SearchInput(props: ISearchInput) {
-  const { handleInputChange, handleChange, handleKeyDown, list, isLoading, inputValue, value } =
+  const { handleInputChange, handleKeyDown, list, isLoading, inputValue, value } =
     props
 
   const [isOpen, setIsOpen] = useState(!!inputValue)
@@ -61,7 +61,7 @@ export default function SearchInput(props: ISearchInput) {
       open={isOpen}
       options={list}
       loading={isLoading}
-      onChange={handleChange}
+      // onChange={handleChange}
       onBlur={handleBlur}
       onFocus={handleFocus}
       onInputChange={handleInputChange}
@@ -73,7 +73,7 @@ export default function SearchInput(props: ISearchInput) {
           {...params}
           // label="Поиск оборудования"
           variant="outlined"
-          sx={{ width: {xs: '90vw', md: "60vw"} }}
+          sx={{ width: {xs: '89vw', sm: "40vw"} }}
           autoFocus={true}
           onKeyDown={handleKeyDown}
           size="small"

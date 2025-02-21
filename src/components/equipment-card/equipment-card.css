@@ -1,3 +1,9 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
 .cardText {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -17,16 +23,25 @@
 .cardActionArea .cardMediaWrapper {
   display: flex;
   justify-content: center;
-  height: 180px;
   width: 100%;
   margin: 0 auto;
 }
 
+.cardMediaWrapper {
+  box-sizing: border-box
+}
+
 .cardActionArea .cardMediaWrapper img {
   object-fit: contain;
+  width: 90%;
 }
 
 .cardStatus {
   position: absolute;
   top: 20px;
+}
+
+.cardActions {
+  display: flex;
+  justify-content: right;
 }

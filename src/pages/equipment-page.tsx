@@ -35,8 +35,6 @@ export default function EquipmentPage() {
     return <h3>Произошла ошибка</h3>
   }
 
-  console.log(data)
-
   if (data) {
     let {
       id,

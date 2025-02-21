@@ -1,8 +1,10 @@
 import MenuIcon from '@mui/icons-material/Menu';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import { Box, IconButton, Drawer, List, ListItem, Typography } from '@mui/material';
 import { useState } from 'react';
 
 import type { Route } from '../../models/routes';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 interface IBurgerMenu {
   handleCloseNavMenu: (path: string) => void;
@@ -14,6 +16,12 @@ interface IBurgerMenu {
 export default function BurgerMenu(props: IBurgerMenu) {
   const { handleCloseNavMenu, handleOpenNavMenu, list } = props;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate()
+
+  const handleGoBack = () => {
+    handleCloseMenu()
+    navigate(-1)
+  };
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     handleOpenNavMenu(event)
@@ -50,6 +58,18 @@ export default function BurgerMenu(props: IBurgerMenu) {
         }}
       >
         <List>
+        <ListItem
+            button
+            onClick={handleGoBack}
+            sx={{
+              borderBottom: '1px solid #e0e0e0', 
+            }}
+          >
+            <ArrowBackIosIcon />
+            <Typography textAlign="left" variant="h5">
+              Назад
+            </Typography>
+          </ListItem>
           {list.map((page) => (
             <ListItem
               button

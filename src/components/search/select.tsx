@@ -22,7 +22,7 @@ interface IProps {
 export default function Select(props: IProps) {
   const { options, handleChange, menuProps, selectedList, label, name } = props
   return (
-    <FormControl size="small" sx={{ width: {xs: "44vw", md: "170px"} }}>
+    <FormControl size="small" sx={{ width: {xs: "44vw", sm: "170px"}, marginTop: "4px"}}>
       <InputLabel id={name}>{label}</InputLabel>
       <MUISelect
         autoWidth

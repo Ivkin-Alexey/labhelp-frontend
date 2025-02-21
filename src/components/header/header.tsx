@@ -77,9 +77,9 @@ function Header() {
     setAnchorElUser(event.currentTarget)
   }
 
-  const handleCloseNavMenu = (path: string) => {
+  const handleCloseNavMenu = (path: string | number) => {
     setAnchorElNav(null)
-    navigate(path)
+    navigate(-1)
   }
 
   const handleCloseUserMenu = () => {
