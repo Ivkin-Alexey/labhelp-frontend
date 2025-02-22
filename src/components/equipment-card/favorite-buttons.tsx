@@ -52,7 +52,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         <StarRoundedIcon />
       </IconButton>
     ) : (
-      <Button color="primary" onClick={handleDelete} sx={{ padding: '6px 8px' }}>
+      <Button color="primary" onClick={handleDelete} sx={{alignSelf: "self-start"}}>
         Удалить из избранного
       </Button>
     )
@@ -64,7 +64,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         <StarBorderRoundedIcon />
       </IconButton>
     ) : (
-      <Button color="primary" onClick={handleAdd} sx={{ padding: '6px 8px' }}>
+      <Button color="primary" onClick={handleAdd} sx={{alignSelf: "self-start"}}>
         В избранное
       </Button>
     )

@@ -28,7 +28,8 @@
 }
 
 .cardMediaWrapper {
-  box-sizing: border-box
+  box-sizing: border-box;
+
 }
 
 .cardActionArea .cardMediaWrapper img {
@@ -44,4 +45,10 @@
 .cardActions {
   display: flex;
   justify-content: right;
+}
+
+@media(width < 600px) {
+  .cardActionArea .cardMediaWrapper {
+    height: 130px;
+  }
 }
