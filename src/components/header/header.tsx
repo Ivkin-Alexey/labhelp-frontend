@@ -73,13 +73,14 @@ function Header() {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
 
-  const handleCloseNavMenu = (path: string | number) => {
+  const handleCloseNavMenu = (path: string) => {
     setAnchorElNav(null)
-    navigate(-1)
+    navigate(path)
   }
 
   const handleCloseUserMenu = () => {

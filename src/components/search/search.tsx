@@ -42,11 +42,9 @@ export function Search(props: ISearch) {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isScrollLocked, setIsScrollLocked] = useState<boolean>(false);
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-  const [isFiltersVisible, setIsFiltersVisible] = useState<boolean>(!isMobile);
 
   const navigate = useNavigate()
   const location = useLocation()
-
 
   useEffect(() => {
     const handleBackButton = (event: PopStateEvent) => {
@@ -152,28 +150,18 @@ export function Search(props: ISearch) {
     }
   }
 
-  function handleFiltersVisibility() {
-    setIsFiltersVisible(prev => !prev)
-  }
-
-  // const isDisabled = useMemo(() => {
-  //   return false
-  // }, [filters, inputValue])
-
   const btnSx: SxProps<Theme> = useMemo(() => isMobile ? { display: isDisabled ? "none" : "inline-flex", height: '35px', position: "fixed", bottom: "10vh", zIndex: 3} : 
   { marginTop: '20px', height: '40px'}, [isMobile, isDisabled])
 
-  // const btnText = useMemo(() => {
-  //   if (filters && inputValue !== '') {
-  //     return 'Искать с фильтрами'
-  //   } else if (filters && inputValue === '') {
-  //     return 'Применить фильтры'
-  //   } else {
-  //     return 'Искать'
-  //   }
-  // }, [filters, inputValue])
-
-  const btnText = "Применить фильтры"
+  const btnText = useMemo(() => {
+    if (filters && inputValue !== '') {
+      return 'Искать с фильтрами'
+    } else if (filters && inputValue === '') {
+      return 'Применить фильтры'
+    } else {
+      return 'Искать'
+    }
+  }, [filters, inputValue])
 
   return (
     <Stack spacing={2} direction="column" sx={{marginTop: {xs: "10px", md: "20px"}}}>
