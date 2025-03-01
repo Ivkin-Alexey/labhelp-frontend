@@ -56,6 +56,7 @@ export default function MainPage() {
           flexDirection: 'column',
           alignItems: 'center',
           minWidth: '80vw',
+          flex: '1 0 auto',
         }}
       >
         <Search />

@@ -2,6 +2,12 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
+    h1: {
+      fontSize: '2rem', // Размер шрифта по умолчанию для h5
+      '@media (max-width:600px)': {
+        fontSize: '1.5rem', // Размер шрифта для экранов меньше 600px
+      },
+    },
     h5: {
       fontSize: '1.5rem', // Размер шрифта по умолчанию для h5
       '@media (max-width:600px)': {
