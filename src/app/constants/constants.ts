@@ -26,6 +26,7 @@ export const routes = {
   admin: '/admin',
   userProfile: '/admin/:login',
   '404': '/404',
+  contacts: '/contacts'
 }
 
 export const apiRoutes = {

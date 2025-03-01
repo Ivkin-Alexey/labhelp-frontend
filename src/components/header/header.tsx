@@ -62,7 +62,7 @@ function Header() {
       path: 'https://nauka.spmi.ru/',
       isRedirect: true,
     },
-    { title: 'Контакты', path: routes[404] },
+    { title: 'Контакты', path: routes.contacts },
     { title: 'Избранное оборудование', path: routes.favorites },
   ]
 
