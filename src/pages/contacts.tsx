@@ -6,7 +6,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import { YMaps, Map, ZoomControl, Placemark } from '@pbe/react-yandex-maps';
 
 export default function ContactsPage() {
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
   return (
     <Container
       sx={{
@@ -58,7 +58,7 @@ export default function ContactsPage() {
         <Box sx={{height: isMobile ? '100%' : '80%'}}>
           <YMaps>
             <Map defaultState={{center: [59.930161, 30.268519], zoom: 16}} width={"100%"} height={"100%"}>
-              <ZoomControl options={{float: "right"}}/>
+              <ZoomControl />
               <Placemark geometry={[59.930161, 30.268519]}/>
             </Map>
           </YMaps>
