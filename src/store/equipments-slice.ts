@@ -5,6 +5,7 @@ import type { IEquipmentsState } from '../models/store'
 const initialState: IEquipmentsState = {
   searchTerm: '',
   searchFilters: null,
+  searchQueryParams: '',
   favoriteList: [],
 }
 
@@ -26,8 +27,12 @@ export const equipmentSlice = createSlice({
     setSearchFilters: (state, { payload: filterState }) => {
       state.searchFilters = filterState
     },
+    setSearchQueryParams: (state, { payload: searchQueryParams }) => {
+      state.searchQueryParams = searchQueryParams
+    },
     clearEquipmentSearch: state => {
       state.searchFilters = null
+      state.searchQueryParams = ''
       state.searchTerm = ''
     },
   },
@@ -36,6 +41,7 @@ export const equipmentSlice = createSlice({
 export const {
   setSearchTerm,
   setSearchFilters,
+  setSearchQueryParams,
   clearEquipmentSearch,
   addToFavorite,
   deleteFromFavorite,

@@ -1,6 +1,8 @@
 import { Suspense, useEffect, useMemo } from 'react'
+import React from 'react'
 
-import { Container, Theme, Typography, useMediaQuery } from '@mui/material'
+import type { Theme} from '@mui/material';
+import { Container, Typography, useMediaQuery } from '@mui/material'
 
 import { DEFAULT_SEARCH_TERM } from '../app/constants/constants'
 import { useAppSelector } from '../app/hooks/hooks'
@@ -10,7 +12,6 @@ import { Search } from '../components/search/search'
 import { useFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
 import { useLazyCheckTokenQuery } from '../store/api/users-api'
 import { selectFavoriteEquipmentsFromLS, selectIsAuth, selectLogin } from '../store/selectors'
-import React from 'react'
 import theme from '../theme'
 const Carousel = React.lazy(() => import('../components/carousel/carousel'))
 
@@ -41,7 +42,7 @@ export default function MainPage() {
     : []
 
     function renderCarousel() {
-      if(isMobile) return null
+      if(isMobile) {return null}
       return(<Suspense fallback={<div>Загрузка карусели...</div>}>
        <Carousel />
       </Suspense>)
@@ -49,7 +50,7 @@ export default function MainPage() {
 
   return (
     <>
-      {renderCarousel()}
+      {/* {renderCarousel()} */}
       <Container
         sx={{
           display: 'flex',
