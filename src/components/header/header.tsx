@@ -88,6 +88,7 @@ function Header() {
   }
 
   function navigateToMainPage() {
+    if(location.pathname === routes.main) return
     dispatch(clearEquipmentSearch())
     navigate(routes.main)
   }

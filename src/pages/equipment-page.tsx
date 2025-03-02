@@ -83,12 +83,11 @@ export default function EquipmentPage() {
         <Button
           variant="text"
           onClick={() => navigate(-1)}
-          sx={{ alignSelf: 'flex-start', margin: '10px', display: {xs: "inline-flex", sm: "none"}}}
+          sx={{ alignSelf: 'flex-start', margin: '10px', display: {sm: "inline-flex", md: "none"}}}
         >
                       <ArrowBackIosIcon />
               Назад
         </Button>
-
         <Box sx={{ position: 'relative', marginBottom: '40px', margin: '0 10px' }}>
           <OperateStatus isOperate={isOperate} label={label} />
           <img
@@ -99,6 +98,7 @@ export default function EquipmentPage() {
               display: 'block',
               marginBottom: '10px',
               maxWidth: '100%',
+              maxHeight: "50vh"
             }}
           />
           <Typography gutterBottom variant="h5" component="div">

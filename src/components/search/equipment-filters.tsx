@@ -17,6 +17,7 @@ const MenuProps = {
       maxHeight: ITEM_HEIGHT * 8 + ITEM_PADDING_TOP,
     },
   },
+  disableScrollLock: true,
 }
 
 export const type = typeof MenuProps
@@ -71,6 +72,7 @@ export default function EquipmentFilters() {
 
           return (
             <Select
+
               key={name}
               name={name}
               options={options}

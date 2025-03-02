@@ -15,6 +15,7 @@ export const preloadedState: IState = {
   equipments: {
     favoriteList: favoriteList ? JSON.parse(favoriteList) : [],
     searchFilters: null,
+    searchQueryParams: "",
     searchTerm: '',
   },
 }

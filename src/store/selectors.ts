@@ -1,5 +1,7 @@
 import type { RootState } from './store'
 
+export const selectState = (state: RootState) => state
+
 export const selectLogin = (state: RootState) => state.account.accountData?.login
 
 export const selectAccount = (state: RootState) => state.account
@@ -15,3 +17,5 @@ export const selectFavoriteEquipmentsFromLS = (state: RootState) => state.equipm
 export const selectEquipmentSearchFilters = (state: RootState) => state.equipments.searchFilters
 
 export const selectEquipmentSearchTerm = (state: RootState) => state.equipments.searchTerm
+
+export const selectEquipmentSearchQueryParams = (state: RootState) => state.equipments.searchQueryParams
