@@ -160,6 +160,7 @@ export function Search(props: ISearch) {
       return
     }
     if (!filters && !inputValue && location.pathname === routes.search) {
+      // eslint-disable-next-line no-restricted-globals
       history.replaceState(null, '', location.pathname)
       return
     } else {
@@ -214,7 +215,7 @@ export function Search(props: ISearch) {
           </Button>
         )}
       </Stack>
-      <EquipmentFilters onOpenChange={setFiltersOpen} />
+      <EquipmentFilters />
     </Stack>
   )
 }
