@@ -12,15 +12,74 @@ const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 function renderLogoGroup() {
   if(!isMobile) {
     return (
-    <>
-    <img src={ckpLogo} alt="#" className="logo_ckp" />
-      <Stack direction="row" spacing={2} className="logo_company">
-        <Typography className="title" sx={{display: {xs: 'none', sm: 'block' }}}>САНКТ-ПЕТЕРБУРГСКИЙ ГОРНЫЙ УНИВЕРСИТЕТ</Typography>
-        <img src={companyLogo} alt="#" className="logo" />
-        <Typography className="title" sx={{display: { xs: 'none', sm: 'block' }}}>SAINT-PETERSBURG MINING UNIVERSITY</Typography>
-      </Stack>
-      <div className="logo_ckp"></div>
-      </>
+      <Stack 
+      direction="row" 
+      alignItems="center" 
+      justifyContent="space-between"
+      sx={{ width: '100%' }}
+    >
+  <Box className="logo_ckp" >
+  <img 
+  src={ckpLogo} 
+  alt="#" 
+  onClick={(e) => {
+    e.preventDefault();
+    window.open("https://spmi.ru/node/18810", "_blank");
+  }}
+  style={{ 
+    width: 'auto',
+    height: '45px',
+    cursor: "pointer"
+  }}
+/></Box>
+      
+      <Stack 
+        direction="row" 
+        spacing={2} 
+        className="logo_company"
+        sx={{
+          flex: 4, // Основное пространство для центрального блока
+          alignItems: 'center',
+          mx: 2 // Отступы по бокам
+        }}
+      >
+  <Typography 
+    className="title" 
+    sx={{
+      display: { xs: 'none', sm: 'block' },
+      flex: 1, // Занимает равное пространство
+      textAlign: 'right', // Выравнивание текста по правому краю
+      pr: 2 // Отступ справа для визуального разделения
+    }}
+  >
+    САНКТ-ПЕТЕРБУРГСКИЙ ГОРНЫЙ УНИВЕРСИТЕТ
+  </Typography>
+
+  <img 
+    src={companyLogo} 
+    alt="#" 
+    className="logo" 
+    style={{ flexShrink: 0 }} // Запрет на сжатие изображения
+  />
+
+  <Typography 
+    className="title" 
+    sx={{
+      display: { xs: 'none', sm: 'block' },
+      flex: 1, // Занимает равное пространство
+      textAlign: 'left', // Выравнивание текста по левому краю
+      pl: 2 // Отступ слева для визуального разделения
+    }}
+  >
+    SAINT-PETERSBURG MINING UNIVERSITY
+  </Typography>
+  </Stack>
+
+<div 
+  className="logo_ckp" 
+  style={{ flex: 1, maxWidth: '100%' }}
+/>
+</Stack>
       )
   } else {
     return (

@@ -15,7 +15,7 @@
 
 .logo_ckp {
   height: 50px;
-  width: 150px;
+  flex: 1
 }
 
 .logo_company {

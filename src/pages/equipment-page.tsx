@@ -73,7 +73,7 @@ export default function EquipmentPage() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           backgroundColor: color,
           overflowX: 'hidden',
           marginBottom: "20px",
@@ -88,7 +88,7 @@ export default function EquipmentPage() {
                       <ArrowBackIosIcon />
               Назад
         </Button>
-        <Box sx={{ position: 'relative', marginBottom: '40px', margin: '0 10px' }}>
+        <Box sx={{ position: 'relative', marginBottom: '40px', margin: '0 0', padding: "8px", width: {sm: "80%", md: "100%"}}}>
           <OperateStatus isOperate={isOperate} label={label} />
           <img
             src={imgUrl}
@@ -98,7 +98,7 @@ export default function EquipmentPage() {
               display: 'block',
               marginBottom: '10px',
               maxWidth: '100%',
-              maxHeight: "50vh"
+              maxHeight: "35vh"
             }}
           />
           <Typography gutterBottom variant="h5" component="div">

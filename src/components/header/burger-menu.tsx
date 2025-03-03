@@ -4,7 +4,7 @@ import { Box, IconButton, Drawer, List, ListItem, Typography } from '@mui/materi
 import { useState } from 'react';
 
 import type { Route } from '../../models/routes';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, redirect, useNavigate } from 'react-router-dom';
 
 interface IBurgerMenu {
   handleCloseNavMenu: (path: string) => void;
@@ -73,10 +73,19 @@ export default function BurgerMenu(props: IBurgerMenu) {
           {list.map((page) => (
             <ListItem
               button
+              href={page.path}
               key={page.title}
               onClick={() => {
-                handleCloseNavMenu(page.path)
-                handleCloseMenu()
+                if (page?.isRedirect) {
+                  // Для внешних URL
+                  window.location.href = page.path; 
+                  // Или открыть в новой вкладке:
+                  // window.open(page.path, "_blank");
+                } else {
+                  // Для внутренних путей SPA
+                  handleCloseNavMenu(page.path);
+                }
+                handleCloseMenu();
               }}
             >
               <Typography textAlign="left" variant='h5'>{page.title}</Typography>
