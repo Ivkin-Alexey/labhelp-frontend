@@ -50,7 +50,7 @@ export default function MainPage() {
 
   return (
     <>
-      {/* {renderCarousel()} */}
+      {renderCarousel()}
       <Container
         sx={{
           display: 'flex',
