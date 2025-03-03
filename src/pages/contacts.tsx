@@ -17,7 +17,7 @@ export default function ContactsPage() {
         flex: '1 0 auto',
       }}
     >
-      <Typography variant="h1" sx={{margin: isMobile ? '20px 0' : '20px 0 0' }}>Контакты</Typography>
+      <Typography variant="h5" sx={{margin: isMobile ? '20px 0' : '20px 0 0' }}>Контакты</Typography>
       <Box sx={{
         display: 'grid',
         gridTemplateColumns: isMobile ? '1fr' : '55% 45%',
@@ -25,6 +25,7 @@ export default function ContactsPage() {
         height: '100%',
         alignItems: 'center',
         paddingBottom: '36px',
+        marginTop: "10px"
         // gap: '20px'
       }}>
         <Box sx={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
@@ -40,24 +41,39 @@ export default function ContactsPage() {
           </Typography>
           <Typography variant="body2">Телефон: +7 (812) 328-84-36</Typography>
           <div>
-            <IconButton href="https://spmi.ru/node/18810" aria-label="Ссылка на сайт" target="_blank"
-                        title="Ссылка на сайт">
+          <IconButton 
+              aria-label="Ссылка на сайт"
+              title="Ссылка на сайт"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open("https://spmi.ru/node/18810", "_blank");
+              }}
+            >
               <LanguageIcon/>
             </IconButton>
-            <IconButton href="tel:+7 (812) 328-84-36" aria-label="Номер телефона" target="_blank"
-                        title="Номер телефона">
+
+            <IconButton 
+              aria-label="Номер телефона"
+              title="Номер телефона"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open("tel:+7 (812) 328-84-36", "_blank");
+              }}
+            >
               <LocalPhoneIcon/>
             </IconButton>
             <IconButton
-              href="mailto:ckp@spmi.ru?subject=Добрый день! Прошу Вас помочь с выбором оборудования"
-              aria-label="Почта" target="_blank" title="Почта">
+              aria-label="Почта" title="Почта"               onClick={(e) => {
+                e.preventDefault();
+                window.open("mailto:ckp@spmi.ru?subject=Добрый день! Прошу Вас помочь с выбором оборудования", "_blank");
+              }}>
               <EmailIcon/>
             </IconButton>
           </div>
         </Box>
         <Box sx={{height: isMobile ? '100%' : '80%'}}>
           <YMaps>
-            <Map defaultState={{center: [59.930161, 30.268519], zoom: 16}} width={"100%"} height={"100%"}>
+            <Map defaultState={{center: [59.930161, 30.268519], zoom: 16}} width={"100%"} height={"50vh"}>
               <ZoomControl />
               <Placemark geometry={[59.930161, 30.268519]}/>
             </Map>
