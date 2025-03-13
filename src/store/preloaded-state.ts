@@ -17,5 +17,6 @@ export const preloadedState: IState = {
     searchFilters: null,
     searchQueryParams: "",
     searchTerm: '',
+    searchResultPage: null
   },
 }
