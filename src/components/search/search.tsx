@@ -27,8 +27,10 @@ import {
   selectEquipmentSearchTerm,
   selectIsAuth,
   selectLogin,
+  selectSearchResultPage,
   selectState,
 } from '../../store/selectors'
+import { useDispatch } from 'react-redux'
 
 interface ISearch {
   list?: IEquipmentItem[] | undefined
@@ -52,6 +54,7 @@ export function Search(props: ISearch) {
   const isAuth = useAppSelector(selectIsAuth)
   const login = useAppSelector(selectLogin)
   const searchQueryParams = useAppSelector(selectEquipmentSearchQueryParams)
+  const savedPage = useAppSelector(selectSearchResultPage)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isAnyFilterOpen, setIsAnyFilterOpen] = useState(false)
@@ -80,11 +83,9 @@ export function Search(props: ISearch) {
       initialRender.current = false
       const searchParams = location.search
       const { term, filters: initialFilters } = decodeQueryParams(searchParams)
-
       if (term) {
         dispatch(setSearchTerm(term))
       }
-
       if (initialFilters != null) {
         dispatch(setSearchFilters(initialFilters))
       }
@@ -110,7 +111,7 @@ export function Search(props: ISearch) {
       login,
       ...(filters && { filters }),
       searchTerm: inputValue,
-      page: PAGE,
+      page: savedPage || PAGE,
       pageSize: PAGE_SIZE,
     })
   }, [])

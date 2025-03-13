@@ -16,4 +16,5 @@ export interface IEquipmentsState {
   searchFilters: null | any
   favoriteList: string[]
   searchQueryParams: null | string
+  searchResultPage: null | number
 }

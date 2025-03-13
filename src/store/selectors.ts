@@ -18,4 +18,6 @@ export const selectEquipmentSearchFilters = (state: RootState) => state.equipmen
 
 export const selectEquipmentSearchTerm = (state: RootState) => state.equipments.searchTerm
 
+export const selectSearchResultPage = (state: RootState) => state.equipments.searchResultPage
+
 export const selectEquipmentSearchQueryParams = (state: RootState) => state.equipments.searchQueryParams

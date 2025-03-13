@@ -7,6 +7,7 @@ const initialState: IEquipmentsState = {
   searchFilters: null,
   searchQueryParams: '',
   favoriteList: [],
+  searchResultPage: null
 }
 
 export const equipmentSlice = createSlice({
@@ -35,6 +36,9 @@ export const equipmentSlice = createSlice({
       state.searchQueryParams = ''
       state.searchTerm = ''
     },
+    setSearchResultPage: (state, { payload: page }) => {
+      state.searchResultPage = page
+    },
   },
 })
 
@@ -42,6 +46,7 @@ export const {
   setSearchTerm,
   setSearchFilters,
   setSearchQueryParams,
+  setSearchResultPage,
   clearEquipmentSearch,
   addToFavorite,
   deleteFromFavorite,

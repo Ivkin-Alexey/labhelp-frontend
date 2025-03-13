@@ -6,7 +6,7 @@ export const SEARCH_DELAY = 1000 // ms
 
 export const PAGE = 1
 
-export const PAGE_SIZE = 50
+export const PAGE_SIZE = 40
 
 export const SEARCH_SUGGEST_NUMBER = 5
 
