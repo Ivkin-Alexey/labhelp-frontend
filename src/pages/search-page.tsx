@@ -78,7 +78,7 @@ export default function SearchPage() {
           isError={isError}
         />
       </Box>
-      {isPaginationVisible && <Pagination sx={{mb: "20px"}} page={data.page} count={count} color="primary" onChange={handlePageChange}/>}
+      {isPaginationVisible && <Pagination sx={{mb: "20px"}} page={data?.page} count={count} color="primary" onChange={handlePageChange}/>}
     </Container>
   )
 }
