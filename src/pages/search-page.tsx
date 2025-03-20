@@ -31,7 +31,7 @@ export default function SearchPage() {
   const login = useAppSelector(selectLogin)
 
   const count = data?.totalCount ? Math.ceil(data.totalCount/PAGE_SIZE) : undefined
-  const isPaginationVisible = data?.totalCount && data?.totalCount > PAGE_SIZE && !isFetching && !isLoading
+  const isPaginationVisible = Boolean(data?.totalCount && data?.totalCount > PAGE_SIZE && !isFetching && !isLoading)
 
   const transformedList = data
     ? data.results.map(el => {
