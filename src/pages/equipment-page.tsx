@@ -102,6 +102,9 @@ export default function EquipmentPage() {
             }}
           />
           <Typography gutterBottom variant="h5" component="div">
+            ID: {id}
+          </Typography>
+          <Typography gutterBottom variant="h5" component="div">
             {name + ' ' + model}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
