@@ -5,11 +5,13 @@ import type {
   AutocompleteChangeReason,
   AutocompleteInputChangeReason,
 } from '@mui/material/Autocomplete'
+import SearchIcon from '@mui/icons-material/Search';
 import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 
 import type { IEquipmentItem } from '../../models/equipments'
+import { InputAdornment } from '@mui/material'
 
 interface ISearchInput {
   handleInputChange(
@@ -17,11 +19,11 @@ interface ISearchInput {
     value: string,
     reason: AutocompleteInputChangeReason,
   ): void
-  handleChange(
-    e: SyntheticEvent<Element, Event>,
-    value: IEquipmentItem | null | string,
-    reason: AutocompleteChangeReason,
-  ): void
+  // handleChange(
+  //   e: SyntheticEvent<Element, Event>,
+  //   value: IEquipmentItem | null | string,
+  //   reason: AutocompleteChangeReason,
+  // ): void
   handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>): void
   list: IEquipmentItem[]
   isLoading: boolean
@@ -30,7 +32,7 @@ interface ISearchInput {
 }
 
 export default function SearchInput(props: ISearchInput) {
-  const { handleInputChange, handleChange, handleKeyDown, list, isLoading, inputValue, value } =
+  const { handleInputChange, handleKeyDown, list, isLoading, inputValue, value } =
     props
 
   const [isOpen, setIsOpen] = useState(!!inputValue)
@@ -59,7 +61,7 @@ export default function SearchInput(props: ISearchInput) {
       open={isOpen}
       options={list}
       loading={isLoading}
-      onChange={handleChange}
+      // onChange={handleChange}
       onBlur={handleBlur}
       onFocus={handleFocus}
       onInputChange={handleInputChange}
@@ -69,14 +71,20 @@ export default function SearchInput(props: ISearchInput) {
       renderInput={params => (
         <TextField
           {...params}
-          label="Оборудование"
+          // label="Поиск оборудования"
           variant="outlined"
-          sx={{ width: '40vw' }}
+          sx={{ width: {xs: '89vw', sm: "40vw"} }}
           autoFocus={true}
           onKeyDown={handleKeyDown}
           size="small"
+          placeholder='Поиск оборудования'
           InputProps={{
             ...params.InputProps,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
             endAdornment: (
               <React.Fragment>
                 {isLoading ? <CircularProgress color="inherit" size={20} /> : null}

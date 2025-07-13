@@ -1,8 +1,12 @@
-export const BASE_URL = 'https://scmp-bot-server.ru/'
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const DEFAULT_SEARCH_TERM = 'Печи'
+export const DEFAULT_SEARCH_TERM = 'спектрометр'
 
 export const SEARCH_DELAY = 1000 // ms
+
+export const PAGE = 1
+
+export const PAGE_SIZE = 40
 
 export const SEARCH_SUGGEST_NUMBER = 5
 
@@ -21,6 +25,8 @@ export const routes = {
   operatingEquipments: '/operating-equipments',
   admin: '/admin',
   userProfile: '/admin/:login',
+  '404': '/404',
+  contacts: '/contacts'
 }
 
 export const apiRoutes = {
@@ -28,7 +34,7 @@ export const apiRoutes = {
     users: {
       userData: '/users/',
       users: '/users',
-      isTokenValid: '/users/token'
+      isTokenValid: '/users/token',
     },
     equipments: {
       equipments: '/equipments',

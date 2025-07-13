@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../../app/constants/constants'
 import { useAppSelector } from '../../app/hooks/hooks'
 import type { equipmentId } from '../../models/equipments'
-import { useAddOperatingEquipmentMutation, useDeleteOperatingEquipmentMutation } from '../../store/api/equipment/operate-equipment'
+import {
+  useAddOperatingEquipmentMutation,
+  useDeleteOperatingEquipmentMutation,
+} from '../../store/api/equipment/operate-equipment'
 import { useDeletePersonMutation } from '../../store/api/users-api'
 import { selectAccount } from '../../store/selectors'
 

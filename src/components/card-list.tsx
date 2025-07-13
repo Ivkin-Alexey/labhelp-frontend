@@ -17,7 +17,7 @@ export default function CardList(props: ICardList) {
   const { isError, isLoading, list, Component } = props
 
   if (isLoading || !Component) {
-    return <Circular/>
+    return <Circular />
   }
 
   if (isError) {

@@ -1,3 +1,9 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
 .cardText {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -9,22 +15,26 @@
 
 .cardActionArea {
   position: relative;
-  width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
 .cardActionArea .cardMediaWrapper {
-    display: flex;
-    width: 180px;
-    height: 180px;
-    margin: 0 auto;
-    padding: 5px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
 }
 
-.cardActionArea .cardMediaWrapper img{
-    object-fit: contain;
+.cardMediaWrapper {
+  box-sizing: border-box;
+
+}
+
+.cardActionArea .cardMediaWrapper img {
+  object-fit: contain;
+  width: 90%;
 }
 
 .cardStatus {
@@ -32,5 +42,13 @@
   top: 20px;
 }
 
+.cardActions {
+  display: flex;
+  justify-content: right;
+}
 
-
+@media(width < 600px) {
+  .cardActionArea .cardMediaWrapper {
+    height: 130px;
+  }
+}

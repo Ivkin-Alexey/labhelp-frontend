@@ -20,9 +20,9 @@ interface IProps {
 }
 
 export default function Select(props: IProps) {
-    const { options, handleChange, menuProps, selectedList, label, name } = props
+  const { options, handleChange, menuProps, selectedList, label, name } = props
   return (
-    <FormControl size="small" sx={{ width: "170px" }}>
+    <FormControl size="small" sx={{ width: {xs: "44vw", sm: "170px"}, marginTop: "4px"}}>
       <InputLabel id={name}>{label}</InputLabel>
       <MUISelect
         autoWidth
@@ -38,9 +38,15 @@ export default function Select(props: IProps) {
         variant="filled"
       >
         {options.map(el => (
-          <MenuItem key={el} value={el} sx={{ width: "auto" }}>
+          <MenuItem key={el} value={el} sx={{ width: 'auto' }}>
             <Checkbox checked={selectedList.includes(el)} />
-            <ListItemText primary={el} />
+            <ListItemText primary={el} primaryTypographyProps={{
+    sx: { 
+      fontSize: {xs: '0.8rem', md: "1rem"},
+      whiteSpace: 'normal',  // Разрешаем перенос по словам
+    wordWrap: 'break-word'
+    }
+  }}/>
           </MenuItem>
         ))}
       </MUISelect>

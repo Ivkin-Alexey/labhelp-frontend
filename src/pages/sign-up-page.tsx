@@ -19,7 +19,7 @@ export default function SignUpPage() {
   const dispatch = useAppDispatch()
 
   const handleSubmit = (data: IFormValues) => {
-    const { login, password }  = data
+    const { login, password } = data
     setSavedLogin(login)
     signup({ login, password, data })
   }

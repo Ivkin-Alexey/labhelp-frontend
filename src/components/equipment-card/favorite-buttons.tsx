@@ -3,13 +3,13 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded'
 import { Button, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
-import { routes } from '../../app/constants/constants'
-import { useAppSelector } from '../../app/hooks/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
 import type { equipmentId } from '../../models/equipments'
 import {
   useAddFavoriteEquipmentMutation,
   useDeleteFavoriteEquipmentMutation,
 } from '../../store/api/equipment/equipments-api'
+import { addToFavorite, deleteFromFavorite } from '../../store/equipments-slice'
 import { selectIsAuth, selectLogin } from '../../store/selectors'
 
 interface IFavoriteButtons {
@@ -21,26 +21,29 @@ interface IFavoriteButtons {
 export default function FavoriteButtons(props: IFavoriteButtons) {
   const { isFavorite = false, equipmentId, isCardMode } = props
 
-  const [add] = useAddFavoriteEquipmentMutation()
-  const [remove] = useDeleteFavoriteEquipmentMutation()
-  const isAuth = useAppSelector(selectIsAuth)
-  const login = useAppSelector(selectLogin)
-  const navigate = useNavigate()
+  // const [add] = useAddFavoriteEquipmentMutation()
+  // const [remove] = useDeleteFavoriteEquipmentMutation()
+  // const isAuth = useAppSelector(selectIsAuth)
+  // const login = useAppSelector(selectLogin)
+  // const navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   function handleAdd() {
-    if (isAuth) {
-      add({ login, equipmentId })
-    } else {
-      navigate(routes.signIn)
-    }
+    dispatch(addToFavorite(equipmentId))
+    // if (isAuth) {
+    //   add({ login, equipmentId })
+    // } else {
+    //   navigate(routes.signIn)
+    // }
   }
 
   function handleDelete() {
-    if (isAuth) {
-      remove({ login, equipmentId })
-    } else {
-      navigate(routes.signIn)
-    }
+    dispatch(deleteFromFavorite(equipmentId))
+    // if (isAuth) {
+    //   remove({ login, equipmentId })
+    // } else {
+    //   navigate(routes.signIn)
+    // }
   }
 
   function renderDeleteBtn() {
@@ -49,7 +52,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         <StarRoundedIcon />
       </IconButton>
     ) : (
-      <Button color="primary" onClick={handleDelete} sx={{ padding: '8px 0' }}>
+      <Button color="primary" onClick={handleDelete} sx={{alignSelf: "self-start"}}>
         Удалить из избранного
       </Button>
     )
@@ -61,7 +64,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         <StarBorderRoundedIcon />
       </IconButton>
     ) : (
-      <Button color="primary" onClick={handleAdd} sx={{ padding: '8px 0' }}>
+      <Button color="primary" onClick={handleAdd} sx={{alignSelf: "self-start"}}>
         В избранное
       </Button>
     )

@@ -1,17 +1,36 @@
-import MenuIcon from '@mui/icons-material/Menu'
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import { Box, IconButton, Drawer, List, ListItem, Typography } from '@mui/material';
+import { useState } from 'react';
 
-import type { Route } from '../../models/routes'
+import type { Route } from '../../models/routes';
+import { Navigate, redirect, useNavigate } from 'react-router-dom';
 
 interface IBurgerMenu {
-  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void
-  handleCloseNavMenu: (path: string) => void
+  handleCloseNavMenu: (path: string) => void;
+  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void;
   anchorElNav: null | HTMLElement
-  list: Route[]
+  list: Route[];
 }
 
 export default function BurgerMenu(props: IBurgerMenu) {
-  const { handleOpenNavMenu, anchorElNav, handleCloseNavMenu, list } = props
+  const { handleCloseNavMenu, handleOpenNavMenu, list } = props;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate()
+
+  const handleGoBack = () => {
+    handleCloseMenu()
+    navigate(-1)
+  };
+
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    handleOpenNavMenu(event)
+    setIsMenuOpen(true);
+  };
+
+  const handleCloseMenu = () => {
+    setIsMenuOpen(false);
+  };
 
   return (
     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -20,35 +39,60 @@ export default function BurgerMenu(props: IBurgerMenu) {
         aria-label="account of current user"
         aria-controls="menu-appbar"
         aria-haspopup="true"
-        onClick={handleOpenNavMenu}
-        color="inherit"
+        onClick={handleOpenMenu}
       >
         <MenuIcon />
       </IconButton>
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorElNav}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        open={Boolean(anchorElNav)}
-        onClose={handleCloseNavMenu}
+
+      <Drawer
+        anchor="left"
+        open={isMenuOpen}
+        onClose={handleCloseMenu}
         sx={{
-          display: { xs: 'block', md: 'none' },
+          width: '100%',
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: '100%',
+            boxSizing: 'border-box',
+          },
         }}
       >
-        {list.map(page => (
-          <MenuItem key={page.title} onClick={() => handleCloseNavMenu(page.path)}>
-            <Typography textAlign="center">{page.title}</Typography>
-          </MenuItem>
-        ))}
-      </Menu>
+        <List>
+        <ListItem
+            button
+            onClick={handleGoBack}
+            sx={{
+              borderBottom: '1px solid #e0e0e0', 
+            }}
+          >
+            <ArrowBackIosIcon />
+            <Typography textAlign="left" variant="h5">
+              Назад
+            </Typography>
+          </ListItem>
+          {list.map((page) => (
+            <ListItem
+              button
+              href={page.path}
+              key={page.title}
+              onClick={() => {
+                if (page?.isRedirect) {
+                  // Для внешних URL
+                  window.location.href = page.path; 
+                  // Или открыть в новой вкладке:
+                  // window.open(page.path, "_blank");
+                } else {
+                  // Для внутренних путей SPA
+                  handleCloseNavMenu(page.path);
+                }
+                handleCloseMenu();
+              }}
+            >
+              <Typography textAlign="left" variant='h5'>{page.title}</Typography>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </Box>
-  )
+  );
 }

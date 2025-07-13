@@ -81,16 +81,22 @@ export default function validateInputValue(
       result.isValid = false
       result.errorText = emptyError
     }
-    if (!rules?.includes('spaceBetweenWordsOnly') && !rules?.includes('login') && !rules?.includes('password')) {
+    if (
+      !rules?.includes('spaceBetweenWordsOnly') &&
+      !rules?.includes('login') &&
+      !rules?.includes('password')
+    ) {
       value = capitalize(value.toLowerCase())
     }
     result.value = value
   }
 
   function checkIsCyrillicOnly() {
-    if (rules?.includes('spaceBetweenWordsOnly'))
-      {value = value?.replace(cyrillicWithSpaceRegExp, '')}
-    else {value = value.replace(cyrillicRegExp, '')}
+    if (rules?.includes('spaceBetweenWordsOnly')) {
+      value = value?.replace(cyrillicWithSpaceRegExp, '')
+    } else {
+      value = value.replace(cyrillicRegExp, '')
+    }
   }
 
   function checkIsSpaceBetweenWords() {
