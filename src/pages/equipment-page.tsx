@@ -124,7 +124,7 @@ export default function EquipmentPage() {
           </Typography>
           {sameList && (
             <Typography variant="body1" color="text.secondary" marginBottom="10px">
-              <b>Количество:</b> {sameList.length + 1}
+              <b>Количество:</b> {sameList.length}
             </Typography>
           )}
         </Box>
