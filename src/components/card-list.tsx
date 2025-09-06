@@ -28,14 +28,6 @@ export default function CardList(props: ICardList) {
     )
   }
 
-  if (list && list?.length === 0) {
-    return (
-      <Typography gutterBottom variant="body1" component="div" marginTop="40px">
-        Список пуст
-      </Typography>
-    )
-  }
-
   if (Array.isArray(list)) {
     return <Component list={list} />
   }

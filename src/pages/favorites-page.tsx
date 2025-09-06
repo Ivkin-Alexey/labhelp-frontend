@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Container } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
@@ -35,10 +35,15 @@ export default function FavoritesPage() {
     }
   }, [equipmentIds])
 
+  function renderMessage() {
+    if(equipmentIds.length === 0) return <Typography mt="20px">Список пуст</Typography>
+  }
+
   return (
     <Container
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}
     >
+      {renderMessage()}
       <CardList
         Component={EquipmentCardList}
         list={equipmentIds.length > 0 ? equipmentList : []}
