@@ -38,7 +38,7 @@ export function EquipmentCard(props: TEquipmentCard) {
     <Card className="card" sx={{
       width: {xs: "42vw", md: "15vw"},
       minWidth: {xs: "120px", md: "250px"},
-      marginTop: {xs: "5px", md: "40px"},
+      marginTop: {xs: "5px", md: "20px"},
     }}
       
     >

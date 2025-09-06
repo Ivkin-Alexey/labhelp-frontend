@@ -1,4 +1,4 @@
-import { Box, Container, Pagination } from '@mui/material'
+import { Box, Container, Pagination, Typography } from '@mui/material'
 
 import { SEARCH_SUGGEST_NUMBER } from '../app/constants/constants'
 import { useAppDispatch, useAppSelector } from '../app/hooks/hooks'
@@ -30,8 +30,9 @@ export default function SearchPage() {
   const savedPage = useAppSelector(selectSearchResultPage)
   const login = useAppSelector(selectLogin)
 
-  const count = data?.totalCount ? Math.ceil(data.totalCount/PAGE_SIZE) : undefined
-  const isPaginationVisible = Boolean(data?.totalCount && data?.totalCount > PAGE_SIZE && !isFetching && !isLoading)
+  const totalCount = data?.totalCount
+  const count = totalCount ? Math.ceil(totalCount/PAGE_SIZE) : undefined
+  const isPaginationVisible = Boolean(totalCount && totalCount > PAGE_SIZE && !isFetching && !isLoading)
 
   const transformedList = data
     ? data.results.map(el => {
@@ -53,6 +54,16 @@ export default function SearchPage() {
       })
   }
 
+  function renderCounter() {
+    if(isLoading || isFetching || isError) return
+    
+    if(totalCount === 0) {
+      return <Typography mt="20px">Ничего не найдено</Typography>
+    }
+    
+    return <Typography mt="20px">Найдено результатов: {totalCount}</Typography>
+  }
+
   return (
     <Container
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}
@@ -63,6 +74,7 @@ export default function SearchPage() {
         fetchEquipments={fetchEquipments}
         isError={isError}
       />
+      {renderCounter()}
       <Box
         sx={{
           display: 'flex',
