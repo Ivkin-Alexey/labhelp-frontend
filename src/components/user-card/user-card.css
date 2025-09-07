@@ -16,21 +16,18 @@
 }
 
 .cardActionArea .cardMediaWrapper {
-    display: flex;
-    width: 180px;
-    height: 180px;
-    margin: 0 auto;
-    padding: 5px;
+  display: flex;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+  padding: 5px;
 }
 
-.cardActionArea .cardMediaWrapper img{
-    object-fit: contain;
+.cardActionArea .cardMediaWrapper img {
+  object-fit: contain;
 }
 
 .cardStatus {
   position: absolute;
   top: 20px;
 }
-
-
-

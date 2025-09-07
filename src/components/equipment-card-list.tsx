@@ -13,17 +13,16 @@ export default function EquipmentCardList({ list }: IEquipmentCardList) {
   }
 
   return (
-    <Stack
-      direction="row"
-      spacing={4}
-      useFlexGap
-      flexWrap="wrap"
-      justifyContent="center"
-      marginBottom="40px"
-    >
-      {list.map((el,i) => {
-        return <EquipmentCard key={i} {...el} isCardMode={true} />
-      })}
-    </Stack>
+      <Stack
+        direction="row"
+        useFlexGap
+        flexWrap="wrap"
+        justifyContent="center"
+        sx={{marginBottom: {xs: "10px", md: "40px"}, marginTop: "6px", gap: {xs: "2vw", md: "30px"}}}
+      >
+        {list.map((el, i) => {
+          return <EquipmentCard key={i} {...el} isCardMode={true}/>
+        })}
+      </Stack>
   )
 }

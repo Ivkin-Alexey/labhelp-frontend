@@ -16,15 +16,22 @@ export default function NavButtons(props: INavButtons) {
   return list.map(page => (
     <Button
       key={page.title}
-      onClick={() => handleCloseNavMenu(page.path)}
+      href={page.path}
+      onClick={e => {
+        if (!page?.isRedirect) {
+          e.preventDefault()
+          handleCloseNavMenu(page.path)
+        }
+      }}
       sx={{
-        my: 2,
-        color: 'white',
+        color: 'textPrimary',
         display: 'block',
-        backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
-        '&:hover': {
-          backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
-        },
+        textAlign: 'center',
+        textJustify: 'center',
+        // backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
+        // '&:hover': {
+        //   backgroundColor: page.path === location.pathname ? '#14589b' : 'inherit',
+        // },
       }}
     >
       {page.title}

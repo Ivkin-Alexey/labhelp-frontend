@@ -2,6 +2,7 @@ import React, { Suspense, useMemo } from 'react'
 
 import { Typography, Box } from '@mui/material'
 
+import NavButtons from './nav-buttons-list'
 import type { Route } from '../../models/routes'
 
 interface IHeaderNavigation {
@@ -14,7 +15,7 @@ interface IHeaderNavigation {
 export default function HeaderNavigation(props: IHeaderNavigation) {
   const { handleCloseNavMenu, navigateToMainPage, list, isAuth } = props
 
-  const NavButtons = useMemo(() => React.lazy(() => import('./nav-buttons-list')), [isAuth])
+  // const NavButtons = useMemo(() => React.lazy(() => import('./nav-buttons-list')), [isAuth])
 
   return (
     <>
@@ -25,7 +26,7 @@ export default function HeaderNavigation(props: IHeaderNavigation) {
         onClick={navigateToMainPage}
         sx={{
           mr: 2,
-          display: { xs: { display: 'flex' }, md: 'none' },
+          display: { xs: 'none', md: "none" },
           flexGrow: 1,
           fontFamily: 'monospace',
           fontWeight: 700,
@@ -38,9 +39,17 @@ export default function HeaderNavigation(props: IHeaderNavigation) {
         LOGO
       </Typography>
 
-      <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: { xs: 'none', md: 'flex' },
+          justifyContent: 'center',
+          maxHeight: '40px',
+        }}
+      >
         <Suspense fallback={null}>
-          {isAuth && <NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu} />}
+          {/* {isAuth && <NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu} />} */}
+          {<NavButtons list={list} handleCloseNavMenu={handleCloseNavMenu} />}
         </Suspense>
       </Box>
     </>

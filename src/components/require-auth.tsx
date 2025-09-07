@@ -24,7 +24,7 @@ export function RequireAuth(props: IRequireAuth) {
 export function RequireAdminRole(props: IRequireAuth) {
   const role = useAppSelector(selectRole)
 
-  if (role !== "admin") {
+  if (role !== 'admin') {
     return <Navigate to={props.redirectTo} />
   }
 

@@ -3,6 +3,7 @@ import { encodeQueryParams } from '../../../app/utils/utils'
 import type {
   equipmentId,
   IEquipmentItem,
+  IEquipmentSearchResult,
   ISearchArg,
   TEquipmentFilters,
 } from '../../../models/equipments'
@@ -11,22 +12,43 @@ import { api } from '../api'
 
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
-    fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login: TLogin }>({
-      query: data =>
-        apiRoutes.get.equipments.equipments + '/' + data.equipmentId + '?login=' + data.login,
+    fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login?: TLogin }>({
+      query: data => ({
+        url: apiRoutes.get.equipments.equipments + '/' + data.equipmentId,
+        params: {
+          login: data.login,
+        },
+      }),
       providesTags: ['Equipment'],
     }),
-    fetchEquipmentsBySearchTerm: builder.query<IEquipmentItem[], ISearchArg>({
+    fetchEquipmentByIDs: builder.query<
+      IEquipmentItem[],
+      { equipmentIds: string[]; login?: TLogin }
+    >({
+      query: ({ login, equipmentIds }) => ({
+        url: apiRoutes.get.equipments.equipments,
+        params: {
+          ...{ login },
+          ...{ equipmentIds },
+        },
+      }),
+      transformResponse: (response: IEquipmentItem[]) =>
+        response.map(item => ({
+          ...item,
+          isFavorite: true,
+        })),
+    }),
+    fetchEquipmentsBySearchTerm: builder.query<IEquipmentSearchResult, ISearchArg>({
       query: data => {
-        const { login, filters = {}, searchTerm} = data
+        const { login, filters = {}, searchTerm, page, pageSize } = data
 
         const params = {
           ...(login && { login }),
           ...filters,
           ...(searchTerm && { term: searchTerm }),
+          ...(page && { page }),
+          ...(pageSize && { pageSize }),
         }
-        console.log(filters)
-
         return apiRoutes.get.equipments.search + encodeQueryParams(params)
       },
       providesTags: ['EquipmentList'],
@@ -50,14 +72,19 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList'],
+      invalidatesTags: [
+        'FavoriteEquipmentList',
+        'Equipment',
+        'OperatingEquipmentList',
+        'EquipmentList',
+      ],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
             'fetchEquipmentsBySearchTerm',
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
             draft =>
-              draft.forEach(el => {
+              draft.results.forEach(el => {
                 if (el.id === data.equipmentId) {
                   el.isFavorite = true
                 }
@@ -77,14 +104,19 @@ export const equipmentsApi = api.injectEndpoints({
         method: 'DELETE',
         body: data,
       }),
-      invalidatesTags: ['FavoriteEquipmentList', 'Equipment', 'OperatingEquipmentList'],
+      invalidatesTags: [
+        'FavoriteEquipmentList',
+        'Equipment',
+        'OperatingEquipmentList',
+        'EquipmentList',
+      ],
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           equipmentsApi.util.updateQueryData(
             'fetchEquipmentsBySearchTerm',
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
             draft =>
-              draft.forEach(el => {
+              draft.results.forEach(el => {
                 if (el.id === data.equipmentId) {
                   delete el.isFavorite
                 }
@@ -127,7 +159,9 @@ export const {
   useFetchEquipmentsBySearchTermQuery,
   useLazyFetchEquipmentsBySearchTermQuery,
   useFetchFavoriteEquipmentsQuery,
+  useLazyFetchEquipmentByIDsQuery,
   useFetchEquipmentByIDQuery,
+  useFetchEquipmentByIDsQuery,
   useAddFavoriteEquipmentMutation,
   useDeleteFavoriteEquipmentMutation,
   useAddTermToHistoryMutation,

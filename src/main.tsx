@@ -10,6 +10,8 @@ import { store } from './store/store'
 import FallbackRender from '../src/pages/fallback-render'
 
 import './index.css'
+import { createTheme, ThemeProvider } from '@mui/material'
+import theme from './theme'
 
 const container = document.getElementById('root')
 
@@ -18,9 +20,11 @@ if (container) {
 
   root.render(
     <ErrorBoundary FallbackComponent={FallbackRender}>
+      <ThemeProvider theme={theme}>
         <Provider store={store}>
           <RouterProvider router={router} />
         </Provider>
+      </ThemeProvider>
     </ErrorBoundary>,
   )
 } else {

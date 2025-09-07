@@ -22,7 +22,7 @@ export const operateEquipmentApi = api.injectEndpoints({
             'fetchEquipmentsBySearchTerm',
             { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
             draft =>
-              draft.forEach(el => {
+              draft.results.forEach(el => {
                 if (el.id === data.equipmentId) {
                   el.isOperate = true
                   el.login = data.login
@@ -51,7 +51,7 @@ export const operateEquipmentApi = api.injectEndpoints({
               'fetchEquipmentsBySearchTerm',
               { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
               draft =>
-                draft.forEach(el => {
+                draft.results.forEach(el => {
                   if (el.id === data.equipmentId) {
                     delete el.isOperate
                     delete el.login

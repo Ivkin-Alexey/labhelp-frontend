@@ -1,7 +1,10 @@
 import { useContext } from 'react'
+import MenuIcon from '@mui/icons-material/Menu';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 
-import { Box, CircularProgress, Container, Typography } from '@mui/material'
-import { useLocation } from 'react-router-dom'
+import { KingBedSharp } from '@mui/icons-material'
+import { Box, Button, CircularProgress, Container, Typography } from '@mui/material'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAppSelector } from '../app/hooks/hooks'
 import { toLowerCaseFirstChart } from '../app/utils/utils'
@@ -10,27 +13,29 @@ import FavoriteButtons from '../components/equipment-card/favorite-buttons'
 import OperateStatus from '../components/equipment-card/operate-status'
 import { ThemeContext } from '../components/root'
 import { useFetchEquipmentByIDQuery } from '../store/api/equipment/equipments-api'
-import { selectLogin } from '../store/selectors'
+import { selectFavoriteEquipmentsFromLS, selectLogin } from '../store/selectors'
 
 export default function EquipmentPage() {
-  const location = useLocation()
+  const navigate = useNavigate(); // Хук для навигации
+  const location = useLocation();
 
-  const equipmentId = location.pathname.slice(1)
-  const accountLogin = useAppSelector(selectLogin)
+  const equipmentId = location.pathname.slice(1);
+  const accountLogin = useAppSelector(selectLogin);
+  const favoriteIds = useAppSelector(selectFavoriteEquipmentsFromLS);
 
-  const { color } = useContext(ThemeContext)
+  const { color } = useContext(ThemeContext);
 
   const { isFetching, isLoading, isError, data } = useFetchEquipmentByIDQuery({
     equipmentId,
     login: accountLogin,
-  })
+  });
 
   if (isLoading || isLoading) {
-    return <Circular />
+    return <Circular />;
   }
 
   if (isError) {
-    return <h3>Произошла ошибка</h3>
+    return <h3>Произошла ошибка</h3>;
   }
 
   if (data) {
@@ -41,19 +46,26 @@ export default function EquipmentPage() {
       model,
       imgUrl,
       description,
-      isFavorite,
+      department,
+      measurements,
+      classification,
+      type,
+      kind,
+      sameList,
       isOperate,
       userName,
       login,
       userId,
-    } = data
+    } = data;
 
-    let label
+    const isFavorite = favoriteIds.includes(id);
+
+    let label;
 
     if (accountLogin === login || accountLogin === userId) {
-      label = 'Вы используете'
+      label = 'Вы используете';
     } else if (userId) {
-      label = 'В работе у пользователя ' + userId
+      label = 'В работе у пользователя ' + userId;
     }
 
     return (
@@ -61,37 +73,63 @@ export default function EquipmentPage() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          marginTop: '40px',
+          alignItems: 'flex-start',
           backgroundColor: color,
+          overflowX: 'hidden',
+          marginBottom: "20px",
+          padding: 0,
         }}
       >
-        <Box sx={{ position: 'relative' }}>
+        <Button
+          variant="text"
+          onClick={() => navigate(-1)}
+          sx={{ alignSelf: 'flex-start', margin: '10px', display: {sm: "inline-flex", md: "none"}}}
+        >
+                      <ArrowBackIosIcon />
+              Назад
+        </Button>
+        <Box sx={{ position: 'relative', marginBottom: '40px', margin: '0 0', padding: "8px", width: {sm: "80%", md: "100%"}}}>
           <OperateStatus isOperate={isOperate} label={label} />
           <img
-            height="400"
             src={imgUrl}
             alt="Изображение карточки"
-            style={{ margin: 'auto', display: 'block', marginBottom: '10px' }}
+            style={{
+              margin: 'auto',
+              display: 'block',
+              marginBottom: '10px',
+              maxWidth: '100%',
+              maxHeight: "35vh"
+            }}
           />
           <Typography gutterBottom variant="h5" component="div">
-            {name}
+            {name + ' ' + model}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
-            Марка: {brand}
+            {description}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
-            Модель: {model}
+            <b>Наименование подразделения:</b> {department}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
-            Заводской №: {id}
+            <b>Тип оборудования:</b> {toLowerCaseFirstChart(type)}
           </Typography>
           <Typography variant="body1" color="text.secondary" marginBottom="10px">
-            Описание: {toLowerCaseFirstChart(description)}
+            <b>Вид измерений:</b> {toLowerCaseFirstChart(measurements)}
           </Typography>
-          <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={false} />
+          <Typography variant="body1" color="text.secondary" marginBottom="10px">
+            <b>Вид оборудования:</b> {toLowerCaseFirstChart(kind)}
+          </Typography>
+          <Typography variant="body1" color="text.secondary" marginBottom="10px">
+            <b>Классификация оборудования:</b> {toLowerCaseFirstChart(classification)}
+          </Typography>
+          {sameList && (
+            <Typography variant="body1" color="text.secondary" marginBottom="10px">
+              <b>Количество:</b> {sameList.length}
+            </Typography>
+          )}
         </Box>
+        <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={false} />
       </Container>
-    )
+    );
   }
 }

@@ -17,21 +17,13 @@ export default function CardList(props: ICardList) {
   const { isError, isLoading, list, Component } = props
 
   if (isLoading || !Component) {
-    return <Circular/>
+    return <Circular />
   }
 
   if (isError) {
     return (
       <Typography gutterBottom variant="body1" component="div" marginTop="40px">
         Произошла ошибка
-      </Typography>
-    )
-  }
-
-  if (list && list?.length === 0) {
-    return (
-      <Typography gutterBottom variant="body1" component="div" marginTop="40px">
-        Список пуст
       </Typography>
     )
   }

@@ -1,5 +1,5 @@
-import type { SelectChangeEvent } from '@mui/material'
-import { Stack } from '@mui/material'
+import type { SelectChangeEvent, Theme } from '@mui/material'
+import { Stack, useMediaQuery } from '@mui/material'
 
 import Select from './select'
 import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
@@ -17,12 +17,14 @@ const MenuProps = {
       maxHeight: ITEM_HEIGHT * 8 + ITEM_PADDING_TOP,
     },
   },
+  disableScrollLock: true,
 }
 
 export const type = typeof MenuProps
 
 export default function EquipmentFilters() {
   const { data: filters, isError, isSuccess } = useFetchFiltersQuery()
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"))
   const dispatch = useAppDispatch()
   const filterState = useAppSelector(selectEquipmentSearchFilters)
 
@@ -35,7 +37,7 @@ export default function EquipmentFilters() {
     let changedFilters
     if (!filterState) {
       changedFilters = {
-        [name]: arr
+        [name]: arr,
       }
     } else {
       changedFilters = { ...filterState, [name]: arr }
@@ -60,9 +62,9 @@ export default function EquipmentFilters() {
     return (
       <Stack
         direction="row"
-        spacing={2}
         useFlexGap
-        sx={{ flexWrap: 'wrap', justifyContent: 'center' }}
+        style={{marginTop: isMobile ? "6px" : "12px"}}
+        sx={{ flexWrap: 'wrap', marginBottom: "6px", justifyContent: 'center', gap: {xs: "1vw", sm: "16px" }}}
       >
         {filters.map((el: IEquipmentFilter) => {
           const { name, label, options } = el
@@ -70,8 +72,9 @@ export default function EquipmentFilters() {
 
           return (
             <Select
+
               key={name}
-              name={name} 
+              name={name}
               options={options}
               handleChange={handleChange}
               menuProps={MenuProps}

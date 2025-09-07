@@ -1,6 +1,6 @@
 import './equipment-card.css'
 
-import { CardActionArea, CardActions } from '@mui/material'
+import { Box, CardActionArea, CardActions, Theme, useMediaQuery } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -11,6 +11,7 @@ import FavoriteButtons from './favorite-buttons'
 import OperateButtons from './operating-buttons'
 import type { equipmentId, TEquipmentCard } from '../../models/equipments'
 import CardStatus from '../user-card/card-status'
+import { Height, Padding } from '@mui/icons-material'
 
 export function EquipmentCard(props: TEquipmentCard) {
   const {
@@ -30,47 +31,35 @@ export function EquipmentCard(props: TEquipmentCard) {
   const navigate = useNavigate()
 
   function handleClick(e: React.MouseEvent, id: equipmentId) {
-    navigate('/' + id)
+    navigate('/' + encodeURIComponent(id))
   }
 
   return (
-    <Card
-      sx={{
-        width: '10vw',
-        minWidth: '200px',
-        marginTop: '40px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'column',
-      }}
+    <Card className="card" sx={{
+      width: {xs: "42vw", md: "15vw"},
+      minWidth: {xs: "120px", md: "250px"},
+      marginTop: {xs: "5px", md: "20px"},
+    }}
+      
     >
       <CardActionArea
         onClick={e => handleClick(e, id)}
-        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
         className="cardActionArea"
       >
         <CardStatus isVisible={isOperate} text={userName || 'В работе'} />
-        <div className="cardMediaWrapper">
+        <Box className="cardMediaWrapper">
           <CardMedia component="img" image={imgUrl} alt="Изображение карточки" />
-        </div>
-        <CardContent>
+        </Box>
+        <CardContent sx={{padding: {xs: "8px", sm: "16px"}}}>
           <Typography className="cardText" gutterBottom variant="body1" component="div">
             {name}
           </Typography>
-          {!isCardMode && (
-            <Typography variant="body2" color="text.secondary" marginBottom="5px">
-              {description}
-            </Typography>
-          )}
-          <Typography variant="body2" color="text.secondary">
-            Инвентарный № {inventoryNumber}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Заводской № {serialNumber}
+          <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", sm: "block"}}}>
+            {description}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', padding: '16px' }}>
+      <CardActions sx={{ padding: {xs: "8px", sm: "16px"}}} className='cardActions'>
         {/* <OperateButtons equipmentId={id} isOperate={isOperate} login={login} /> */}
         <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={isCardMode} />
       </CardActions>

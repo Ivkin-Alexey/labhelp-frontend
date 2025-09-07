@@ -1,0 +1,28 @@
+name: frontend-deploy
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+      host: ${{ secrets.HOST }}
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.PRIVATE_KEY }}
+      port: ${{ secrets.SSH_PORT }}
+      script: |
+        cd ${{ secrets.REPO_DIR }}
+        git pull origin ${{ secrets.BRANCH }}
+        npm install --only=prod
+        npm run build
+        
+        sudo cp -rf ${{ secrets.BUILD_DIR }}/* ${{ secrets.TARGET_DIR }}/
+        sudo chown -R ${{ secrets.WEB_USER }}:${{ secrets.WEB_GROUP }} ${{ secrets.TARGET_DIR }}
