@@ -25,7 +25,10 @@ jobs:
           fi
           
           cd ${{ secrets.REPO_DIR }}
+
+          git checkout ${{ secrets.BRANCH }}
           git pull origin ${{ secrets.BRANCH }}
+          git status
           npm install --only=prod
           npm run build
           
