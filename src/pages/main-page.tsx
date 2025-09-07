@@ -29,7 +29,7 @@ export default function MainPage() {
   const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
   const arg = { login, searchTerm: DEFAULT_SEARCH_TERM, page: 1, pageSize: 100 }
 
-  console.log("ok")
+  console.log("ok 1")
 
   const { isFetching, isError, data } = useFetchEquipmentsBySearchTermQuery(arg)
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
