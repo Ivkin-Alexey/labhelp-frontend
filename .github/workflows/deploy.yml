@@ -16,6 +16,14 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
+
+          # Установка rsync если не установлен
+          if ! command -v rsync &> /dev/null; then
+            echo "Устанавливаем rsync..."
+            sudo apt-get update
+            sudo apt-get install -y rsync
+          fi
+          
           cd ${{ secrets.REPO_DIR }}
           git pull origin ${{ secrets.BRANCH }}
           npm install --only=prod
