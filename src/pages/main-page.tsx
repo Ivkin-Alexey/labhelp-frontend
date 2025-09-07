@@ -23,7 +23,33 @@ export default function MainPage() {
   //   }
   // }, [])
 
+<<<<<<< Updated upstream
   const { isFetching, isError, data: equipmentList } = useFetchEquipmentsBySearchTermQuery(arg)
+=======
+  const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
+  const arg = { login, searchTerm: DEFAULT_SEARCH_TERM, page: 1, pageSize: 100 }
+
+  console.log("ok")
+
+  const { isFetching, isError, data } = useFetchEquipmentsBySearchTermQuery(arg)
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+
+  const transformedList = data
+    ? data.results.map(el => {
+        return {
+          ...el,
+          isFavorite: equipmentIds.includes(el.id),
+        }
+      })
+    : []
+
+    function renderCarousel() {
+      if(isMobile) {return null}
+      return(<Suspense fallback={<div>Загрузка карусели...</div>}>
+       <Carousel />
+      </Suspense>)
+    }
+>>>>>>> Stashed changes
 
   return (
     <Container
