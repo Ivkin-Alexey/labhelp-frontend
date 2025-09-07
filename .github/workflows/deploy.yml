@@ -14,15 +14,15 @@ jobs:
     - name: Deploy using ssh
       uses: appleboy/ssh-action@master
       with:
-      host: ${{ secrets.HOST }}
-      username: ${{ secrets.USERNAME }}
-      key: ${{ secrets.PRIVATE_KEY }}
-      port: ${{ secrets.SSH_PORT }}
-      script: |
-        cd ${{ secrets.REPO_DIR }}
-        git pull origin ${{ secrets.BRANCH }}
-        npm install --only=prod
-        npm run build
-        
-        sudo cp -rf ${{ secrets.BUILD_DIR }}/* ${{ secrets.TARGET_DIR }}/
-        sudo chown -R ${{ secrets.WEB_USER }}:${{ secrets.WEB_GROUP }} ${{ secrets.TARGET_DIR }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd ${{ secrets.REPO_DIR }}
+          git pull origin ${{ secrets.BRANCH }}
+          npm install --only=prod
+          npm run build
+          
+          sudo cp -rf ${{ secrets.BUILD_DIR }}/* ${{ secrets.TARGET_DIR }}/
+          sudo chown -R ${{ secrets.WEB_USER }}:${{ secrets.WEB_GROUP }} ${{ secrets.TARGET_DIR }}
