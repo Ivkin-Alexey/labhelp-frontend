@@ -79,7 +79,7 @@ jobs:
           fi
 
           # Установка зависимостей
-          if ! npm install --only=prod; then
+          if ! npm install; then
             echo "❌ ОШИБКА: Не удалось установить зависимости"
             exit 1
           fi
