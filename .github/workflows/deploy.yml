@@ -1,12 +1,9 @@
 name: frontend-deploy
 
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,15 +11,102 @@ jobs:
     - name: Deploy using ssh
       uses: appleboy/ssh-action@master
       with:
-      host: ${{ secrets.HOST }}
-      username: ${{ secrets.USERNAME }}
-      key: ${{ secrets.PRIVATE_KEY }}
-      port: ${{ secrets.SSH_PORT }}
-      script: |
-        cd ${{ secrets.REPO_DIR }}
-        git pull origin ${{ secrets.BRANCH }}
-        npm install --only=prod
-        npm run build
-        
-        sudo cp -rf ${{ secrets.BUILD_DIR }}/* ${{ secrets.TARGET_DIR }}/
-        sudo chown -R ${{ secrets.WEB_USER }}:${{ secrets.WEB_GROUP }} ${{ secrets.TARGET_DIR }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          set -e  # Завершать при любой ошибке
+          
+          # Валидация ВСЕХ обязательных секретов - ИСПРАВЛЕННЫЙ СИНТАКСИС
+          if [ -z "${{ secrets.HOST }}" ] || \
+             [ -z "${{ secrets.USERNAME }}" ] || \
+             [ -z "${{ secrets.PRIVATE_KEY }}" ] || \
+             [ -z "${{ secrets.SSH_PORT }}" ] || \
+             [ -z "${{ secrets.REPO_DIR }}" ] || \
+             [ -z "${{ secrets.BRANCH }}" ] || \
+             [ -z "${{ secrets.BUILD_DIR }}" ] || \
+             [ -z "${{ secrets.TARGET_DIR }}" ] || \
+             [ -z "${{ secrets.WEB_USER }}" ] || \
+             [ -z "${{ secrets.WEB_GROUP }}" ]; then
+            echo "❌ ОШИБКА: Не все обязательные секреты заполнены"
+            echo "Проверьте наличие следующих секретов в GitHub Secrets:"
+            echo "  - HOST, USERNAME, PRIVATE_KEY, SSH_PORT"
+            echo "  - REPO_DIR, BRANCH, BUILD_DIR, TARGET_DIR"
+            echo "  - WEB_USER, WEB_GROUP"
+            exit 1
+          fi
+
+          echo "✅ Все обязательные секреты заполнены"
+
+          # Установка rsync если не установлен
+          if ! command -v rsync &> /dev/null; then
+            echo "Устанавливаем rsync..."
+            sudo apt-get update
+            sudo apt-get install -y rsync
+          fi
+
+          # Проверка существования целевой директории
+          if [ ! -d "${{ secrets.TARGET_DIR }}" ]; then
+            echo "❌ ОШИБКА: Целевая директория не существует: ${{ secrets.TARGET_DIR }}"
+            exit 1
+          fi
+          
+          # Проверка существования директории репозитория
+          if [ ! -d "${{ secrets.REPO_DIR }}" ]; then
+            echo "❌ ОШИБКА: Директория репозитория не существует: ${{ secrets.REPO_DIR }}"
+            exit 1
+          fi
+          
+          cd "${{ secrets.REPO_DIR }}"
+          echo "Рабочая директория: $(pwd)"
+
+          # Переключение на ветку
+          git checkout "${{ secrets.BRANCH }}"
+
+          CURRENT_BRANCH=$(git branch --show-current)
+          if [ "$CURRENT_BRANCH" != "${{ secrets.BRANCH }}" ]; then
+            echo "❌ ОШИБКА: Остались на ветке $CURRENT_BRANCH вместо ${{ secrets.BRANCH }}"
+            exit 1
+          fi
+
+          echo "✅ Успешно переключены на ветку: $CURRENT_BRANCH"
+
+          # Обновление репозитория
+          if ! git pull origin "${{ secrets.BRANCH }}"; then
+            echo "❌ ОШИБКА: Не удалось обновить репозиторий"
+            exit 1
+          fi
+
+          # Установка зависимостей
+          if ! npm install; then
+            echo "❌ ОШИБКА: Не удалось установить зависимости"
+            exit 1
+          fi
+
+          # Сборка проекта
+          if ! npm run build; then
+            echo "❌ ОШИБКА: Сборка проекта не удалась"
+            exit 1
+          fi
+
+          # Проверка что сборка создала файлы
+          if [ ! -d "${{ secrets.BUILD_DIR }}" ] || [ -z "$(ls -A "${{ secrets.BUILD_DIR }}")" ]; then
+            echo "❌ ОШИБКА: Папка сборки пустая или не существует"
+            exit 1
+          fi
+
+          # Деплой
+          echo "=== DRY RUN - проверка изменений ==="
+          sudo rsync -av --delete --dry-run \
+            "${{ secrets.BUILD_DIR }}"/ \
+            "${{ secrets.TARGET_DIR }}"/
+
+          echo "=== ВЫПОЛНЯЕМ РЕАЛЬНУЮ СИНХРОНИЗАЦИЮ ==="
+          sudo rsync -av --delete --progress \
+            "${{ secrets.BUILD_DIR }}"/ \
+            "${{ secrets.TARGET_DIR }}"/
+
+          sudo chown -R "${{ secrets.WEB_USER }}:${{ secrets.WEB_GROUP }}" "${{ secrets.TARGET_DIR }}"
+          
+          echo "✅ Деплой успешно завершен!"
