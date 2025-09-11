@@ -65,7 +65,7 @@ export function Search(props: ISearch) {
   function replaceUrl() {
     const params = {
       ...filters,
-      ...(inputValue && { term: inputValue }),
+      ...(inputValue?.trim() && { term: inputValue.trim() }),
     }
     const encodedParams = encodeQueryParams(params)
     // eslint-disable-next-line no-restricted-globals
@@ -84,19 +84,22 @@ export function Search(props: ISearch) {
       const searchParams = location.search
       const { term, filters: initialFilters } = decodeQueryParams(searchParams)
       if (term) {
-        dispatch(setSearchTerm(term))
+        dispatch(setSearchTerm(term.trim()))
       }
       if (initialFilters != null) {
         dispatch(setSearchFilters(initialFilters))
       }
       // secondlRequest.current = false
-      fetchEquipments({
-        login,
-        ...(initialFilters && { filters: initialFilters }),
-        searchTerm: term,
-        page: PAGE,
-        pageSize: PAGE_SIZE,
-      })
+      // Делаем запрос только если есть поисковый термин или фильтры
+      if (term?.trim() || initialFilters) {
+        fetchEquipments({
+          login,
+          ...(initialFilters && { filters: initialFilters }),
+          searchTerm: term.trim(),
+          page: PAGE,
+          pageSize: PAGE_SIZE,
+        })
+      }
     }
   }, [])
 
@@ -107,10 +110,14 @@ export function Search(props: ISearch) {
     if (!inputValue && !filters) {
       return
     }
+    // Не делаем запрос если поисковый термин пустой или содержит только пробелы
+    if (inputValue && !inputValue.trim()) {
+      return
+    }
     fetchEquipments({
       login,
       ...(filters && { filters }),
-      searchTerm: inputValue,
+      searchTerm: inputValue.trim(),
       page: savedPage || PAGE,
       pageSize: PAGE_SIZE,
     })
@@ -132,6 +139,10 @@ export function Search(props: ISearch) {
     if (!inputValue && !filters) {
       return
     }
+    // Не делаем запрос если поисковый термин пустой или содержит только пробелы
+    if (inputValue && !inputValue.trim()) {
+      return
+    }
     const abortController = new AbortController()
     if (initialRequest.current) {
       initialRequest.current = false
@@ -144,7 +155,7 @@ export function Search(props: ISearch) {
     fetchEquipments({
       login,
       ...(filters && { filters }),
-      searchTerm: inputValue,
+      searchTerm: inputValue.trim(),
       page: PAGE,
       pageSize: PAGE_SIZE,
     })
@@ -155,7 +166,7 @@ export function Search(props: ISearch) {
 
   // Обновление URL
   useLayoutEffect(() => {
-    if ((debouncedValue || filters) && location.pathname === routes.main) {
+    if ((debouncedValue?.trim() || filters) && location.pathname === routes.main) {
       navigate(routes.search)
       replaceUrl()
       return
@@ -187,10 +198,11 @@ export function Search(props: ISearch) {
           handleInputChange={handleInputChange}
           handleKeyDown={e =>
             e.key === 'Enter' &&
+            inputValue?.trim() &&
             fetchEquipments?.({
               login,
               filters,
-              searchTerm: inputValue,
+              searchTerm: inputValue.trim(),
               page: PAGE,
               pageSize: PAGE_SIZE,
             })
