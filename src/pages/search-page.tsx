@@ -73,6 +73,7 @@ export default function SearchPage() {
         isLoading={isFetching}
         fetchEquipments={fetchEquipments}
         isError={isError}
+        showTotalCount={true}
       />
       {renderCounter()}
       <Box

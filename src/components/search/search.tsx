@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
 import { decodeQueryParams, encodeQueryParams } from '../../app/utils/utils'
 import type { IEquipmentItem, ISearchArg } from '../../models/equipments'
-import { useAddTermToHistoryMutation } from '../../store/api/equipment/equipments-api'
+import { useAddTermToHistoryMutation, useFetchEquipmentsCountQuery } from '../../store/api/equipment/equipments-api'
 import {
   clearEquipmentSearch,
   setSearchFilters,
@@ -37,10 +37,11 @@ interface ISearch {
   isLoading?: boolean
   isError?: boolean
   fetchEquipments?: (args: ISearchArg) => void
+  showTotalCount?: boolean
 }
 
 export function Search(props: ISearch) {
-  const { list = [], isLoading = false, fetchEquipments, isError = false } = props
+  const { list = [], isLoading = false, fetchEquipments, isError = false, showTotalCount = false } = props
 
   const inputValue = useAppSelector(selectEquipmentSearchTerm)
   const filters = useAppSelector(selectEquipmentSearchFilters)
@@ -61,6 +62,11 @@ export function Search(props: ISearch) {
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
   const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
   const navigate = useNavigate()
+  
+  // Получаем общее количество оборудования
+  const { data: totalCountData, isLoading: isCountLoading, error: countError } = useFetchEquipmentsCountQuery(undefined, {
+    skip: !showTotalCount
+  })
 
   function replaceUrl() {
     const params = {
@@ -199,6 +205,9 @@ export function Search(props: ISearch) {
           isLoading={isLoading}
           inputValue={inputValue}
           value={null}
+          totalCount={totalCountData?.count}
+          isCountLoading={isCountLoading}
+          showTotalCount={showTotalCount}
         />
 
         {showFilterButton && (

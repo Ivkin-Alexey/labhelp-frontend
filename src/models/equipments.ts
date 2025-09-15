@@ -63,3 +63,7 @@ export interface IAvailableEquipments {
   inaccessible: string[] | []
   available: string[] | []
 }
+
+export interface IEquipmentCount {
+  count: number
+}

@@ -29,10 +29,13 @@ interface ISearchInput {
   isLoading: boolean
   inputValue: string
   value: IEquipmentItem | null
+  totalCount?: number
+  isCountLoading?: boolean
+  showTotalCount?: boolean
 }
 
 export default function SearchInput(props: ISearchInput) {
-  const { handleInputChange, handleKeyDown, list, isLoading, inputValue, value } =
+  const { handleInputChange, handleKeyDown, list, isLoading, inputValue, value, totalCount, isCountLoading, showTotalCount } =
     props
 
   const [isOpen, setIsOpen] = useState(!!inputValue)
@@ -42,6 +45,26 @@ export default function SearchInput(props: ISearchInput) {
       return equipment
     }
     return equipment.name + ' ' + equipment.model + ' (зав. № ' + equipment.id + ')'
+  }
+
+  function getPlaceholder() {
+    if (showTotalCount && totalCount !== undefined && !isCountLoading) {
+      // Правильное склонение слова "единиц"
+      const lastDigit = totalCount % 10
+      const secondLastDigit = Math.floor((totalCount % 100) / 10)
+      
+      let unitsWord = ''
+      // Если последняя цифра 1, а предпоследняя НЕ 1, то добавляем "ы"
+      if (lastDigit === 1 && secondLastDigit !== 1) {
+        unitsWord = 'ы'
+      }
+      
+      return `Искать среди ${totalCount} единиц${unitsWord} оборудования`
+    }
+    if (showTotalCount && isCountLoading) {
+      return 'Загрузка...'
+    }
+    return 'Поиск оборудования'
   }
 
   function handleBlur() {
@@ -77,7 +100,7 @@ export default function SearchInput(props: ISearchInput) {
           autoFocus={true}
           onKeyDown={handleKeyDown}
           size="small"
-          placeholder='Поиск оборудования'
+          placeholder={getPlaceholder()}
           InputProps={{
             ...params.InputProps,
             startAdornment: (

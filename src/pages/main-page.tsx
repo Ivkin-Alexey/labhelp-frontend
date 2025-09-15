@@ -62,7 +62,7 @@ export default function MainPage() {
           flex: '1 0 auto',
         }}
       >
-        <Search />
+        <Search showTotalCount={true} />
         <CardList
           Component={EquipmentCardList}
           list={transformedList}
