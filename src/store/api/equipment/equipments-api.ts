@@ -2,6 +2,7 @@ import { apiRoutes, DEFAULT_SEARCH_TERM } from '../../../app/constants/constants
 import { encodeQueryParams } from '../../../app/utils/utils'
 import type {
   equipmentId,
+  IEquipmentCount,
   IEquipmentItem,
   IEquipmentSearchResult,
   ISearchArg,
@@ -65,6 +66,10 @@ export const equipmentsApi = api.injectEndpoints({
     }),
     fetchFilters: builder.query<TEquipmentFilters, void>({
       query: () => apiRoutes.get.equipments.filters,
+    }),
+    fetchEquipmentsCount: builder.query<IEquipmentCount, void>({
+      query: () => apiRoutes.get.equipments.count,
+      providesTags: ['EquipmentList'],
     }),
     addFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
       query: data => ({
@@ -168,4 +173,5 @@ export const {
   useDeleteTermFromHistoryMutation,
   useFetchSearchHistoryQuery,
   useFetchFiltersQuery,
+  useFetchEquipmentsCountQuery,
 } = equipmentsApi

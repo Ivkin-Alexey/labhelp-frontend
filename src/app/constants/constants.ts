@@ -43,6 +43,7 @@ export const apiRoutes = {
       operate: '/equipments/operate/',
       searchHistory: '/equipments/search-history/',
       filters: '/equipments/filters',
+      count: '/equipments/count',
     },
   },
   post: {
