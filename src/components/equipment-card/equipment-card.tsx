@@ -58,7 +58,7 @@ export function EquipmentCard(props: TEquipmentCard) {
           <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", sm: "block"}}}>
             {description}
           </Typography>
-          <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", sm: "block"}}}>
+          <Typography variant="inherit" color="text.secondary" marginBottom="5px">
             Количество: {quantity}
           </Typography>
         </CardContent>
