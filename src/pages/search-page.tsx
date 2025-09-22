@@ -56,13 +56,21 @@ export default function SearchPage() {
   }
 
   function renderCounter() {
-    if(isLoading || isFetching || isError) return
+    if(isLoading || isFetching || isError ) return
     
+<<<<<<< Updated upstream
     if(totalEquipmentUnits === 0) {
       return <Typography mt="20px">Ничего не найдено</Typography>
     }
     
     return <Typography mt="20px">Найдено результатов: {totalEquipmentUnits}</Typography>
+=======
+    if(typeof totalCount === "number" && totalCount > 0) {
+      return <Typography mt="20px">Найдено результатов: {totalCount}</Typography>
+    }
+
+    return <Typography mt="20px">Ничего не найдено</Typography>
+>>>>>>> Stashed changes
   }
 
   return (
