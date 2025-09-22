@@ -26,6 +26,7 @@ export function EquipmentCard(props: TEquipmentCard) {
     login,
     isCardMode,
     userName,
+    quantity,
   } = props
 
   const navigate = useNavigate()
@@ -56,6 +57,9 @@ export function EquipmentCard(props: TEquipmentCard) {
           </Typography>
           <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", sm: "block"}}}>
             {description}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", sm: "block"}}}>
+            Количество: {quantity}
           </Typography>
         </CardContent>
       </CardActionArea>

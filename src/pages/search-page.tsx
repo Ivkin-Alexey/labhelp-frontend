@@ -30,9 +30,10 @@ export default function SearchPage() {
   const savedPage = useAppSelector(selectSearchResultPage)
   const login = useAppSelector(selectLogin)
 
-  const totalCount = data?.totalCount
-  const count = totalCount ? Math.ceil(totalCount/PAGE_SIZE) : undefined
-  const isPaginationVisible = Boolean(totalCount && totalCount > PAGE_SIZE && !isFetching && !isLoading)
+  const totalEquipmentCards = data?.totalEquipmentCards
+  const totalEquipmentUnits = data?.totalEquipmentUnits
+  const count = totalEquipmentCards ? Math.ceil(totalEquipmentCards/PAGE_SIZE) : undefined
+  const isPaginationVisible = Boolean(totalEquipmentCards && totalEquipmentCards > PAGE_SIZE && !isFetching && !isLoading)
 
   const transformedList = data
     ? data.results.map(el => {
@@ -57,11 +58,11 @@ export default function SearchPage() {
   function renderCounter() {
     if(isLoading || isFetching || isError) return
     
-    if(totalCount === 0) {
+    if(totalEquipmentUnits === 0) {
       return <Typography mt="20px">Ничего не найдено</Typography>
     }
     
-    return <Typography mt="20px">Найдено результатов: {totalCount}</Typography>
+    return <Typography mt="20px">Найдено результатов: {totalEquipmentUnits}</Typography>
   }
 
   return (

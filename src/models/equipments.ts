@@ -23,12 +23,14 @@ export interface IEquipmentItem {
   sameList?: string[]
   serialNumber: string
   inventoryNumber: string
+  quantity?: number
 }
 
 export interface IEquipmentSearchResult {
   results: IEquipmentItem[]
   page: number
-  totalCount: number
+  totalEquipmentCards: number
+  totalEquipmentUnits: number
 }
 
 export type TEquipmentFilters = IEquipmentFilter[]

@@ -217,7 +217,7 @@ export function Search(props: ISearch) {
           isLoading={isLoading}
           inputValue={inputValue}
           value={null}
-          totalCount={totalCountData?.count}
+          totalEquipmentUnits={totalCountData?.count}
           isCountLoading={isCountLoading}
           showTotalCount={showTotalCount}
         />
