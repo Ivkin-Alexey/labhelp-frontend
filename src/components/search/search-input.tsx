@@ -29,13 +29,13 @@ interface ISearchInput {
   isLoading: boolean
   inputValue: string
   value: IEquipmentItem | null
-  totalCount?: number
+  totalEquipmentUnits?: number
   isCountLoading?: boolean
   showTotalCount?: boolean
 }
 
 export default function SearchInput(props: ISearchInput) {
-  const { handleInputChange, handleKeyDown, list, isLoading, inputValue, value, totalCount, isCountLoading, showTotalCount } =
+  const { handleInputChange, handleKeyDown, list, isLoading, inputValue, value, totalEquipmentUnits, isCountLoading, showTotalCount } =
     props
 
   const [isOpen, setIsOpen] = useState(!!inputValue)
@@ -48,10 +48,10 @@ export default function SearchInput(props: ISearchInput) {
   }
 
   function getPlaceholder() {
-    if (showTotalCount && totalCount !== undefined && !isCountLoading) {
+    if (showTotalCount && totalEquipmentUnits !== undefined && !isCountLoading) {
       // Правильное склонение слова "единиц"
-      const lastDigit = totalCount % 10
-      const secondLastDigit = Math.floor((totalCount % 100) / 10)
+      const lastDigit = totalEquipmentUnits % 10
+      const secondLastDigit = Math.floor((totalEquipmentUnits % 100) / 10)
       
       let unitsWord = ''
       // Если последняя цифра 1, а предпоследняя НЕ 1, то добавляем "ы"
@@ -59,7 +59,7 @@ export default function SearchInput(props: ISearchInput) {
         unitsWord = 'ы'
       }
       
-      return `Искать среди ${totalCount} единиц${unitsWord} оборудования`
+      return `Искать среди ${totalEquipmentUnits} единиц${unitsWord} оборудования`
     }
     if (showTotalCount && isCountLoading) {
       return 'Загрузка...'
