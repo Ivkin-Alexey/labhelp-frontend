@@ -58,9 +58,11 @@ export function EquipmentCard(props: TEquipmentCard) {
           <Typography variant="body2" color="text.secondary" marginBottom="5px" sx={{display: {xs: "none", sm: "block"}}}>
             {description}
           </Typography>
-          <Typography variant="inherit" color="text.secondary" marginBottom="5px">
-            Количество: {quantity}
-          </Typography>
+          {quantity && (
+            <Typography variant="inherit" color="text.secondary" marginBottom="5px">
+              Количество: {quantity}
+            </Typography>
+          )}
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ padding: {xs: "8px", sm: "16px"}}} className='cardActions'>
