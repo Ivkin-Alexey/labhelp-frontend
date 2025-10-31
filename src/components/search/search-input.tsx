@@ -83,7 +83,7 @@ export default function SearchInput(props: ISearchInput) {
       noOptionsText="Оборудование не найдено"
       open={isOpen}
       options={list}
-      loading={isLoading}
+      loading={false}
       // onChange={handleChange}
       onBlur={handleBlur}
       onFocus={handleFocus}
@@ -110,7 +110,6 @@ export default function SearchInput(props: ISearchInput) {
             ),
             endAdornment: (
               <React.Fragment>
-                {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
                 {params.InputProps.endAdornment}
               </React.Fragment>
             ),
