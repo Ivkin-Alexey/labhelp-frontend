@@ -31,6 +31,13 @@ interface ISearch {
   showTotalCount?: boolean
 }
 
+// Одинаковые аргументы не должны уходить на сервер дважды: начальный запрос
+// делают layout-эффекты, а эффект обработки запросов видит те же значения
+function getSearchArgsKey(args: ISearchArg) {
+  const { login, filters, searchTerm, page, pageSize } = args
+  return JSON.stringify([login, searchTerm, page, pageSize, filters ?? null])
+}
+
 export function Search(props: ISearch) {
   const { list = [], isLoading = false, fetchEquipments, showTotalCount = false } = props
 
@@ -40,8 +47,12 @@ export function Search(props: ISearch) {
   const location = useLocation()
   const path = location.pathname
   const initialRender = useRef(true)
-  const initialRequest = useRef(true)
-  const secondlRequest = useRef(true)
+  // Прогон эффекта в коммите монтирования ничего не запрашивает: начальный
+  // запрос делают layout-эффекты ниже. Флаг снимаем до всех проверок — иначе
+  // «первым» оказывалось первое действие пользователя и его смена фильтров
+  // не вызывала бы загрузку
+  const mountRun = useRef(true)
+  const lastRequestKey = useRef<string | null>(null)
   const login = useAppSelector(selectLogin)
   const savedPage = useAppSelector(selectSearchResultPage)
   const [, setFiltersOpen] = useState(false)
@@ -66,6 +77,17 @@ export function Search(props: ISearch) {
     history.replaceState({}, '', encodedParams)
   }
 
+  // Дублирование запроса исключает ключ аргументов: один и тот же набор
+  // фильтров и терминов не запрашивается дважды
+  function fetchOnce(args: ISearchArg) {
+    const key = getSearchArgsKey(args)
+    if (!fetchEquipments || key === lastRequestKey.current) {
+      return
+    }
+    lastRequestKey.current = key
+    fetchEquipments(args)
+  }
+
   // Первый рендер. Который выполнится только на странице Search
   useLayoutEffect(() => {
     // Проверяем, если компонент вмонтирован не на странице Search прекращаем выполнение
@@ -86,7 +108,7 @@ export function Search(props: ISearch) {
       // secondlRequest.current = false
       // Делаем запрос только если есть поисковый термин или фильтры
       if (term?.trim() || initialFilters) {
-        fetchEquipments({
+        fetchOnce({
           login,
           ...(initialFilters && { filters: initialFilters }),
           searchTerm: term.trim(),
@@ -110,7 +132,7 @@ export function Search(props: ISearch) {
     if (inputValue && !inputValue.trim()) {
       return
     }
-    fetchEquipments({
+    fetchOnce({
       login,
       ...(filters && { filters }),
       searchTerm: inputValue.trim(),
@@ -130,6 +152,10 @@ export function Search(props: ISearch) {
 
   // Обработка запросов
   useEffect(() => {
+    if (mountRun.current) {
+      mountRun.current = false
+      return
+    }
     if (!fetchEquipments || path === routes.main) {
       return
     }
@@ -141,15 +167,7 @@ export function Search(props: ISearch) {
       return
     }
     const abortController = new AbortController()
-    if (initialRequest.current) {
-      initialRequest.current = false
-      return
-    }
-    if (secondlRequest.current) {
-      secondlRequest.current = false
-      return
-    }
-    fetchEquipments({
+    fetchOnce({
       login,
       ...(filters && { filters }),
       searchTerm: inputValue.trim(),
