@@ -1,17 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { Container, Typography } from '@mui/material'
 
 import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
 import EquipmentCardList from '../components/equipment-card-list'
-import {
-  useFetchEquipmentByIDQuery,
-  useFetchEquipmentByIDsQuery,
-  useFetchFavoriteEquipmentsQuery,
-  useLazyFetchEquipmentByIDsQuery,
-} from '../store/api/equipment/equipments-api'
-import { selectFavoriteEquipmentsFromLS, selectLogin } from '../store/selectors'
+import { useLazyFetchEquipmentByIDsQuery } from '../store/api/equipment/equipments-api'
+import { selectFavoriteEquipmentsFromLS } from '../store/selectors'
 
 export default function FavoritesPage() {
   // const login = useAppSelector(selectLogin)
@@ -20,23 +15,18 @@ export default function FavoritesPage() {
 
   const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
 
-  const [fetch, { isFetching, isLoading, isError, data: equipmentList }] =
-    useLazyFetchEquipmentByIDsQuery()
+  const [fetch, { isLoading, isError, data: equipmentList }] = useLazyFetchEquipmentByIDsQuery()
 
   useEffect(() => {
     if (Array.isArray(equipmentIds) && equipmentIds.length > 0) {
       fetch({ equipmentIds })
     }
-  }, [])
-
-  useEffect(() => {
-    if (Array.isArray(equipmentIds) && equipmentIds.length > 0) {
-      fetch({ equipmentIds })
-    }
-  }, [equipmentIds])
+  }, [equipmentIds, fetch])
 
   function renderMessage() {
-    if(equipmentIds.length === 0) return <Typography mt="20px">Список пуст</Typography>
+    if (equipmentIds.length === 0) {
+      return <Typography mt="20px">Список пуст</Typography>
+    }
   }
 
   return (

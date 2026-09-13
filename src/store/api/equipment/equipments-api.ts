@@ -1,7 +1,6 @@
-import { apiRoutes, DEFAULT_SEARCH_TERM } from '../../../app/constants/constants'
+import { apiRoutes } from '../../../app/constants/constants'
 import { encodeQueryParams } from '../../../app/utils/utils'
 import type {
-  equipmentId,
   IEquipmentCount,
   IEquipmentItem,
   IEquipmentSearchResult,
@@ -56,16 +55,19 @@ export const equipmentsApi = api.injectEndpoints({
       },
       providesTags: ['EquipmentList'],
     }),
-    fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
-      query: login => apiRoutes.get.equipments.favorite + login,
-      transformResponse: (response: IEquipmentItem[]) => {
-        return response.map(item => ({
-          ...item,
-          isFavorite: true,
-        }))
-      },
-      providesTags: ['FavoriteEquipmentList'],
-    }),
+    // TODO: избранное на сервере — задача на будущее. Сейчас избранные ids
+    //  лежат в localStorage (favorite-equipment-middleware), чтобы списком могли
+    //  пользоваться и незалогиненные пользователи.
+    // fetchFavoriteEquipments: builder.query<IEquipmentItem[], string>({
+    //   query: login => apiRoutes.get.equipments.favorite + login,
+    //   transformResponse: (response: IEquipmentItem[]) => {
+    //     return response.map(item => ({
+    //       ...item,
+    //       isFavorite: true,
+    //     }))
+    //   },
+    //   providesTags: ['FavoriteEquipmentList'],
+    // }),
     fetchFilters: builder.query<TEquipmentFilters, void>({
       query: () => apiRoutes.get.equipments.filters,
     }),
@@ -73,70 +75,33 @@ export const equipmentsApi = api.injectEndpoints({
       query: () => apiRoutes.get.equipments.count,
       providesTags: ['EquipmentList'],
     }),
-    addFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
-      query: data => ({
-        url: apiRoutes.delete.equipments.favorite + data.equipmentId + `?login=${data.login}`,
-        method: 'POST',
-        body: data,
-      }),
-      invalidatesTags: [
-        'FavoriteEquipmentList',
-        'Equipment',
-        'OperatingEquipmentList',
-        'EquipmentList',
-      ],
-      async onQueryStarted(data, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
-          equipmentsApi.util.updateQueryData(
-            'fetchEquipmentsBySearchTerm',
-            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
-            draft =>
-              draft.results.forEach(el => {
-                if (el.id === data.equipmentId) {
-                  el.isFavorite = true
-                }
-              }),
-          ),
-        )
-        try {
-          await queryFulfilled
-        } catch {
-          patchResult.undo()
-        }
-      },
-    }),
-    deleteFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
-      query: data => ({
-        url: apiRoutes.delete.equipments.favorite + data.equipmentId + `?login=${data.login}`,
-        method: 'DELETE',
-        body: data,
-      }),
-      invalidatesTags: [
-        'FavoriteEquipmentList',
-        'Equipment',
-        'OperatingEquipmentList',
-        'EquipmentList',
-      ],
-      async onQueryStarted(data, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
-          equipmentsApi.util.updateQueryData(
-            'fetchEquipmentsBySearchTerm',
-            { searchTerm: DEFAULT_SEARCH_TERM, login: data.login },
-            draft =>
-              draft.results.forEach(el => {
-                if (el.id === data.equipmentId) {
-                  delete el.isFavorite
-                }
-              }),
-          ),
-        )
-        try {
-          await queryFulfilled
-        } catch {
-          patchResult.undo()
-        }
-      },
-    }),
+    // TODO: см. комментарий выше — добавление/удаление избранного на сервере пока не используется
+    // addFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
+    //   query: data => ({
+    //     url: apiRoutes.delete.equipments.favorite + data.equipmentId + `?login=${data.login}`,
+    //     method: 'POST',
+    //     body: data,
+    //   }),
+    //   invalidatesTags: [
+    //     'FavoriteEquipmentList',
+    //     'Equipment',
+    //     'OperatingEquipmentList',
+    //     'EquipmentList',
+    //   ],
+    // }),
+    // deleteFavoriteEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
+    //   query: data => ({
+    //     url: apiRoutes.delete.equipments.favorite + data.equipmentId + `?login=${data.login}`,
+    //     method: 'DELETE',
+    //     body: data,
+    //   }),
+    //   invalidatesTags: [
+    //     'FavoriteEquipmentList',
+    //     'Equipment',
+    //     'OperatingEquipmentList',
+    //     'EquipmentList',
+    //   ],
+    // }),
     fetchSearchHistory: builder.query<string, string>({
       query: login => ({
         url: apiRoutes.get.equipments.searchHistory + login,
@@ -176,12 +141,12 @@ export const equipmentsApi = api.injectEndpoints({
 export const {
   useFetchEquipmentsBySearchTermQuery,
   useLazyFetchEquipmentsBySearchTermQuery,
-  useFetchFavoriteEquipmentsQuery,
+  // useFetchFavoriteEquipmentsQuery,
   useLazyFetchEquipmentByIDsQuery,
   useFetchEquipmentByIDQuery,
   useFetchEquipmentByIDsQuery,
-  useAddFavoriteEquipmentMutation,
-  useDeleteFavoriteEquipmentMutation,
+  // useAddFavoriteEquipmentMutation,
+  // useDeleteFavoriteEquipmentMutation,
   useAddTermToHistoryMutation,
   useDeleteTermFromHistoryMutation,
   useFetchSearchHistoryQuery,

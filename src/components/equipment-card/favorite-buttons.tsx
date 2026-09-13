@@ -1,16 +1,10 @@
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded'
 import StarRoundedIcon from '@mui/icons-material/StarRounded'
 import { Button, IconButton } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 
-import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
+import { useAppDispatch } from '../../app/hooks/hooks'
 import type { equipmentId } from '../../models/equipments'
-import {
-  useAddFavoriteEquipmentMutation,
-  useDeleteFavoriteEquipmentMutation,
-} from '../../store/api/equipment/equipments-api'
 import { addToFavorite, deleteFromFavorite } from '../../store/equipments-slice'
-import { selectIsAuth, selectLogin } from '../../store/selectors'
 
 interface IFavoriteButtons {
   isFavorite?: boolean
@@ -52,7 +46,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         <StarRoundedIcon />
       </IconButton>
     ) : (
-      <Button color="primary" onClick={handleDelete} sx={{alignSelf: "self-start"}}>
+      <Button color="primary" onClick={handleDelete} sx={{ alignSelf: 'self-start' }}>
         Удалить из избранного
       </Button>
     )
@@ -64,7 +58,7 @@ export default function FavoriteButtons(props: IFavoriteButtons) {
         <StarBorderRoundedIcon />
       </IconButton>
     ) : (
-      <Button color="primary" onClick={handleAdd} sx={{alignSelf: "self-start"}}>
+      <Button color="primary" onClick={handleAdd} sx={{ alignSelf: 'self-start' }}>
         В избранное
       </Button>
     )
