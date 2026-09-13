@@ -20,4 +20,5 @@ export const selectEquipmentSearchTerm = (state: RootState) => state.equipments.
 
 export const selectSearchResultPage = (state: RootState) => state.equipments.searchResultPage
 
-export const selectEquipmentSearchQueryParams = (state: RootState) => state.equipments.searchQueryParams
+export const selectEquipmentSearchQueryParams = (state: RootState) =>
+  state.equipments.searchQueryParams

@@ -1,36 +1,37 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
-import { Box, IconButton, Drawer, List, ListItem, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState } from 'react'
 
-import type { Route } from '../../models/routes';
-import { Navigate, redirect, useNavigate } from 'react-router-dom';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import MenuIcon from '@mui/icons-material/Menu'
+import { Box, IconButton, Drawer, List, ListItem, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+
+import type { Route } from '../../models/routes'
 
 interface IBurgerMenu {
-  handleCloseNavMenu: (path: string) => void;
-  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void;
+  handleCloseNavMenu: (path: string) => void
+  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void
   anchorElNav: null | HTMLElement
-  list: Route[];
+  list: Route[]
 }
 
 export default function BurgerMenu(props: IBurgerMenu) {
-  const { handleCloseNavMenu, handleOpenNavMenu, list } = props;
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { handleCloseNavMenu, handleOpenNavMenu, list } = props
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navigate = useNavigate()
 
   const handleGoBack = () => {
     handleCloseMenu()
     navigate(-1)
-  };
+  }
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     handleOpenNavMenu(event)
-    setIsMenuOpen(true);
-  };
+    setIsMenuOpen(true)
+  }
 
   const handleCloseMenu = () => {
-    setIsMenuOpen(false);
-  };
+    setIsMenuOpen(false)
+  }
 
   return (
     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -58,11 +59,11 @@ export default function BurgerMenu(props: IBurgerMenu) {
         }}
       >
         <List>
-        <ListItem
+          <ListItem
             button
             onClick={handleGoBack}
             sx={{
-              borderBottom: '1px solid #e0e0e0', 
+              borderBottom: '1px solid #e0e0e0',
             }}
           >
             <ArrowBackIosIcon />
@@ -70,7 +71,7 @@ export default function BurgerMenu(props: IBurgerMenu) {
               Назад
             </Typography>
           </ListItem>
-          {list.map((page) => (
+          {list.map(page => (
             <ListItem
               button
               href={page.path}
@@ -78,21 +79,23 @@ export default function BurgerMenu(props: IBurgerMenu) {
               onClick={() => {
                 if (page?.isRedirect) {
                   // Для внешних URL
-                  window.location.href = page.path; 
+                  window.location.href = page.path
                   // Или открыть в новой вкладке:
                   // window.open(page.path, "_blank");
                 } else {
                   // Для внутренних путей SPA
-                  handleCloseNavMenu(page.path);
+                  handleCloseNavMenu(page.path)
                 }
-                handleCloseMenu();
+                handleCloseMenu()
               }}
             >
-              <Typography textAlign="left" variant='h5'>{page.title}</Typography>
+              <Typography textAlign="left" variant="h5">
+                {page.title}
+              </Typography>
             </ListItem>
           ))}
         </List>
       </Drawer>
     </Box>
-  );
+  )
 }

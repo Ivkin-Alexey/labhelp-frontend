@@ -1,7 +1,7 @@
+import { Box } from '@mui/material'
 import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import './style.css'
+import 'slick-carousel/slick/slick.css'
 
 import CarouselItem from './carousel-item'
 import img0 from '../../images/0.jpeg'
@@ -12,7 +12,7 @@ import img4 from '../../images/4.jpeg'
 import img5 from '../../images/5.jpeg'
 import img6 from '../../images/6.jpeg'
 import img7 from '../../images/7.jpeg'
-import { Box } from '@mui/material'
+import './style.css'
 
 const images = [img0, img1, img2, img3, img4, img5, img6, img7]
 

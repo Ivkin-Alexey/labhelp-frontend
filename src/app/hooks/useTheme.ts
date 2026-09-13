@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function useTheme(): [string, () => void] {
   const [color, setColor] = useState<string>(localStorage.getItem('color') || 'white')

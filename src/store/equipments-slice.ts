@@ -7,7 +7,7 @@ const initialState: IEquipmentsState = {
   searchFilters: null,
   searchQueryParams: '',
   favoriteList: [],
-  searchResultPage: null
+  searchResultPage: null,
 }
 
 export const equipmentSlice = createSlice({

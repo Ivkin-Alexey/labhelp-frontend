@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles'
 
 const theme = createTheme({
   typography: {
@@ -19,7 +19,6 @@ const theme = createTheme({
       '@media (max-width:600px)': {
         fontSize: '0.8rem', // Размер шрифта для экранов меньше 600px
         wordBreak: 'break-word',
-        
       },
     },
   },
@@ -31,6 +30,6 @@ const theme = createTheme({
       main: '#dc004e', // Вторичный цвет
     },
   },
-});
+})
 
-export default theme;
+export default theme

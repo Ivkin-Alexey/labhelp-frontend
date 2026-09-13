@@ -28,22 +28,18 @@ const EditPersonalDataPage = () => {
 
   const message = localisations.pages.editPersonalData.confirmMsg
 
-  const { data: userList, isFetching, isError } = useGetUserListQuery(accountLogin)
+  const { data: userList } = useGetUserListQuery(accountLogin)
 
-  const [
-    sendData,
-    { isSuccess: isSuccessUpdate, isError: isErrorUpdate, isLoading: isLoadingUpdate },
-  ] = useUpdatePersonDataMutation()
-  const [
-    deleteMutation,
-    { isSuccess: isSuccessDelete, isError: isErrorDelete, isLoading: isLoadingDelete },
-  ] = useDeletePersonMutation()
+  const [sendData, { isSuccess: isSuccessUpdate, isLoading: isLoadingUpdate }] =
+    useUpdatePersonDataMutation()
+  const [deleteMutation, { isSuccess: isSuccessDelete, isLoading: isLoadingDelete }] =
+    useDeletePersonMutation()
 
   useEffect(() => {
     if (isSuccessDelete || isSuccessUpdate) {
       navigate(routes.admin)
     }
-  }, [isSuccessDelete, isSuccessUpdate])
+  }, [isSuccessDelete, isSuccessUpdate, navigate])
 
   const userData: IUserCard | undefined = userList?.find(el => el.login === login)
   if (!userData) {

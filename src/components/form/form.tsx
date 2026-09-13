@@ -1,11 +1,10 @@
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { MenuItem, Stack, TextField } from '@mui/material'
 import Button from '@mui/material/Button'
 import ListSubheader from '@mui/material/ListSubheader'
 
-import { useAppSelector } from '../../app/hooks/hooks'
 import inputsSettings from '../../app/inputs/inputs'
 import validateInputValue from '../../app/inputs/validators'
 import type {
@@ -16,7 +15,6 @@ import type {
   IFormValues,
 } from '../../models/inputs'
 import type { IUserForm } from '../../models/users'
-import { selectLogin } from '../../store/selectors'
 
 interface IFormProps {
   inputList: TInputArray
@@ -48,7 +46,6 @@ const Form = (props: IFormProps) => {
     inputList: inputLabelList,
     defaultInputValues,
     filteringRules,
-    confirmMessage,
     onSendData,
     isLoading = false,
     btnText = 'Отправить',
@@ -79,7 +76,7 @@ const Form = (props: IFormProps) => {
           },
         }
       }, {}),
-    [],
+    [inputLabelList, defaultInputValues],
   )
 
   // В formState хранится состояние формы, необходимое для ее валидации, а также отправки данных на сервер.
@@ -97,6 +94,8 @@ const Form = (props: IFormProps) => {
     return formValues
   }
 
+  // filterInputs/validateFormData пересоздаются на каждый рендер, а их добавление
+  // в зависимости запускает бесконечный цикл рендеров — эффект нужен только при изменении формы
   useEffect(() => {
     if (validateFormData()) {
       setIsDisabled(true)
@@ -105,6 +104,7 @@ const Form = (props: IFormProps) => {
     }
     setTextInputs(() => filterInputs())
     setFormState(() => formState)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formState])
 
   const onChangeData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

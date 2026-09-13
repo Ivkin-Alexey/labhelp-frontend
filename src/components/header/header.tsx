@@ -1,24 +1,22 @@
 import type * as React from 'react'
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 
-import { Theme, Typography, useMediaQuery } from '@mui/material'
+import type { Theme } from '@mui/material'
+import { Typography, useMediaQuery } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import BurgerMenu from './burger-menu'
-import HeaderLogo from './header-logo'
 import HeaderNavigation from './header-navigation'
 import Logo from './logo'
-import UserMenu from './user-menu'
 import { routes } from '../../app/constants/constants'
 import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
+import { clearEquipmentSearch } from '../../store/equipments-slice'
 import { selectAccount, selectIsAuth } from '../../store/selectors'
 
 import './style.css'
-import { clearEquipmentSearch } from '../../store/equipments-slice'
-import theme from '../../theme'
 
 // let defaultPages = [
 //   { title: 'Избранное', path: routes.favorites },
@@ -42,9 +40,11 @@ function Header() {
   const location = useLocation()
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- используется закомментированным <UserMenu />
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- используется закомментированным useMemo с ролями
   const { accountData } = useAppSelector(selectAccount)
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
   // const pages = useMemo(() => {
   //   if (accountData?.role === 'admin') {
   //     return [...defaultPages, ...adminPages]
@@ -66,7 +66,7 @@ function Header() {
     { title: 'Избранное оборудование', path: routes.favorites },
   ]
 
-  if(!isMobile) {
+  if (!isMobile) {
     pages.shift()
   }
 
@@ -74,6 +74,7 @@ function Header() {
     setAnchorElNav(event.currentTarget)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- используется закомментированным <UserMenu />
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
@@ -83,16 +84,20 @@ function Header() {
     navigate(path)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- используется закомментированным <UserMenu />
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
   }
 
   function navigateToMainPage() {
-    if(location.pathname === routes.main) return
+    if (location.pathname === routes.main) {
+      return
+    }
     dispatch(clearEquipmentSearch())
     navigate(routes.main)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- используется закомментированным <UserMenu />
   function getUserMenuList() {
     if (isAuth) {
       return [settings[2]]
@@ -115,14 +120,18 @@ function Header() {
           variant="h5"
           align="center"
           color="textPrimary"
-          sx={{ cursor: 'pointer', marginTop: {xs: 0, md: "10px"}}} onClick={navigateToMainPage}
+          sx={{ cursor: 'pointer', marginTop: { xs: 0, md: '10px' } }}
+          onClick={navigateToMainPage}
         >
           Единый каталог учебного и научного лабораторного оборудования
         </Typography>
-        <Toolbar disableGutters sx={{
-    position: { xs: 'absolute', sm: 'static' },
-    top: { xs: '10px', sm: '0' },
-  }}>
+        <Toolbar
+          disableGutters
+          sx={{
+            position: { xs: 'absolute', sm: 'static' },
+            top: { xs: '10px', sm: '0' },
+          }}
+        >
           {/* <HeaderLogo navigateToMainPage={navigateToMainPage} /> */}
           {/* {isAuth && (
             <BurgerMenu

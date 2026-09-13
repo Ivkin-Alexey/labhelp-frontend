@@ -1,7 +1,6 @@
-import { useContext } from 'react'
 import './user-card.css'
 
-import { CardActionArea, CardActions } from '@mui/material'
+import { CardActionArea } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -9,23 +8,12 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
 import CardStatus from './card-status'
-import FavoriteButtons from './favorite-buttons'
-import OperateButtons from './operating-buttons'
 import { routes } from '../../app/constants/constants'
 import { createPersonName } from '../../app/methods/methods'
 import type { TLogin, IUserCard } from '../../models/users'
 
 export function UserCard(props: IUserCard) {
-  const {
-    imgUrl = '#',
-    login,
-    position,
-    department,
-    isVerified = true,
-    firstName,
-    lastName,
-    patronymic,
-  } = props
+  const { imgUrl = '#', login, position, department, isVerified = true } = props
 
   const navigate = useNavigate()
 

@@ -8,7 +8,6 @@ import {
   useAddOperatingEquipmentMutation,
   useDeleteOperatingEquipmentMutation,
 } from '../../store/api/equipment/operate-equipment'
-import { useDeletePersonMutation } from '../../store/api/users-api'
 import { selectAccount } from '../../store/selectors'
 
 interface IOperateButtons {

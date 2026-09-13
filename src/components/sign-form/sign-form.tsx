@@ -2,11 +2,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { CircularProgress } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
-import CssBaseline from '@mui/material/CssBaseline'
 import Grid from '@mui/material/Grid'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 import SignUpLink from './sign-up-link'
@@ -14,8 +11,6 @@ import { categoryFilteringRules } from '../../app/inputs/filteringRules'
 import forms from '../../app/inputs/forms'
 import type { IFormValues } from '../../models/inputs'
 import Form from '../form/form'
-
-const defaultTheme = createTheme()
 
 interface ISignForm {
   handleSubmit(data: IFormValues): void

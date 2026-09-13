@@ -1,7 +1,5 @@
 import { Button } from '@mui/material'
 
-import { TLogin } from '../../models/users'
-
 interface IProps {
   isDisabled?: boolean
   handleOnClick: () => void

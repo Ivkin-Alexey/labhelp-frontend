@@ -1,17 +1,13 @@
 import { useState, type SyntheticEvent } from 'react'
-import * as React from 'react'
+import type * as React from 'react'
 
-import type {
-  AutocompleteChangeReason,
-  AutocompleteInputChangeReason,
-} from '@mui/material/Autocomplete'
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from '@mui/icons-material/Search'
+import { InputAdornment } from '@mui/material'
+import type { AutocompleteInputChangeReason } from '@mui/material/Autocomplete'
 import Autocomplete from '@mui/material/Autocomplete'
-import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 
 import type { IEquipmentItem } from '../../models/equipments'
-import { InputAdornment } from '@mui/material'
 
 interface ISearchInput {
   handleInputChange(
@@ -35,8 +31,16 @@ interface ISearchInput {
 }
 
 export default function SearchInput(props: ISearchInput) {
-  const { handleInputChange, handleKeyDown, list, isLoading, inputValue, value, totalEquipmentUnits, isCountLoading, showTotalCount } =
-    props
+  const {
+    handleInputChange,
+    handleKeyDown,
+    list,
+    inputValue,
+    value,
+    totalEquipmentUnits,
+    isCountLoading,
+    showTotalCount,
+  } = props
 
   const [isOpen, setIsOpen] = useState(!!inputValue)
 
@@ -52,13 +56,13 @@ export default function SearchInput(props: ISearchInput) {
       // Правильное склонение слова "единиц"
       const lastDigit = totalEquipmentUnits % 10
       const secondLastDigit = Math.floor((totalEquipmentUnits % 100) / 10)
-      
+
       let unitsWord = ''
       // Если последняя цифра 1, а предпоследняя НЕ 1, то добавляем "ы"
       if (lastDigit === 1 && secondLastDigit !== 1) {
         unitsWord = 'ы'
       }
-      
+
       return `Искать среди ${totalEquipmentUnits} единиц${unitsWord} оборудования`
     }
     if (showTotalCount && isCountLoading) {
@@ -96,7 +100,7 @@ export default function SearchInput(props: ISearchInput) {
           {...params}
           // label="Поиск оборудования"
           variant="outlined"
-          sx={{ width: {xs: '89vw', sm: "40vw"} }}
+          sx={{ width: { xs: '89vw', sm: '40vw' } }}
           autoFocus={true}
           onKeyDown={handleKeyDown}
           size="small"
@@ -108,11 +112,7 @@ export default function SearchInput(props: ISearchInput) {
                 <SearchIcon />
               </InputAdornment>
             ),
-            endAdornment: (
-              <React.Fragment>
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            ),
+            endAdornment: params.InputProps.endAdornment,
           }}
         />
       )}

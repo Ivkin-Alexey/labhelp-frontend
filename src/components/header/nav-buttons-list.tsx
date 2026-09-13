@@ -1,5 +1,4 @@
 import { Button } from '@mui/material'
-import { useLocation } from 'react-router-dom'
 
 import type { Route } from '../../models/routes'
 
@@ -10,8 +9,6 @@ interface INavButtons {
 
 export default function NavButtons(props: INavButtons) {
   const { list, handleCloseNavMenu } = props
-
-  const location = useLocation()
 
   return list.map(page => (
     <Button

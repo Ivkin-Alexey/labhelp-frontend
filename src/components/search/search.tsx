@@ -1,11 +1,11 @@
 import type { SyntheticEvent } from 'react'
-import { useEffect, useLayoutEffect, useMemo, useState, useRef } from 'react'
+import { useEffect, useLayoutEffect, useState, useRef } from 'react'
 
 import type { AutocompleteInputChangeReason, Theme } from '@mui/material'
-import { SxProps, useMediaQuery } from '@mui/material'
-import { Button, Stack, Typography } from '@mui/material'
+import { useMediaQuery } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import zIndex from '@mui/material/styles/zIndex'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import EquipmentFilters from './equipment-filters'
 import SearchInput from './search-input'
@@ -14,23 +14,14 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks/hooks'
 import { useDebounce } from '../../app/hooks/useDebounce'
 import { decodeQueryParams, encodeQueryParams } from '../../app/utils/utils'
 import type { IEquipmentItem, ISearchArg } from '../../models/equipments'
-import { useAddTermToHistoryMutation, useFetchEquipmentsCountQuery } from '../../store/api/equipment/equipments-api'
-import {
-  clearEquipmentSearch,
-  setSearchFilters,
-  setSearchQueryParams,
-  setSearchTerm,
-} from '../../store/equipments-slice'
+import { useFetchEquipmentsCountQuery } from '../../store/api/equipment/equipments-api'
+import { clearEquipmentSearch, setSearchFilters, setSearchTerm } from '../../store/equipments-slice'
 import {
   selectEquipmentSearchFilters,
-  selectEquipmentSearchQueryParams,
   selectEquipmentSearchTerm,
-  selectIsAuth,
   selectLogin,
   selectSearchResultPage,
-  selectState,
 } from '../../store/selectors'
-import { useDispatch } from 'react-redux'
 
 interface ISearch {
   list?: IEquipmentItem[] | undefined
@@ -41,32 +32,29 @@ interface ISearch {
 }
 
 export function Search(props: ISearch) {
-  const { list = [], isLoading = false, fetchEquipments, isError = false, showTotalCount = false } = props
+  const { list = [], isLoading = false, fetchEquipments, showTotalCount = false } = props
 
   const inputValue = useAppSelector(selectEquipmentSearchTerm)
   const filters = useAppSelector(selectEquipmentSearchFilters)
   const dispatch = useAppDispatch()
   const location = useLocation()
   const path = location.pathname
-  const [searchParams] = useSearchParams()
   const initialRender = useRef(true)
   const initialRequest = useRef(true)
   const secondlRequest = useRef(true)
-  const isAuth = useAppSelector(selectIsAuth)
   const login = useAppSelector(selectLogin)
-  const searchQueryParams = useAppSelector(selectEquipmentSearchQueryParams)
   const savedPage = useAppSelector(selectSearchResultPage)
-  const [filtersOpen, setFiltersOpen] = useState(false)
-  const [isDisabled, setIsDisabled] = useState<boolean>(true)
-  const [isAnyFilterOpen, setIsAnyFilterOpen] = useState(false)
+  const [, setFiltersOpen] = useState(false)
+  const [isAnyFilterOpen] = useState(false)
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
   const debouncedValue = useDebounce(inputValue, SEARCH_DELAY)
   const navigate = useNavigate()
-  
+
   // Получаем общее количество оборудования
-  const { data: totalCountData, isLoading: isCountLoading, error: countError } = useFetchEquipmentsCountQuery(undefined, {
-    skip: !showTotalCount
-  })
+  const { data: totalCountData, isLoading: isCountLoading } = useFetchEquipmentsCountQuery(
+    undefined,
+    { skip: !showTotalCount },
+  )
 
   function replaceUrl() {
     const params = {
@@ -107,6 +95,8 @@ export function Search(props: ISearch) {
         })
       }
     }
+    // Инициализация только на первом рендере страницы поиска
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useLayoutEffect(() => {
@@ -127,6 +117,7 @@ export function Search(props: ISearch) {
       page: savedPage || PAGE,
       pageSize: PAGE_SIZE,
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -135,7 +126,7 @@ export function Search(props: ISearch) {
     }
     window.addEventListener('popstate', handleBackButton)
     return () => window.removeEventListener('popstate', handleBackButton)
-  }, [])
+  }, [dispatch])
 
   // Обработка запросов
   useEffect(() => {
@@ -168,6 +159,9 @@ export function Search(props: ISearch) {
     return () => {
       abortController.abort() // Отмена запроса при размонтировании
     }
+    // Реагируем только на debounced-значение и фильтры: зависимостями от
+    // inputValue/login/path запросы вызывались бы на каждое нажатие клавиши
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue, filters])
 
   // Обновление URL
@@ -185,6 +179,7 @@ export function Search(props: ISearch) {
       replaceUrl()
     }
     // setIsDisabled(!inputValue && !filters)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue, filters, navigate])
 
   const handleInputChange = (

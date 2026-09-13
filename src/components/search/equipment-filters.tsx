@@ -23,8 +23,8 @@ const MenuProps = {
 export const type = typeof MenuProps
 
 export default function EquipmentFilters() {
-  const { data: filters, isError, isSuccess } = useFetchFiltersQuery()
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"))
+  const { data: filters } = useFetchFiltersQuery()
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
   const dispatch = useAppDispatch()
   const filterState = useAppSelector(selectEquipmentSearchFilters)
 
@@ -63,8 +63,13 @@ export default function EquipmentFilters() {
       <Stack
         direction="row"
         useFlexGap
-        style={{marginTop: isMobile ? "6px" : "12px"}}
-        sx={{ flexWrap: 'wrap', marginBottom: "6px", justifyContent: 'center', gap: {xs: "1vw", sm: "16px" }}}
+        style={{ marginTop: isMobile ? '6px' : '12px' }}
+        sx={{
+          flexWrap: 'wrap',
+          marginBottom: '6px',
+          justifyContent: 'center',
+          gap: { xs: '1vw', sm: '16px' },
+        }}
       >
         {filters.map((el: IEquipmentFilter) => {
           const { name, label, options } = el
@@ -72,7 +77,6 @@ export default function EquipmentFilters() {
 
           return (
             <Select
-
               key={name}
               name={name}
               options={options}

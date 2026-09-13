@@ -1,21 +1,17 @@
 import { Box, Container, Pagination, Typography } from '@mui/material'
 
-import { SEARCH_SUGGEST_NUMBER } from '../app/constants/constants'
-import { useAppDispatch, useAppSelector } from '../app/hooks/hooks'
+import { PAGE_SIZE } from '../app/constants/constants'
+import { useAppSelector } from '../app/hooks/hooks'
 import CardList from '../components/card-list'
 import EquipmentCardList from '../components/equipment-card-list'
 import { Search } from '../components/search/search'
 import { useLazyFetchEquipmentsBySearchTermQuery } from '../store/api/equipment/equipments-api'
-import { selectFavoriteEquipmentsFromLS, selectSearchResultPage } from '../store/selectors'
-import { PAGE, PAGE_SIZE, routes, SEARCH_DELAY } from '../app/constants/constants'
-
+import { selectFavoriteEquipmentsFromLS } from '../store/selectors'
 import {
   selectEquipmentSearchFilters,
   selectEquipmentSearchTerm,
   selectLogin,
 } from '../store/selectors'
-import { useState } from 'react'
-import { setSearchResultPage } from '../store/equipments-slice'
 
 export default function SearchPage() {
   const [fetchEquipments, { isFetching, isLoading, isError, data }] =
@@ -23,17 +19,17 @@ export default function SearchPage() {
 
   // const suggestList = equipmentList?.slice(0, SEARCH_SUGGEST_NUMBER)
 
-  const dispatch = useAppDispatch()
   const equipmentIds = useAppSelector(selectFavoriteEquipmentsFromLS)
   const inputValue = useAppSelector(selectEquipmentSearchTerm)
   const filters = useAppSelector(selectEquipmentSearchFilters)
-  const savedPage = useAppSelector(selectSearchResultPage)
   const login = useAppSelector(selectLogin)
 
   const totalEquipmentCards = data?.totalEquipmentCards
   const totalEquipmentUnits = data?.totalEquipmentUnits
-  const count = totalEquipmentCards ? Math.ceil(totalEquipmentCards/PAGE_SIZE) : undefined
-  const isPaginationVisible = Boolean(totalEquipmentCards && totalEquipmentCards > PAGE_SIZE && !isFetching && !isLoading)
+  const count = totalEquipmentCards ? Math.ceil(totalEquipmentCards / PAGE_SIZE) : undefined
+  const isPaginationVisible = Boolean(
+    totalEquipmentCards && totalEquipmentCards > PAGE_SIZE && !isFetching && !isLoading,
+  )
 
   const transformedList = data
     ? data.results.map(el => {
@@ -44,23 +40,25 @@ export default function SearchPage() {
       })
     : []
 
-    function handlePageChange(event: React.ChangeEvent<unknown>, page: number): void {
-      // dispatch(setSearchResultPage(page))
-      fetchEquipments({
-        login,
-        ...(filters && { filters }),
-        searchTerm: inputValue,
-        page,
-        pageSize: PAGE_SIZE,
-      })
+  function handlePageChange(event: React.ChangeEvent<unknown>, page: number): void {
+    // dispatch(setSearchResultPage(page))
+    fetchEquipments({
+      login,
+      ...(filters && { filters }),
+      searchTerm: inputValue,
+      page,
+      pageSize: PAGE_SIZE,
+    })
   }
 
   function renderCounter() {
-    if(isLoading || isFetching || isError ) return
-    if(totalEquipmentUnits === 0) {
+    if (isLoading || isFetching || isError) {
+      return
+    }
+    if (totalEquipmentUnits === 0) {
       return <Typography mt="20px">Ничего не найдено</Typography>
     }
-    
+
     return <Typography mt="20px">Найдено результатов: {totalEquipmentUnits}</Typography>
   }
 
@@ -91,7 +89,15 @@ export default function SearchPage() {
           isError={isError}
         />
       </Box>
-      {isPaginationVisible && <Pagination sx={{mb: "20px"}} page={data?.page} count={count} color="primary" onChange={handlePageChange}/>}
+      {isPaginationVisible && (
+        <Pagination
+          sx={{ mb: '20px' }}
+          page={data?.page}
+          count={count}
+          color="primary"
+          onChange={handlePageChange}
+        />
+      )}
     </Container>
   )
 }
