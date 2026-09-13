@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { createBrowserRouter } from 'react-router-dom'
 
@@ -6,7 +6,8 @@ import { routes } from './constants/constants'
 import { RequireAuth, RequireAdminRole } from '../components/require-auth'
 import Root from '../components/root'
 import NotExistPage from '../pages/404-page'
-import AdminPage from '../pages/admin-page'
+import AdminPanel from '../pages/admin-panel'
+import ContactsPage from '../pages/contacts'
 import EquipmentPage from '../pages/equipment-page'
 import FavoritesPage from '../pages/favorites-page'
 import MainPage from '../pages/main-page'
@@ -14,7 +15,6 @@ import SearchPage from '../pages/search-page'
 import SignInPage from '../pages/sign-in-page'
 import SignUpPage from '../pages/sign-up-page'
 import EditPersonalDataPage from '../pages/user-data-editing-page'
-import ContactsPage from '../pages/contacts'
 
 // const FavoritesPage = React.lazy(() => import('../pages/favorites-page'))
 const HistoryPage = React.lazy(() => import('../pages/history-page'))
@@ -50,21 +50,17 @@ const router = createBrowserRouter([
         path: routes[404],
         element: <NotExistPage />,
       },
-      // {
-      //   path: routes.favorites,
-      //   element: (
-      //     <RequireAuth redirectTo={routes.signIn}>
-      //       <FavoritesPage />
-      //     </RequireAuth>
-      //   ),
-      // },
       {
         path: routes.favorites,
-        element: <FavoritesPage />,
+        element: (
+          <RequireAuth redirectTo={routes.signIn}>
+            <FavoritesPage />
+          </RequireAuth>
+        ),
       },
       {
         path: routes.contacts,
-        element: <ContactsPage />
+        element: <ContactsPage />,
       },
       {
         path: routes.history,
@@ -86,7 +82,7 @@ const router = createBrowserRouter([
         path: routes.admin,
         element: (
           <RequireAdminRole redirectTo={routes.signIn}>
-            <AdminPage />
+            <AdminPanel />
           </RequireAdminRole>
         ),
       },
@@ -97,6 +93,12 @@ const router = createBrowserRouter([
             <EditPersonalDataPage />
           </RequireAdminRole>
         ),
+      },
+      {
+        // Ловушка для всех неизвестных адресов: без неё любой односегментный
+        // путь попадал бы в маршрут карточки оборудования
+        path: routes.notFound,
+        element: <NotExistPage />,
       },
     ],
   },

@@ -1,10 +1,8 @@
 import { useContext } from 'react'
-import MenuIcon from '@mui/icons-material/Menu';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 
-import { KingBedSharp } from '@mui/icons-material'
-import { Box, Button, CircularProgress, Container, Typography } from '@mui/material'
-import { useLocation, useNavigate } from 'react-router-dom'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import { Box, Button, Container, Typography } from '@mui/material'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAppSelector } from '../app/hooks/hooks'
 import { toLowerCaseFirstChart } from '../app/utils/utils'
@@ -16,32 +14,33 @@ import { useFetchEquipmentByIDQuery } from '../store/api/equipment/equipments-ap
 import { selectFavoriteEquipmentsFromLS, selectLogin } from '../store/selectors'
 
 export default function EquipmentPage() {
-  const navigate = useNavigate(); // Хук для навигации
-  const location = useLocation();
+  const navigate = useNavigate() // Хук для навигации
+  const { equipmentId } = useParams<{ equipmentId: string }>()
 
-  const equipmentId = location.pathname.slice(1);
-  const accountLogin = useAppSelector(selectLogin);
-  const favoriteIds = useAppSelector(selectFavoriteEquipmentsFromLS);
+  const accountLogin = useAppSelector(selectLogin)
+  const favoriteIds = useAppSelector(selectFavoriteEquipmentsFromLS)
 
-  const { color } = useContext(ThemeContext);
+  const { color } = useContext(ThemeContext)
 
-  const { isFetching, isLoading, isError, data } = useFetchEquipmentByIDQuery({
-    equipmentId,
-    login: accountLogin,
-  });
+  const { isLoading, isError, data } = useFetchEquipmentByIDQuery(
+    {
+      equipmentId: equipmentId ?? '',
+      login: accountLogin,
+    },
+    { skip: !equipmentId },
+  )
 
-  if (isLoading || isLoading) {
-    return <Circular />;
+  if (isLoading) {
+    return <Circular />
   }
 
   if (isError) {
-    return <h3>Произошла ошибка</h3>;
+    return <h3>Произошла ошибка</h3>
   }
 
   if (data) {
     let {
       id,
-      brand,
       name,
       model,
       imgUrl,
@@ -53,19 +52,18 @@ export default function EquipmentPage() {
       kind,
       sameList,
       isOperate,
-      userName,
       login,
       userId,
-    } = data;
+    } = data
 
-    const isFavorite = favoriteIds.includes(id);
+    const isFavorite = favoriteIds.includes(id)
 
-    let label;
+    let label
 
     if (accountLogin === login || accountLogin === userId) {
-      label = 'Вы используете';
+      label = 'Вы используете'
     } else if (userId) {
-      label = 'В работе у пользователя ' + userId;
+      label = 'В работе у пользователя ' + userId
     }
 
     return (
@@ -76,19 +74,31 @@ export default function EquipmentPage() {
           alignItems: 'flex-start',
           backgroundColor: color,
           overflowX: 'hidden',
-          marginBottom: "20px",
+          marginBottom: '20px',
           padding: 0,
         }}
       >
         <Button
           variant="text"
           onClick={() => navigate(-1)}
-          sx={{ alignSelf: 'flex-start', margin: '10px', display: {sm: "inline-flex", md: "none"}}}
+          sx={{
+            alignSelf: 'flex-start',
+            margin: '10px',
+            display: { sm: 'inline-flex', md: 'none' },
+          }}
         >
-                      <ArrowBackIosIcon />
-              Назад
+          <ArrowBackIosIcon />
+          Назад
         </Button>
-        <Box sx={{ position: 'relative', marginBottom: '40px', margin: '0 0', padding: "8px", width: {sm: "80%", md: "100%"}}}>
+        <Box
+          sx={{
+            position: 'relative',
+            marginBottom: '40px',
+            margin: '0 0',
+            padding: '8px',
+            width: { sm: '80%', md: '100%' },
+          }}
+        >
           <OperateStatus isOperate={isOperate} label={label} />
           <img
             src={imgUrl}
@@ -98,7 +108,7 @@ export default function EquipmentPage() {
               display: 'block',
               marginBottom: '10px',
               maxWidth: '100%',
-              maxHeight: "35vh"
+              maxHeight: '35vh',
             }}
           />
           <Typography gutterBottom variant="h5" component="div">
@@ -130,6 +140,6 @@ export default function EquipmentPage() {
         </Box>
         <FavoriteButtons equipmentId={id} isFavorite={isFavorite} isCardMode={false} />
       </Container>
-    );
+    )
   }
 }

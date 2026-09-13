@@ -1,4 +1,4 @@
-export const BASE_URL = import.meta.env.VITE_BASE_URL;
+export const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export const DEFAULT_SEARCH_TERM = 'спектрометр'
 
@@ -18,7 +18,7 @@ export const routes = {
   main: '/',
   signIn: '/signin',
   signUp: '/signup',
-  equipment: '/:equipmentId',
+  equipment: '/equipments/:equipmentId',
   favorites: '/favorites',
   history: '/history',
   search: '/search',
@@ -26,7 +26,14 @@ export const routes = {
   admin: '/admin',
   userProfile: '/admin/:login',
   '404': '/404',
-  contacts: '/contacts'
+  contacts: '/contacts',
+  // Любой неизвестный адрес ведёт на страницу 404
+  notFound: '*',
+}
+
+// Ссылка на карточку оборудования
+export function getEquipmentPath(equipmentId: string) {
+  return `/equipments/${encodeURIComponent(equipmentId)}`
 }
 
 export const apiRoutes = {
@@ -44,6 +51,7 @@ export const apiRoutes = {
       searchHistory: '/equipments/search-history/',
       filters: '/equipments/filters',
       count: '/equipments/count',
+      syncStatus: '/equipments/sync-status',
     },
   },
   post: {
@@ -55,6 +63,7 @@ export const apiRoutes = {
       favorite: '/equipments/favorite/',
       operate: '/equipments/operate/',
       searchHistory: '/equipments/search-history/',
+      syncEquipmentDb: '/equipments/sync-db/',
     },
   },
   delete: {

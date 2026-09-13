@@ -11,6 +11,8 @@ import type {
 import type { TLogin } from '../../../models/users'
 import { api } from '../api'
 
+export type TSyncStatus = 'pending' | 'success' | 'idle' | 'error'
+
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login?: TLogin }>({
@@ -157,6 +159,17 @@ export const equipmentsApi = api.injectEndpoints({
       }),
       invalidatesTags: ['HistoryList'],
     }),
+    syncEquipmentDb: builder.mutation<string, void>({
+      query: () => ({
+        url: apiRoutes.post.equipments.syncEquipmentDb,
+        method: 'POST',
+      }),
+      invalidatesTags: ['EquipmentList', 'Equipment'],
+    }),
+    getSyncEquipmentDbStatus: builder.query<{ status: TSyncStatus }, void>({
+      query: () => apiRoutes.get.equipments.syncStatus,
+      providesTags: ['SyncStatus'],
+    }),
   }),
 })
 
@@ -174,4 +187,6 @@ export const {
   useFetchSearchHistoryQuery,
   useFetchFiltersQuery,
   useFetchEquipmentsCountQuery,
+  useSyncEquipmentDbMutation,
+  useGetSyncEquipmentDbStatusQuery,
 } = equipmentsApi
