@@ -51,12 +51,11 @@ const router = createBrowserRouter([
         element: <NotExistPage />,
       },
       {
+        // Временно открыто: избранные ids лежат в localStorage, страница не
+        // требует авторизации. RequireAuth вернём вместе с серверным избранным
+        // (см. TODO в store/api/equipment/equipments-api.ts)
         path: routes.favorites,
-        element: (
-          <RequireAuth redirectTo={routes.signIn}>
-            <FavoritesPage />
-          </RequireAuth>
-        ),
+        element: <FavoritesPage />,
       },
       {
         path: routes.contacts,
