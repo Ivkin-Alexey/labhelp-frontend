@@ -32,7 +32,9 @@ export const authMiddleware: Middleware<{}, IState> = store => next => action =>
         break
 
       case 'account/clearUserData':
-        localStorage.clear()
+        // Логаут должен удалять только данные аккаунта: избранный список и
+        // остальные ключи принадлежат пользователю и не зависят от сессии
+        Object.values(names.account).forEach(key => localStorage.removeItem(key))
         break
 
       default:

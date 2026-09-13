@@ -10,13 +10,14 @@ export const preloadedState: IState = {
   account: {
     accountData: accountData ? JSON.parse(accountData) : null,
     token: token ? token : null,
-    isAuth: Boolean(accountData),
+    // Без токена сессию восстановливать не из чего — сервер её всё равно не примет
+    isAuth: Boolean(accountData && token),
   },
   equipments: {
     favoriteList: favoriteList ? JSON.parse(favoriteList) : [],
     searchFilters: null,
-    searchQueryParams: "",
+    searchQueryParams: '',
     searchTerm: '',
-    searchResultPage: null
+    searchResultPage: null,
   },
 }

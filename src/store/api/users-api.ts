@@ -7,7 +7,7 @@ import type {
   IUserCredentials,
   IUserRegistrationData,
 } from '../../models/users'
-import { setToken, setUserData } from '../users-slice'
+import { clearUserData, setToken, setUserData } from '../users-slice'
 
 export const usersApi = api.injectEndpoints({
   endpoints: builder => ({
@@ -16,9 +16,18 @@ export const usersApi = api.injectEndpoints({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          console.log(data)
+          if (!data.data) {
+            dispatch(clearUserData())
+          }
         } catch (e) {
-          console.error('Failed to get user data: ', e)
+          // Сессия не подтверждена сервером (401/403) — разлогиниваем,
+          // сетевые ошибки оставляем как есть, чтобы не выкидывать пользователя
+          const status = (e as { status?: number })?.status
+          if (status === 401 || status === 403) {
+            dispatch(clearUserData())
+          } else {
+            console.error('Failed to check token: ', e)
+          }
         }
       },
     }),
@@ -107,6 +116,7 @@ export const {
   useLazyGetAccountDataQuery,
   useUpdatePersonDataMutation,
   useDeletePersonMutation,
+  useCheckTokenQuery,
   useLazyCheckTokenQuery,
   useGetUserListQuery,
 } = usersApi
