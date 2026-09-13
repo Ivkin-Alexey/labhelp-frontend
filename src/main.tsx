@@ -1,16 +1,14 @@
-import React from 'react'
-
+import { ThemeProvider } from '@mui/material'
+import { SnackbarProvider } from 'notistack'
 import { createRoot } from 'react-dom/client'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 
 import router from './app/router'
-import { store } from './store/store'
-import FallbackRender from '../src/pages/fallback-render'
-
 import './index.css'
-import { createTheme, ThemeProvider } from '@mui/material'
+import FallbackRender from './pages/fallback-render'
+import { store } from './store/store'
 import theme from './theme'
 
 const container = document.getElementById('root')
@@ -22,7 +20,9 @@ if (container) {
     <ErrorBoundary FallbackComponent={FallbackRender}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
-          <RouterProvider router={router} />
+          <SnackbarProvider maxSnack={3} preventDuplicate>
+            <RouterProvider router={router} />
+          </SnackbarProvider>
         </Provider>
       </ThemeProvider>
     </ErrorBoundary>,

@@ -1,38 +1,34 @@
-import type * as React from 'react'
 import { useEffect, useState } from 'react'
 
-import { useErrorBoundary } from 'react-error-boundary'
+import { useSnackbar } from 'notistack'
 import { useNavigate } from 'react-router-dom'
 
 import { routes } from '../app/constants/constants'
-import { useAppDispatch, useAppSelector } from '../app/hooks/hooks'
+import { useAppSelector } from '../app/hooks/hooks'
 import SignForm from '../components/sign-form/sign-form'
 import type { IFormValues } from '../models/inputs'
 import { useLazyGetAccountDataQuery, useSignInMutation } from '../store/api/users-api'
 import { selectToken } from '../store/selectors'
-import { setUserData } from '../store/users-slice'
 
 export default function SignInPage() {
-  const [signIn, { isError: isAuthError, isLoading: isAuthLoading, isSuccess: isAuthSuccess }] =
-    useSignInMutation()
-
   const [
-    getAccountData,
+    signIn,
     {
-      data: accountData,
-      isError: isAccountError,
-      isLoading: isAccountLoading,
-      isSuccess: isAccountSuccess,
-      error,
+      isError: isAuthError,
+      error: authError,
+      isLoading: isAuthLoading,
+      isSuccess: isAuthSuccess,
+      reset: resetSignIn,
     },
-  ] = useLazyGetAccountDataQuery()
+  ] = useSignInMutation()
 
-  const { showBoundary } = useErrorBoundary()
+  const [getAccountData, { isSuccess: isAccountSuccess }] = useLazyGetAccountDataQuery()
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const [savedLogin, setSavedLogin] = useState<FormDataEntryValue | null>(null)
 
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const token = useAppSelector(selectToken)
 
   const handleSubmit = (data: IFormValues) => {
@@ -46,27 +42,43 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (isAuthSuccess && savedLogin && token) {
-      getAccountData(savedLogin?.toString())
+      getAccountData(savedLogin.toString())
     }
-  }, [isAuthSuccess, token])
+  }, [isAuthSuccess, savedLogin, token, getAccountData])
 
   useEffect(() => {
     if (isAccountSuccess) {
       navigate(routes.main)
     }
-  }, [isAccountSuccess])
+  }, [isAccountSuccess, navigate])
 
+  // Ошибка входа — штатная ситуация (например, неверный пароль), поэтому показываем
+  // сообщение, а не роняем приложение на ErrorBoundary
   useEffect(() => {
-    if (isAccountError) {
-      console.log(error)
+    if (!isAuthError) {
+      return
     }
-  }, [isAccountError])
-
-  if (isAuthError) {
-    showBoundary(error)
-  }
+    enqueueSnackbar(getSignInErrorMessage(authError), {
+      variant: 'error',
+      anchorOrigin: { vertical: 'top', horizontal: 'right' },
+      autoHideDuration: 7000,
+    })
+    resetSignIn()
+  }, [isAuthError, authError, enqueueSnackbar, resetSignIn])
 
   return (
     <SignForm handleSubmit={handleSubmit} isLoading={isAuthLoading} title="Вход" isSignIn={true} />
   )
+}
+
+function getSignInErrorMessage(error: unknown) {
+  const status = (error as { status?: number | string } | undefined)?.status
+
+  if (status === 401 || status === 403) {
+    return 'Неверный логин или пароль'
+  }
+  if (status === 'FETCH_ERROR') {
+    return 'Сервер недоступен, попробуйте позже'
+  }
+  return 'Не удалось войти, попробуйте позже'
 }
