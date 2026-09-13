@@ -13,6 +13,20 @@ function isGetRequest(args: unknown) {
   return method.toUpperCase() === 'GET'
 }
 
+// Дефолтное условие ретраев в RTK не смотрит на статус ответа и повторяет
+// любые ошибки, включая 4xx. Повторяем только преходящие сбои: обрыв сети,
+// 429 (много запросов) и 5xx, кроме 501 (метод не реализован — повторять
+// бессмысленно)
+function isTransientError(error: unknown) {
+  const status = (error as { status?: number | string } | undefined)?.status
+
+  if (status === 'FETCH_ERROR') {
+    return true
+  }
+
+  return typeof status === 'number' && (status === 429 || (status >= 500 && status !== 501))
+}
+
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: retry(
@@ -28,9 +42,11 @@ export const api = createApi({
       },
     }),
     {
-      // Повторяем только GET-запросы: повтор мутиаций (POST/PATCH/DELETE) может
-      // дать побочный эффект на сервере — например, повторно запустить синхронизацию БД
-      retryCondition: (_error, args, { attempt }) => attempt <= MAX_RETRIES && isGetRequest(args),
+      // Повторяем только GET-запросы при преходящих сбоях: повтор мутиаций
+      // (POST/PATCH/DELETE) может дать побочный эффект на сервере — например,
+      // повторно запустить синхронизацию БД
+      retryCondition: (error, args, { attempt }) =>
+        attempt <= MAX_RETRIES && isGetRequest(args) && isTransientError(error),
     },
   ),
   tagTypes: [
