@@ -1,0 +1,12 @@
+# Normalize line endings: store LF in the repository, check out LF in working tree.
+* text=auto eol=lf
+
+# Binary assets must never be rewritten by line-ending filters.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary

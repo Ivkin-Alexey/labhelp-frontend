@@ -1,8 +1,8 @@
 import type { IEquipmentFilterState, IQueriesObject } from '../../models/equipments'
 
 interface DecodedQueryParams {
-  filters: Record<string, any> | null;
-  term: string;
+  filters: Record<string, any> | null
+  term: string
 }
 
 export function toLowerCaseFirstChart(string: string) {
@@ -19,28 +19,28 @@ export function encodeQueryParams(params: IQueriesObject) {
     })
     .join('&')
 
-  return encodedParams ? `?${encodedParams}` : ""
+  return encodedParams ? `?${encodedParams}` : ''
 }
 
 export function decodeQueryParams(url: string): DecodedQueryParams {
-  let filters: Record<string, any> | null = {};
-  let term = '';
-  
+  let filters: Record<string, any> | null = {}
+  let term = ''
+
   // Извлекаем часть URL после '?' и декодируем
-  const queryString = url.split('?')[1] || '';
-  const pairs = queryString.split('&').filter(Boolean);
+  const queryString = url.split('?')[1] || ''
+  const pairs = queryString.split('&').filter(Boolean)
 
   for (const pair of pairs) {
-    let [key, value] = pair.split('=');
-    
+    let [key, value] = pair.split('=')
+
     // Декодируем ключ и значение
-    key = decodeURIComponent(key || '');
-    value = decodeURIComponent((value || '').replace(/\+/g, ' '));
+    key = decodeURIComponent(key || '')
+    value = decodeURIComponent((value || '').replace(/\+/g, ' '))
 
     // Пытаемся распарсить JSON-массив/объект
     try {
-      if (/^[\[{]/.test(value) && /[\]}]$/.test(value)) {
-        value = JSON.parse(value);
+      if (/^(\[|\{)/.test(value) && /[\]}]$/.test(value)) {
+        value = JSON.parse(value)
       }
     } catch (e) {
       // Оставляем как строку при ошибке парсинга
@@ -48,17 +48,17 @@ export function decodeQueryParams(url: string): DecodedQueryParams {
 
     // Отделяем searchTerm от filters
     if (key === 'term') {
-      term = value;
+      term = value
     } else {
-      filters[key] = value;
+      filters[key] = value
     }
   }
 
-  if(JSON.stringify(filters) === "{}") {
+  if (JSON.stringify(filters) === '{}') {
     filters = null
   }
 
-  return { filters, term };
+  return { filters, term }
 }
 
 export function checkIsFiltered(filtersState: IEquipmentFilterState) {

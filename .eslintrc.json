@@ -19,7 +19,7 @@
         ]
       }
     ],
-    "no-console": ["warn"],
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-multiple-empty-lines": ["error"],
     "curly": ["error", "all"],
     "import/prefer-default-export": "off",

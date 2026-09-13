@@ -1,9 +1,4 @@
-import type {
-  TValidateCallback,
-  TValidateResult,
-  TValidateRule,
-  TValidateRules,
-} from '../../models/inputs'
+import type { TValidateResult, TValidateRule, TValidateRules } from '../../models/inputs'
 import { LOGIN_SPECIAL_CHARACTERS } from '../constants/constants'
 import validateErrorMessages from '../constants/localizations/validateErrors'
 import { capitalize } from '../methods/methods'
