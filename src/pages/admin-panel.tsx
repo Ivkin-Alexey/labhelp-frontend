@@ -49,18 +49,63 @@ interface LogEntry {
 }
 
 const SYNC_POLLING_INTERVAL = 2000 // ms
+const SYNC_TIMEOUT_MS = 120000 // ms
+
+// RTK Query реджектит unwrap() обычным объектом (FetchBaseQueryError или
+// SerializedError), а не экземпляром Error, поэтому проверяем поля напрямую
+function getSyncErrorMessage(error: unknown): string {
+  const e = error as {
+    status?: number | string
+    data?: { message?: string; detail?: string } | string
+    error?: string
+  }
+
+  const data = e?.data
+
+  if (typeof data === 'string' && data) {
+    return data
+  }
+
+  if (typeof data === 'object' && data !== null) {
+    const serverMessage = data.message ?? data.detail
+    if (typeof serverMessage === 'string' && serverMessage) {
+      return serverMessage
+    }
+  }
+
+  if (e?.status === 'FETCH_ERROR') {
+    return 'Сервер недоступен'
+  }
+  if (typeof e?.status === 'number') {
+    return `Ошибка сервера (${e.status})`
+  }
+  if (e?.error) {
+    return e.error
+  }
+
+  return 'Неизвестная ошибка'
+}
 
 function AdminPanel() {
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [isSyncing, setIsSyncing] = useState(false)
+  // Поллинг статуса включаем только после того, как сервер принял задачу:
+  // иначе первый опрос успевает вернуть статус предыдущей синхронизации
+  const [isPolling, setIsPolling] = useState(false)
   const lastLoggedStatus = useRef<TSyncStatus | null>(null)
+  const syncStartedAt = useRef(0)
   const { enqueueSnackbar } = useSnackbar()
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   const [syncEquipmentDb] = useSyncEquipmentDbMutation()
 
-  const { data: syncStatus } = useGetSyncEquipmentDbStatusQuery(undefined, {
-    pollingInterval: isSyncing ? SYNC_POLLING_INTERVAL : 0,
+  const {
+    data: syncStatus,
+    fulfilledTimeStamp,
+    isError: isStatusError,
+    isFetching: isStatusFetching,
+  } = useGetSyncEquipmentDbStatusQuery(undefined, {
+    pollingInterval: isPolling ? SYNC_POLLING_INTERVAL : 0,
   })
 
   const addLog = useCallback((message: string, type: LogEntry['type'] = 'info') => {
@@ -95,6 +140,7 @@ function AdminPanel() {
   const handleSyncDatabase = async () => {
     setLogs([])
     lastLoggedStatus.current = null
+    syncStartedAt.current = Date.now()
     setIsSyncing(true)
 
     addLog('Запрос на синхронизацию базы данных отправлен', 'info')
@@ -102,8 +148,9 @@ function AdminPanel() {
     try {
       await syncEquipmentDb().unwrap()
       addLog('Сервер принял задачу, ожидаем завершения...', 'info')
+      setIsPolling(true)
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Неизвестная ошибка'
+      const errorMessage = getSyncErrorMessage(error)
       addLog(`Ошибка запроса синхронизации: ${errorMessage}`, 'error')
       notify(`Ошибка синхронизации: ${errorMessage}`, 'error')
       setIsSyncing(false)
@@ -113,7 +160,13 @@ function AdminPanel() {
   useEffect(() => {
     const status = syncStatus?.status
 
-    if (!isSyncing || !status || status === lastLoggedStatus.current) {
+    if (!isSyncing || !isPolling || !status || status === lastLoggedStatus.current) {
+      return
+    }
+
+    // Реагируем только на статусы, полученные после старта текущей синхронизации,
+    // иначе сработаем на закэшированный ответ предыдущего запуска
+    if (!fulfilledTimeStamp || fulfilledTimeStamp < syncStartedAt.current) {
       return
     }
 
@@ -123,14 +176,43 @@ function AdminPanel() {
       addLog('База данных успешно синхронизирована', 'success')
       notify('База данных успешно синхронизирована', 'success')
       setIsSyncing(false)
+      setIsPolling(false)
     }
 
     if (status === 'error') {
       addLog('Синхронизация завершилась с ошибкой', 'error')
       notify('Синхронизация завершилась с ошибкой', 'error')
       setIsSyncing(false)
+      setIsPolling(false)
     }
-  }, [syncStatus, isSyncing, addLog, notify])
+  }, [syncStatus, fulfilledTimeStamp, isSyncing, isPolling, addLog, notify])
+
+  // Опрос статуса упал даже после ретраев — выходим из syncing, иначе панель
+  // зависнет с неактивной кнопкой и бесконечным прогресс-баром
+  useEffect(() => {
+    if (!isSyncing || !isPolling || !isStatusError || isStatusFetching) {
+      return
+    }
+    addLog('Сервер не отвечает на запрос статуса синхронизации', 'error')
+    notify('Не удалось получить статус синхронизации', 'error')
+    setIsSyncing(false)
+    setIsPolling(false)
+  }, [isSyncing, isPolling, isStatusError, isStatusFetching, addLog, notify])
+
+  // Страховка: если статус так и не сменился (бэкенд «потерял» задачу),
+  // по таймауту разблокируем кнопку вместо вечного «Синхронизация...»
+  useEffect(() => {
+    if (!isSyncing) {
+      return
+    }
+    const timer = window.setTimeout(() => {
+      addLog('Превышено время ожидания синхронизации', 'error')
+      notify('Синхронизация не завершилась за отведённое время', 'error')
+      setIsSyncing(false)
+      setIsPolling(false)
+    }, SYNC_TIMEOUT_MS)
+    return () => window.clearTimeout(timer)
+  }, [isSyncing, addLog, notify])
 
   const clearLogs = () => {
     setLogs([])
