@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import {
   CheckCircle as CheckCircleIcon,
-  Close as CloseIcon,
   CloudUpload as CloudUploadIcon,
   Error as ErrorIcon,
   Info as InfoIcon,
@@ -12,7 +11,6 @@ import {
   Box,
   Button,
   Container,
-  LinearProgress,
   List,
   ListItem,
   ListItemIcon,
@@ -86,6 +84,12 @@ function getSyncErrorMessage(error: unknown): string {
   return 'Неизвестная ошибка'
 }
 
+// Даты приходят с сервера в ISO-формате
+function formatDateTime(isoDate: string): string {
+  const date = new Date(isoDate)
+  return Number.isNaN(date.getTime()) ? isoDate : date.toLocaleString()
+}
+
 function AdminPanel() {
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [isSyncing, setIsSyncing] = useState(false)
@@ -93,6 +97,7 @@ function AdminPanel() {
   // иначе первый опрос успевает вернуть статус предыдущей синхронизации
   const [isPolling, setIsPolling] = useState(false)
   const lastLoggedStatus = useRef<TSyncStatus | null>(null)
+  const lastLoggedStage = useRef<string | null>(null)
   const syncStartedAt = useRef(0)
   const { enqueueSnackbar } = useSnackbar()
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
@@ -140,6 +145,7 @@ function AdminPanel() {
   const handleSyncDatabase = async () => {
     setLogs([])
     lastLoggedStatus.current = null
+    lastLoggedStage.current = null
     syncStartedAt.current = Date.now()
     setIsSyncing(true)
 
@@ -158,9 +164,7 @@ function AdminPanel() {
   }
 
   useEffect(() => {
-    const status = syncStatus?.status
-
-    if (!isSyncing || !isPolling || !status || status === lastLoggedStatus.current) {
+    if (!isSyncing || !isPolling || !syncStatus) {
       return
     }
 
@@ -170,17 +174,32 @@ function AdminPanel() {
       return
     }
 
+    const { status, stageDescription, error, equipmentCount } = syncStatus
+
+    // Этапы меняются внутри одного статуса pending, поэтому отслеживаем их
+    // отдельно от статуса
+    if (stageDescription && stageDescription !== lastLoggedStage.current) {
+      lastLoggedStage.current = stageDescription
+      addLog(stageDescription, 'info')
+    }
+
+    if (!status || status === lastLoggedStatus.current) {
+      return
+    }
+
     lastLoggedStatus.current = status
 
     if (status === 'success') {
-      addLog('База данных успешно синхронизирована', 'success')
+      const count = equipmentCount ?? 0
+      addLog(`Синхронизация завершена, записей: ${count}`, 'success')
       notify('База данных успешно синхронизирована', 'success')
       setIsSyncing(false)
       setIsPolling(false)
     }
 
     if (status === 'error') {
-      addLog('Синхронизация завершилась с ошибкой', 'error')
+      const details = error ? `: ${error}` : ''
+      addLog(`Синхронизация завершилась с ошибкой${details}`, 'error')
       notify('Синхронизация завершилась с ошибкой', 'error')
       setIsSyncing(false)
       setIsPolling(false)
@@ -213,11 +232,6 @@ function AdminPanel() {
     }, SYNC_TIMEOUT_MS)
     return () => window.clearTimeout(timer)
   }, [isSyncing, addLog, notify])
-
-  const clearLogs = () => {
-    setLogs([])
-    notify('Логи очищены', 'info')
-  }
 
   const getLogIcon = (type: LogEntry['type']) => {
     switch (type) {
@@ -261,25 +275,16 @@ function AdminPanel() {
         >
           {isSyncing ? 'Синхронизация...' : 'Обновить базу данных'}
         </Button>
-
-        {logs.length > 0 && (
-          <Button
-            variant="outlined"
-            size="large"
-            startIcon={<CloseIcon />}
-            onClick={clearLogs}
-            disabled={isSyncing}
-          >
-            Очистить логи
-          </Button>
-        )}
-
-        {isSyncing && (
-          <Box sx={{ width: 160 }}>
-            <LinearProgress />
-          </Box>
-        )}
       </Box>
+
+      {/* Итог последней синхронизации виден и после её завершения */}
+      {!isSyncing && syncStatus?.completedAt && (
+        <Typography variant="body2" color="text.secondary" textAlign="center" sx={{ mb: 2 }}>
+          {syncStatus.status === 'success'
+            ? `Последняя синхронизация: ${formatDateTime(syncStatus.completedAt)}, записей: ${syncStatus.equipmentCount ?? 0}`
+            : `Последняя синхронизация завершилась с ошибкой: ${formatDateTime(syncStatus.completedAt)}`}
+        </Typography>
+      )}
 
       {/* Логи выполнения */}
       <Box sx={{ mt: 3 }}>

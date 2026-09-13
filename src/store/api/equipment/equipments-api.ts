@@ -12,6 +12,19 @@ import { api } from '../api'
 
 export type TSyncStatus = 'pending' | 'success' | 'idle' | 'error'
 
+// Бэкенд всегда отдает весь набор полей: во время синхронизации они заполнены,
+// вне её приходят значения по умолчанию
+export interface ISyncStatusDetail {
+  status: TSyncStatus
+  stage: string | null
+  stageDescription: string | null
+  progress: number
+  error: string | null
+  startedAt: string | null
+  completedAt: string | null
+  equipmentCount: number | null
+}
+
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login?: TLogin }>({
@@ -131,7 +144,7 @@ export const equipmentsApi = api.injectEndpoints({
       }),
       invalidatesTags: ['EquipmentList', 'Equipment'],
     }),
-    getSyncEquipmentDbStatus: builder.query<{ status: TSyncStatus }, void>({
+    getSyncEquipmentDbStatus: builder.query<ISyncStatusDetail, void>({
       query: () => apiRoutes.get.equipments.syncStatus,
       providesTags: ['SyncStatus'],
     }),
