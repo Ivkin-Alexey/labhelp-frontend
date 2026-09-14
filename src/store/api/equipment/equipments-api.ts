@@ -28,8 +28,11 @@ export interface ISyncStatusDetail {
 export const equipmentsApi = api.injectEndpoints({
   endpoints: builder => ({
     fetchEquipmentByID: builder.query<IEquipmentItem, { equipmentId: string; login?: TLogin }>({
+      // Id оборудования приходит из Google-таблицы и может содержать '/', '?'
+      // и другие символы со спецзначением в URL. Без экранирования такой id
+      // распадается на несколько сегментов пути и запрос уходит не в тот роут
       query: data => ({
-        url: apiRoutes.get.equipments.equipments + '/' + data.equipmentId,
+        url: apiRoutes.get.equipments.equipments + '/' + encodeURIComponent(data.equipmentId),
         params: {
           login: data.login,
         },

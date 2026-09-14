@@ -11,7 +11,9 @@ export const operateEquipmentApi = api.injectEndpoints({
     }),
     addOperatingEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>({
       query: data => ({
-        url: apiRoutes.post.equipments.operate + data.equipmentId + `?login=${data.login}`,
+        // encodeURIComponent обязателен: id оборудования может содержать '/',
+        // без экранирования он распадается на несколько сегментов пути
+        url: apiRoutes.post.equipments.operate + encodeURIComponent(data.equipmentId) + `?login=${data.login}`,
         method: 'POST',
         body: data,
       }),
@@ -40,7 +42,10 @@ export const operateEquipmentApi = api.injectEndpoints({
     deleteOperatingEquipment: builder.mutation<string, { login: string; equipmentId: equipmentId }>(
       {
         query: data => ({
-          url: apiRoutes.delete.equipments.operate + data.equipmentId + `?login=${data.login}`,
+          url:
+            apiRoutes.delete.equipments.operate +
+            encodeURIComponent(data.equipmentId) +
+            `?login=${data.login}`,
           method: 'DELETE',
           body: data,
         }),
