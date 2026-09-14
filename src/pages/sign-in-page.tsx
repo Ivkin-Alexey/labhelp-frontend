@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useSnackbar } from 'notistack'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { routes } from '../app/constants/constants'
 import { useAppSelector } from '../app/hooks/hooks'
@@ -9,6 +9,13 @@ import SignForm from '../components/sign-form/sign-form'
 import type { IFormValues } from '../models/inputs'
 import { useLazyGetAccountDataQuery, useSignInMutation } from '../store/api/users-api'
 import { selectToken } from '../store/selectors'
+
+// Редирект после входа: RequireAuth/RequireAdminRole кладут в state.from путь
+// страницы, с которой отправили логиниться. Внешние адреса отсекаем
+function getRedirectFrom(state: unknown): string {
+  const from = (state as { from?: string } | null)?.from
+  return from && from.startsWith('/') && !from.startsWith('//') ? from : routes.main
+}
 
 export default function SignInPage() {
   const [
@@ -29,7 +36,9 @@ export default function SignInPage() {
   const [savedLogin, setSavedLogin] = useState<FormDataEntryValue | null>(null)
 
   const navigate = useNavigate()
+  const location = useLocation()
   const token = useAppSelector(selectToken)
+  const redirectTo = getRedirectFrom(location.state)
 
   const handleSubmit = (data: IFormValues) => {
     const { login, password } = data
@@ -48,9 +57,10 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (isAccountSuccess) {
-      navigate(routes.main)
+      // replace: страница входа не нужна в истории после успешного входа
+      navigate(redirectTo, { replace: true })
     }
-  }, [isAccountSuccess, navigate])
+  }, [isAccountSuccess, navigate, redirectTo])
 
   // Ошибка входа — штатная ситуация (например, неверный пароль), поэтому показываем
   // сообщение, а не роняем приложение на ErrorBoundary

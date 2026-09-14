@@ -22,11 +22,13 @@ import {
 import type { Theme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
+import { useAppDispatch } from '../app/hooks/hooks'
 import {
   useGetSyncEquipmentDbStatusQuery,
   useSyncEquipmentDbMutation,
   type TSyncStatus,
 } from '../store/api/equipment/equipments-api'
+import { clearUserData } from '../store/users-slice'
 
 const LogContainer = styled(Paper)(({ theme }) => ({
   height: 400,
@@ -89,7 +91,15 @@ function formatDateTime(isoDate: string): string {
   return Number.isNaN(date.getTime()) ? isoDate : date.toLocaleString()
 }
 
+// 401/403 на защищённом запросе означает протухший JWT: сессию нужно завершить.
+// 403 приходит и при попытке не-админа дернуть админский маршрут — исход тот же
+function isAuthError(error: unknown): boolean {
+  const status = (error as { status?: number | string } | undefined)?.status
+  return status === 401 || status === 403
+}
+
 function AdminPanel() {
+  const dispatch = useAppDispatch()
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [isSyncing, setIsSyncing] = useState(false)
   // Поллинг статуса включаем только после того, как сервер принял задачу:
@@ -105,6 +115,7 @@ function AdminPanel() {
   const {
     data: syncStatus,
     fulfilledTimeStamp,
+    error: statusError,
     isError: isStatusError,
     isFetching: isStatusFetching,
   } = useGetSyncEquipmentDbStatusQuery(undefined, {
@@ -145,6 +156,15 @@ function AdminPanel() {
     } catch (error) {
       const errorMessage = getSyncErrorMessage(error)
       addLog(`Ошибка запроса синхронизации: ${errorMessage}`, 'error')
+
+      if (isAuthError(error)) {
+        // Токен протух. clearUserData обнуляет роль, RequireAdminRole
+        // перебросит на signIn, а после входа вернёт обратно на /admin
+        addLog('Сессия истекла, войдите заново', 'error')
+        dispatch(clearUserData())
+        return
+      }
+
       setIsSyncing(false)
     }
   }
@@ -196,10 +216,18 @@ function AdminPanel() {
     if (!isSyncing || !isPolling || !isStatusError || isStatusFetching) {
       return
     }
+
+    // 401/403 при поллинге — токен протух уже во время синхронизации
+    if (statusError && isAuthError(statusError)) {
+      addLog('Сессия истекла, войдите заново', 'error')
+      dispatch(clearUserData())
+      return
+    }
+
     addLog('Сервер не отвечает на запрос статуса синхронизации', 'error')
     setIsSyncing(false)
     setIsPolling(false)
-  }, [isSyncing, isPolling, isStatusError, isStatusFetching, addLog])
+  }, [isSyncing, isPolling, isStatusError, isStatusFetching, statusError, addLog, dispatch])
 
   // Страховка: если статус так и не сменился (бэкенд «потерял» задачу),
   // по таймауту разблокируем кнопку вместо вечного «Синхронизация...»
