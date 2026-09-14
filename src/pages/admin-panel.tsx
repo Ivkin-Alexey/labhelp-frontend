@@ -21,7 +21,6 @@ import {
 } from '@mui/material'
 import type { Theme } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { useSnackbar } from 'notistack'
 
 import {
   useGetSyncEquipmentDbStatusQuery,
@@ -99,7 +98,6 @@ function AdminPanel() {
   const lastLoggedStatus = useRef<TSyncStatus | null>(null)
   const lastLoggedStage = useRef<string | null>(null)
   const syncStartedAt = useRef(0)
-  const { enqueueSnackbar } = useSnackbar()
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
 
   const [syncEquipmentDb] = useSyncEquipmentDbMutation()
@@ -131,17 +129,6 @@ function AdminPanel() {
     }, 100)
   }, [])
 
-  const notify = useCallback(
-    (message: string, variant: 'success' | 'error' | 'info') => {
-      enqueueSnackbar(message, {
-        variant,
-        anchorOrigin: { vertical: 'top', horizontal: 'right' },
-        autoHideDuration: variant === 'info' ? 2000 : 7000,
-      })
-    },
-    [enqueueSnackbar],
-  )
-
   const handleSyncDatabase = async () => {
     setLogs([])
     lastLoggedStatus.current = null
@@ -158,7 +145,6 @@ function AdminPanel() {
     } catch (error) {
       const errorMessage = getSyncErrorMessage(error)
       addLog(`Ошибка запроса синхронизации: ${errorMessage}`, 'error')
-      notify(`Ошибка синхронизации: ${errorMessage}`, 'error')
       setIsSyncing(false)
     }
   }
@@ -192,7 +178,6 @@ function AdminPanel() {
     if (status === 'success') {
       const count = equipmentCount ?? 0
       addLog(`Синхронизация завершена, записей: ${count}`, 'success')
-      notify('База данных успешно синхронизирована', 'success')
       setIsSyncing(false)
       setIsPolling(false)
     }
@@ -200,23 +185,21 @@ function AdminPanel() {
     if (status === 'error') {
       const details = error ? `: ${error}` : ''
       addLog(`Синхронизация завершилась с ошибкой${details}`, 'error')
-      notify('Синхронизация завершилась с ошибкой', 'error')
       setIsSyncing(false)
       setIsPolling(false)
     }
-  }, [syncStatus, fulfilledTimeStamp, isSyncing, isPolling, addLog, notify])
+  }, [syncStatus, fulfilledTimeStamp, isSyncing, isPolling, addLog])
 
   // Опрос статуса упал даже после ретраев — выходим из syncing, иначе панель
-  // зависнет с неактивной кнопкой и бесконечным прогресс-баром
+  // зависнет с неактивной кнопкой в режиме «Синхронизация...»
   useEffect(() => {
     if (!isSyncing || !isPolling || !isStatusError || isStatusFetching) {
       return
     }
     addLog('Сервер не отвечает на запрос статуса синхронизации', 'error')
-    notify('Не удалось получить статус синхронизации', 'error')
     setIsSyncing(false)
     setIsPolling(false)
-  }, [isSyncing, isPolling, isStatusError, isStatusFetching, addLog, notify])
+  }, [isSyncing, isPolling, isStatusError, isStatusFetching, addLog])
 
   // Страховка: если статус так и не сменился (бэкенд «потерял» задачу),
   // по таймауту разблокируем кнопку вместо вечного «Синхронизация...»
@@ -226,12 +209,11 @@ function AdminPanel() {
     }
     const timer = window.setTimeout(() => {
       addLog('Превышено время ожидания синхронизации', 'error')
-      notify('Синхронизация не завершилась за отведённое время', 'error')
       setIsSyncing(false)
       setIsPolling(false)
     }, SYNC_TIMEOUT_MS)
     return () => window.clearTimeout(timer)
-  }, [isSyncing, addLog, notify])
+  }, [isSyncing, addLog])
 
   const getLogIcon = (type: LogEntry['type']) => {
     switch (type) {
@@ -246,7 +228,11 @@ function AdminPanel() {
 
   return (
     <Container maxWidth="lg">
-      <Typography variant="h5" sx={{ margin: isMobile ? '20px 0' : '20px 0 0' }}>
+      <Typography
+        variant="h5"
+        textAlign="center"
+        sx={{ margin: isMobile ? '20px 0' : '20px 0 0' }}
+      >
         Админ-панель
       </Typography>
 
@@ -273,7 +259,7 @@ function AdminPanel() {
             borderRadius: 2,
           }}
         >
-          {isSyncing ? 'Синхронизация...' : 'Обновить базу данных'}
+          {isSyncing ? 'Синхронизация...' : 'Синхронизировать'}
         </Button>
       </Box>
 
@@ -302,7 +288,7 @@ function AdminPanel() {
             >
               <TerminalIcon sx={{ fontSize: 48, mb: 2, opacity: 0.5 }} />
               <Typography variant="body2">
-                Нажмите кнопку "Обновить базу данных" для начала синхронизации
+                Нажмите кнопку "Синхронизировать" для начала синхронизации
               </Typography>
             </Box>
           ) : (
