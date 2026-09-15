@@ -24,10 +24,13 @@ export function RequireAuth(props: IRequireAuth) {
 }
 
 export function RequireAdminRole(props: IRequireAuth) {
+  const isAuth = useAppSelector(selectIsAuth)
   const role = useAppSelector(selectRole)
   const location = useLocation()
 
-  if (role !== 'admin') {
+  // Проверяем и isAuth: accountData лежит в localStorage отдельно от токена,
+  // поэтому после его удаления роль в стейте остаётся, хотя сессии уже нет
+  if (!isAuth || role !== 'admin') {
     return <Navigate to={props.redirectTo} state={{ from: location.pathname }} replace />
   }
 

@@ -109,4 +109,19 @@ describe('RequireAdminRole', () => {
 
     expect(screen.getByText('admin')).toBeInTheDocument()
   })
+
+  it('редиректит, даже если роль админа осталась в стейте, а сессии нет', () => {
+    // Токен удалён, но accountData с role: 'admin' всё ещё в localStorage:
+    // без проверки isAuth гвард пустил бы пользователя без сессии
+    renderGuard(
+      <RequireAdminRole redirectTo="/signin">
+        <div>admin</div>
+      </RequireAdminRole>,
+      '/admin',
+      { isAuth: false, accountData: accountDataWithRole('admin') },
+    )
+
+    expect(screen.queryByText('admin')).not.toBeInTheDocument()
+    expectRedirectedTo('/admin')
+  })
 })
