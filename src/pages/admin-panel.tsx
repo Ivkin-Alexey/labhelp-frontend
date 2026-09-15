@@ -180,7 +180,7 @@ function AdminPanel() {
       return
     }
 
-    const { status, stageDescription, error, equipmentCount } = syncStatus
+    const { status, stageDescription, error, equipmentCount, collisions } = syncStatus
 
     // Этапы меняются внутри одного статуса pending, поэтому отслеживаем их
     // отдельно от статуса
@@ -198,6 +198,17 @@ function AdminPanel() {
     if (status === 'success') {
       const count = equipmentCount ?? 0
       addLog(`Синхронизация завершена, записей: ${count}`, 'success')
+
+      if (collisions && collisions.length > 0) {
+        // Дубли пары «инвентарный_заводской» в таблице: id получили суффикс.
+        // Данные стоит поправить в таблице, чтобы id были стабильными
+        addLog(
+          `Обнаружены дубли id в таблице (${collisions.length} шт.), им назначен суффикс. Исправьте данные:`,
+          'error',
+        )
+        collisions.forEach(id => addLog(`• ${id}`, 'error'))
+      }
+
       setIsSyncing(false)
       setIsPolling(false)
     }

@@ -23,6 +23,8 @@ export interface ISyncStatusDetail {
   startedAt: string | null
   completedAt: string | null
   equipmentCount: number | null
+  // id с дублями пары «инвентарный_заводской» в таблице: их стоит поправить
+  collisions: string[] | null
 }
 
 export const equipmentsApi = api.injectEndpoints({
