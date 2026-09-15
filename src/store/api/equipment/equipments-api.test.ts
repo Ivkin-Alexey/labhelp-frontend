@@ -46,8 +46,13 @@ beforeEach(() => {
   vi.stubGlobal(
     'fetch',
     vi.fn(async (input: RequestInfo | URL) => {
-      requestedUrls.push(readUrl(input))
-      return new Response(JSON.stringify({ id: ID_WITH_SLASH, name: 'Стенд' }), {
+      const url = readUrl(input)
+      requestedUrls.push(url)
+      // Список по id возвращает массив карточек, одиночная карточка — объект
+      const body = url.includes('equipmentIds')
+        ? [{ id: ID_WITH_SLASH, name: 'Стенд' }]
+        : { id: ID_WITH_SLASH, name: 'Стенд' }
+      return new Response(JSON.stringify(body), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       })
@@ -99,5 +104,28 @@ describe('addOperatingEquipment', () => {
     )
 
     expectIdInSingleSegment(requestedUrls[0], ID_WITH_SLASH)
+  })
+})
+
+describe('fetchEquipmentByIDs', () => {
+  it('склеивает список id в один параметр equipmentIds через запятую', async () => {
+    const store = makeStore()
+
+    const request = store.dispatch(
+      equipmentsApi.endpoints.fetchEquipmentByIDs.initiate({
+        equipmentIds: [ID_WITH_SLASH, ID_WITH_SPACE],
+      }),
+    )
+    const result = await request
+    request.unsubscribe()
+
+    // Бэкенд ждёт equipmentIds=a,b,c (один параметр с запятыми), а не
+    // повторяющийся ключ equipmentIds=a&equipmentIds=b
+    const params = new URL(requestedUrls[0]).searchParams
+    expect(params.getAll('equipmentIds')).toEqual([`${ID_WITH_SLASH},${ID_WITH_SPACE}`])
+    // transformResponse помечает каждую карточку как избранную
+    expect(result.data).toEqual([
+      { id: ID_WITH_SLASH, name: 'Стенд', isFavorite: true },
+    ])
   })
 })

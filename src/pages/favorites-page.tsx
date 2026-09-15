@@ -27,6 +27,18 @@ export default function FavoritesPage() {
     if (equipmentIds.length === 0) {
       return <Typography mt="20px">Список пуст</Typography>
     }
+
+    // Список загружен, но сервер не нашёл ни одного id: избранное собрано на
+    // устаревших данных (например, до пересинхронизации БД). Без этого
+    // сообщения страница выглядела бы просто пустой
+    if (!isLoading && !isError && Array.isArray(equipmentList) && equipmentList.length === 0) {
+      return (
+        <Typography mt="20px">
+          Оборудование из избранного не найдено. Возможно, список устарел — добавьте
+          карточки заново
+        </Typography>
+      )
+    }
   }
 
   return (

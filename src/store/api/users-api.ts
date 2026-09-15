@@ -9,6 +9,14 @@ import type {
 } from '../../models/users'
 import { clearUserData, setToken, setUserData } from '../users-slice'
 
+// queryFulfilled реджектится объектом { error, meta }, а не самой ошибкой:
+// статус лежит внутри error. Раньше читали e.status и на 401 от протухшего
+// токена попадали в else — пользователь оставался «залогинен» до перезагрузки
+function getErrorStatus(e: unknown): number | undefined {
+  const rejection = e as { status?: number; error?: { status?: number } } | undefined
+  return rejection?.status ?? rejection?.error?.status
+}
+
 export const usersApi = api.injectEndpoints({
   endpoints: builder => ({
     checkToken: builder.query<{ message: string; data: boolean }, void>({
@@ -22,7 +30,7 @@ export const usersApi = api.injectEndpoints({
         } catch (e) {
           // Сессия не подтверждена сервером (401/403) — разлогиниваем,
           // сетевые ошибки оставляем как есть, чтобы не выкидывать пользователя
-          const status = (e as { status?: number })?.status
+          const status = getErrorStatus(e)
           if (status === 401 || status === 403) {
             dispatch(clearUserData())
           } else {
