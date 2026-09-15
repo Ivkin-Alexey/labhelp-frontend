@@ -27,7 +27,6 @@ export const authMiddleware: Middleware<{}, IState> = store => next => action =>
       case 'account/setUserData':
         if (typeof action.payload === 'object') {
           localStorage.setItem(names.account.accountData, JSON.stringify(action.payload))
-          localStorage.setItem(names.account.isAuth, JSON.stringify(true))
         }
         break
 
@@ -35,6 +34,10 @@ export const authMiddleware: Middleware<{}, IState> = store => next => action =>
         // Логаут должен удалять только данные аккаунта: избранный список и
         // остальные ключи принадлежат пользователю и не зависят от сессии
         Object.values(names.account).forEach(key => localStorage.removeItem(key))
+        // isAuth раньше писался в localStorage, но никогда не читался: при
+        // загрузке страницы isAuth вычисляется из accountData и token.
+        // Подчищаем ключ, оставшийся у пользователей со старой версии
+        localStorage.removeItem('isAuth')
         break
 
       default:

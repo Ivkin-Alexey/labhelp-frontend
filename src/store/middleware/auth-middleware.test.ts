@@ -23,7 +23,7 @@ describe('authMiddleware', () => {
     expect(localStorage.getItem(names.account.token)).toBe('token-123')
   })
 
-  it('сохраняет данные аккаунта и флаг авторизации', () => {
+  it('сохраняет данные аккаунта', () => {
     dispatchAction(authMiddleware, {
       type: 'account/setUserData',
       payload: { login: 'ivanov', role: 'user' },
@@ -32,18 +32,19 @@ describe('authMiddleware', () => {
     expect(localStorage.getItem(names.account.accountData)).toBe(
       JSON.stringify({ login: 'ivanov', role: 'user' }),
     )
-    expect(localStorage.getItem(names.account.isAuth)).toBe('true')
   })
 
   it('при логауте удаляет только данные аккаунта, избранное остаётся', () => {
     localStorage.setItem(names.account.token, 'token-123')
     localStorage.setItem(names.account.accountData, JSON.stringify({ login: 'ivanov' }))
-    localStorage.setItem(names.account.isAuth, 'true')
     localStorage.setItem(names.equipment.favoriteEquipments, JSON.stringify(['equipment-1']))
+    // Ключ, оставшийся у пользователей со старой версии, тоже должен уйти
+    localStorage.setItem('isAuth', 'true')
 
     dispatchAction(authMiddleware, { type: 'account/clearUserData' })
 
     accountKeys.forEach(key => expect(localStorage.getItem(key)).toBeNull())
+    expect(localStorage.getItem('isAuth')).toBeNull()
     expect(localStorage.getItem(names.equipment.favoriteEquipments)).toBe(
       JSON.stringify(['equipment-1']),
     )
