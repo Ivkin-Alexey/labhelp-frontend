@@ -4,14 +4,14 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 
 import CarouselItem from './carousel-item'
-import img0 from '../../images/0.jpeg'
-import img1 from '../../images/1.jpeg'
-import img2 from '../../images/2.jpeg'
-import img3 from '../../images/3.jpeg'
-import img4 from '../../images/4.jpeg'
-import img5 from '../../images/5.jpeg'
-import img6 from '../../images/6.jpeg'
-import img7 from '../../images/7.jpeg'
+import img0 from '../../images/0.webp'
+import img1 from '../../images/1.webp'
+import img2 from '../../images/2.webp'
+import img3 from '../../images/3.webp'
+import img4 from '../../images/4.webp'
+import img5 from '../../images/5.webp'
+import img6 from '../../images/6.webp'
+import img7 from '../../images/7.webp'
 import './style.css'
 
 const images = [img0, img1, img2, img3, img4, img5, img6, img7]
@@ -53,7 +53,7 @@ function Carousel() {
     <Box className="slider-container">
       <Slider {...settings}>
         {images.map((el, i) => {
-          return <CarouselItem src={el} key={i} alt="#" />
+          return <CarouselItem src={el} key={i} alt="#" eager={i === 0} />
         })}
       </Slider>
     </Box>

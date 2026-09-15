@@ -1,8 +1,8 @@
 import type { Theme } from '@mui/material'
 import { Box, Stack, Typography, useMediaQuery } from '@mui/material'
 
-import ckpLogo from '../../images/ckp-logo.png'
-import companyLogo from '../../images/company-logo.png'
+import ckpLogo from '../../images/ckp-logo.webp'
+import companyLogo from '../../images/company-logo.webp'
 import './style.css'
 
 export default function Logo() {
