@@ -2,6 +2,7 @@ import { createContext, useEffect, useMemo } from 'react'
 
 import { Outlet, useLocation } from 'react-router-dom'
 
+import { clearChunkReloadMark } from './error-page/error-page'
 import Header from './header/header'
 import { useAppSelector } from '../app/hooks/hooks'
 import useTheme from '../app/hooks/useTheme'
@@ -25,6 +26,9 @@ export default function Root() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    // Приложение загрузилось успешно: сбрасываем метку авто-перезагрузки после
+    // ошибки чанков, чтобы следующий такой сбой снова обработался автоматически
+    clearChunkReloadMark()
   }, [location.pathname])
 
   return (

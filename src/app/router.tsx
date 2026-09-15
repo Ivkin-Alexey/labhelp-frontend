@@ -3,6 +3,7 @@ import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { routes } from './constants/constants'
+import ErrorPage from '../components/error-page/error-page'
 import { RequireAuth, RequireAdminRole } from '../components/require-auth'
 import Root from '../components/root'
 import NotExistPage from '../pages/404-page'
@@ -24,7 +25,9 @@ const router = createBrowserRouter([
   {
     path: routes.main,
     element: <Root />,
-    // TODO: implement <ErrorPage />,
+    // Без errorElement ошибки рендера страниц рисовал бы дефолтный экран
+    // react-router («Unexpected Application Error!»)
+    errorElement: <ErrorPage />,
     children: [
       {
         path: routes.main,
