@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+
 import {
   CheckCircle as CheckCircleIcon,
   CloudUpload as CloudUploadIcon,
   Error as ErrorIcon,
   Info as InfoIcon,
+  People as PeopleIcon,
   Terminal as TerminalIcon,
 } from '@mui/icons-material'
 import {
@@ -21,7 +23,9 @@ import {
 } from '@mui/material'
 import type { Theme } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { useNavigate } from 'react-router-dom'
 
+import { routes } from '../app/constants/constants'
 import { useAppDispatch } from '../app/hooks/hooks'
 import {
   useGetSyncEquipmentDbStatusQuery,
@@ -100,6 +104,7 @@ function isAuthError(error: unknown): boolean {
 
 function AdminPanel() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [isSyncing, setIsSyncing] = useState(false)
   // Поллинг статуса включаем только после того, как сервер принял задачу:
@@ -300,6 +305,20 @@ function AdminPanel() {
         >
           {isSyncing ? 'Синхронизация...' : 'Синхронизировать'}
         </Button>
+
+        <Button
+          variant="outlined"
+          size="large"
+          startIcon={<PeopleIcon />}
+          onClick={() => navigate(routes.usersList)}
+          sx={{
+            py: 1.5,
+            px: 4,
+            borderRadius: 2,
+          }}
+        >
+          Пользователи
+        </Button>
       </Box>
 
       {/* Итог последней синхронизации виден и после её завершения */}
@@ -327,7 +346,7 @@ function AdminPanel() {
             >
               <TerminalIcon sx={{ fontSize: 48, mb: 2, opacity: 0.5 }} />
               <Typography variant="body2">
-                Нажмите кнопку "Синхронизировать" для начала синхронизации
+                Нажмите кнопку "Синхронизировать" для начала синхронизации базы данных с Google Sheets.
               </Typography>
             </Box>
           ) : (

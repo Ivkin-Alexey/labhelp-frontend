@@ -1,7 +1,7 @@
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 
-import { MenuItem, Stack, TextField } from '@mui/material'
+import { FormControlLabel, MenuItem, Stack, Switch, TextField } from '@mui/material'
 import Button from '@mui/material/Button'
 import ListSubheader from '@mui/material/ListSubheader'
 
@@ -27,6 +27,19 @@ interface IFormProps {
   header?: string
   disabledInputs?: TInputArray
   optionalButtons?: React.ReactNode | undefined
+  // Текст второй кнопки: отправляет только изменённые поля через onSendData,
+  // неактивна, пока поля не меняли
+  secondBtnText?: string
+  // Если задано, главная кнопка вызывает это действие вместо отправки формы
+  onMainBtnClick?: (formData: IFormValues) => void
+  // Если задано, вторая кнопка вызывает это действие вместо отправки формы
+  onSecondBtnClick?: (formData: IFormValues) => void
+  // Главная кнопка неактивна, пока поля не изменены (для форм редактирования)
+  requireChange?: boolean
+  // Контрол подтверждения пользователя: отображается над полями формы,
+  // переключение сразу вызывает onVerifiedChange (PATCH уходит с isVerified)
+  isVerified?: boolean
+  onVerifiedChange?: (isVerified: boolean) => void
 }
 
 interface IFormState {
@@ -52,6 +65,12 @@ const Form = (props: IFormProps) => {
     header,
     optionalButtons,
     disabledInputs,
+    secondBtnText,
+    onMainBtnClick,
+    onSecondBtnClick,
+    requireChange = false,
+    isVerified,
+    onVerifiedChange,
   } = props
 
   const defaultFormState: IFormState = useMemo(
@@ -150,6 +169,21 @@ const Form = (props: IFormProps) => {
     return Object.values(trimmedFormState).find(el => el.isValid === false)
   }
 
+  // Отправляем только изменённые поля: сервер применяет PATCH как есть, и
+  // нечего перезаписывать неизменившиеся значения (а пароль и вовсе не трогаем)
+  function getChangedFormValues(): IFormValues {
+    const formValues = getFormValues()
+    const changedValues: IFormValues = {}
+    for (const key in formValues) {
+      if (formValues[key] !== defaultFormState[key]?.value) {
+        changedValues[key] = formValues[key]
+      }
+    }
+    return changedValues
+  }
+
+  const isFormChanged = Object.keys(getChangedFormValues()).length > 0
+
   function renderSelectOptions(options: string[]) {
     return options.map(option => (
       <MenuItem key={option} value={option}>
@@ -201,11 +235,43 @@ const Form = (props: IFormProps) => {
       onKeyDown={handleKeyDown}
     >
       {header && <ListSubheader component="div">{header}</ListSubheader>}
+      {onVerifiedChange && (
+        <FormControlLabel
+          control={
+            <Switch
+              checked={Boolean(isVerified)}
+              onChange={(_, checked) => {
+                // Клик игнорируем, пока идёт любой PATCH, но свитч не
+                // затемняем: disabled на время «Сохранить» выглядел как
+                // мерцание (тускнеет и светлеет после ответа сервера)
+                if (!isLoading) {
+                  onVerifiedChange(checked)
+                }
+              }}
+              color="success"
+            />
+          }
+          label={isVerified ? 'Подтверждён' : 'Не подтверждён'}
+        />
+      )}
       {renderTextFields()}
+      {secondBtnText && (
+        <Button
+          variant="outlined"
+          disabled={!isFormChanged || isLoading}
+          onClick={() =>
+            onSecondBtnClick ? onSecondBtnClick(getChangedFormValues()) : onSendData(getChangedFormValues())
+          }
+        >
+          {secondBtnText}
+        </Button>
+      )}
       <Button
         variant="contained"
-        disabled={isDisabled || isLoading}
-        onClick={() => onSendData(getFormValues())}
+        disabled={(requireChange && !isFormChanged) || isDisabled || isLoading}
+        onClick={() =>
+          onMainBtnClick ? onMainBtnClick(getFormValues()) : onSendData(getFormValues())
+        }
       >
         {btnText}
       </Button>

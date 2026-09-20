@@ -4,11 +4,13 @@ import { Container } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 
+import NotExistPage from './404-page'
 import { routes } from '../app/constants/constants'
 import localisations from '../app/constants/localizations/localizations'
 import { useAppSelector } from '../app/hooks/hooks'
 import { categoryFilteringRules } from '../app/inputs/filteringRules'
 import forms from '../app/inputs/forms'
+import Fallback from '../components/Fallback'
 import Form from '../components/form/form'
 import OptionalUserFormButtons from '../components/form/option-buttons'
 import type { IUserCard, TLogin } from '../models/users'
@@ -28,22 +30,36 @@ const EditPersonalDataPage = () => {
 
   const message = localisations.pages.editPersonalData.confirmMsg
 
-  const { data: userList } = useGetUserListQuery(accountLogin)
+  const { data: userList, isLoading: isUserListLoading } = useGetUserListQuery(accountLogin)
 
-  const [sendData, { isSuccess: isSuccessUpdate, isLoading: isLoadingUpdate }] =
-    useUpdatePersonDataMutation()
+  const [sendData, { isLoading: isLoadingUpdate }] = useUpdatePersonDataMutation()
   const [deleteMutation, { isSuccess: isSuccessDelete, isLoading: isLoadingDelete }] =
     useDeletePersonMutation()
 
   useEffect(() => {
-    if (isSuccessDelete || isSuccessUpdate) {
-      navigate(routes.admin)
+    // После удаления пользователя возвращаемся в список; после сохранения
+    // или подтверждения остаёмся на странице пользователя
+    if (isSuccessDelete) {
+      navigate(routes.usersList)
     }
-  }, [isSuccessDelete, isSuccessUpdate, navigate])
+  }, [isSuccessDelete, navigate])
+
+  // Пока список грузится, данных может не быть — не считаем это ошибкой
+  const isUnknownUser = !isUserListLoading && !userList?.some(el => el.login === login)
+  if (isUnknownUser) {
+    // Пользователя нет в БД: пустой экран не информативен, показываем 404
+    return <NotExistPage />
+  }
 
   const userData: IUserCard | undefined = userList?.find(el => el.login === login)
   if (!userData) {
-    return null
+    return Fallback()
+  }
+
+  // Переключатель «Подтверждён»: PATCH уходит только с флагом и логином —
+  // логин строит URL патча, без него уходит PATCH /users/undefined
+  function handleVerifiedChange(isVerified: boolean) {
+    sendData({ login, isVerified })
   }
 
   function handleDeletePerson(login: TLogin | undefined) {
@@ -54,14 +70,17 @@ const EditPersonalDataPage = () => {
   }
 
   const optionalButtons = () => {
-    if (userData.role !== 'admin') {
-      return (
-        <OptionalUserFormButtons
-          handleOnClick={() => handleDeletePerson(login)}
-          isLoading={isLoadingDelete}
-        />
-      )
+    // Кнопка удаления не показывается для админов: админов удалять нельзя,
+    // серверная проверка — страховка на случай прямого запроса в обход UI
+    if (userData.role === 'admin') {
+      return null
     }
+    return (
+      <OptionalUserFormButtons
+        handleOnClick={() => handleDeletePerson(login)}
+        isLoading={isLoadingDelete}
+      />
+    )
   }
 
   return (
@@ -74,8 +93,13 @@ const EditPersonalDataPage = () => {
         disabledInputs={['login']}
         onSendData={sendData}
         isLoading={isLoadingUpdate}
-        btnText="Подтвердить"
+        btnText="Сохранить изменения"
         header="Данные пользователя:"
+        // Кнопка «Сохранить» неактивна, пока поля не меняли: PATCH уйдёт
+        // только с изменёнными полями, без изменений отправлять нечего
+        requireChange
+        isVerified={userData.isVerified}
+        onVerifiedChange={handleVerifiedChange}
         optionalButtons={optionalButtons()}
       />
     </Container>

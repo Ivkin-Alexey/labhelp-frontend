@@ -24,6 +24,7 @@ export const routes = {
   search: '/search',
   operatingEquipments: '/operating-equipments',
   admin: '/admin',
+  usersList: '/admin/users',
   userProfile: '/admin/:login',
   '404': '/404',
   contacts: '/contacts',
@@ -34,6 +35,11 @@ export const routes = {
 // Ссылка на карточку оборудования
 export function getEquipmentPath(equipmentId: string) {
   return `/equipments/${encodeURIComponent(equipmentId)}`
+}
+
+// Ссылка на редактирование данных пользователя
+export function getUserProfilePath(login: string) {
+  return `/admin/${encodeURIComponent(login)}`
 }
 
 export const apiRoutes = {

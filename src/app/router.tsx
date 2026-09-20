@@ -26,6 +26,7 @@ const SearchPage = React.lazy(() => import('../pages/search-page'))
 const SignInPage = React.lazy(() => import('../pages/sign-in-page'))
 const SignUpPage = React.lazy(() => import('../pages/sign-up-page'))
 const EditPersonalDataPage = React.lazy(() => import('../pages/user-data-editing-page'))
+const UsersListPage = React.lazy(() => import('../pages/users-list-page'))
 const HistoryPage = React.lazy(() => import('../pages/history-page'))
 const OperatingEquipmentsPage = React.lazy(() => import('../pages/operating-equipments-page'))
 
@@ -93,6 +94,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAdminRole redirectTo={routes.signIn}>
             <AdminPanel />
+          </RequireAdminRole>
+        ),
+      },
+      {
+        path: routes.usersList,
+        element: (
+          <RequireAdminRole redirectTo={routes.signIn}>
+            <UsersListPage />
           </RequireAdminRole>
         ),
       },

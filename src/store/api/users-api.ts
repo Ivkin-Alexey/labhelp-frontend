@@ -1,6 +1,5 @@
 import { api } from './api'
 import { apiRoutes } from '../../app/constants/constants'
-import type { IFormValues } from '../../models/inputs'
 import type {
   TAccountData,
   TLogin,
@@ -16,6 +15,10 @@ function getErrorStatus(e: unknown): number | undefined {
   const rejection = e as { status?: number; error?: { status?: number } } | undefined
   return rejection?.status ?? rejection?.error?.status
 }
+
+// Тело PATCH /users/:login: поля формы — строки, плюс флаг подтверждения
+// isVerified, который Prisma на сервере ожидает как boolean
+type TUpdatePersonData = { [key: string]: string | boolean | undefined }
 
 export const usersApi = api.injectEndpoints({
   endpoints: builder => ({
@@ -83,7 +86,7 @@ export const usersApi = api.injectEndpoints({
         'OperatingEquipmentList',
       ],
     }),
-    updatePersonData: builder.mutation<string, IFormValues>({
+    updatePersonData: builder.mutation<string, TUpdatePersonData>({
       query: userFormData => ({
         url: apiRoutes.patch.users + userFormData.login,
         method: 'PATCH',
