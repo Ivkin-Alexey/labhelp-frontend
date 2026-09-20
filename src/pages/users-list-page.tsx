@@ -19,6 +19,10 @@ import { selectLogin } from '../store/selectors'
 
 const columns = ['ФИО', 'Логин', 'Категория', 'Роль', 'Статус']
 
+// Колонки, без которых список читается хуже, но которые не влезают
+// на узкий экран: на мобиле остаются ФИО, логин и статус
+const hiddenOnMobileColumns = ['Категория', 'Роль']
+
 function UsersTable(props: { list: IUserCard[] }) {
   const navigate = useNavigate()
 
@@ -43,6 +47,13 @@ function UsersTable(props: { list: IUserCard[] }) {
     return '—'
   }
 
+  function cellSx(title: string) {
+    if (hiddenOnMobileColumns.includes(title)) {
+      return { display: { xs: 'none', sm: 'table-cell' } }
+    }
+    return undefined
+  }
+
   return (
     <TableContainer
       sx={{
@@ -50,13 +61,16 @@ function UsersTable(props: { list: IUserCard[] }) {
         maxWidth: '900px',
         mt: '20px',
         cursor: 'pointer',
+        px: { xs: 1, sm: 2 },
       }}
     >
       <Table size="small" aria-label="Список пользователей">
         <TableHead>
           <TableRow>
             {columns.map(title => (
-              <TableCell key={title}>{title}</TableCell>
+              <TableCell key={title} sx={cellSx(title)}>
+                {title}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -69,8 +83,8 @@ function UsersTable(props: { list: IUserCard[] }) {
             >
               <TableCell>{renderFio(user)}</TableCell>
               <TableCell>{user.login}</TableCell>
-              <TableCell>{userCategory(user)}</TableCell>
-              <TableCell>{renderRole(user)}</TableCell>
+              <TableCell sx={cellSx('Категория')}>{userCategory(user)}</TableCell>
+              <TableCell sx={cellSx('Роль')}>{renderRole(user)}</TableCell>
               <TableCell align="center">
                 {user.isVerified && (
                   <Tooltip title="Подтверждён">
@@ -92,7 +106,7 @@ export default function UsersListPage() {
   const { isLoading, isError, data: userList } = useGetUserListQuery(accountLogin)
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80vw' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
       <Typography variant="h5" textAlign="center" mt="20px">
         Пользователи
       </Typography>

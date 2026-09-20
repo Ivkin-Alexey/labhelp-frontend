@@ -35,7 +35,9 @@ import {
 import { clearUserData } from '../store/users-slice'
 
 const LogContainer = styled(Paper)(({ theme }) => ({
-  height: 400,
+  // На мобиле лог занимает большую часть экрана, но не выталкивает кнопки
+  height: '50vh',
+  maxHeight: 400,
   overflow: 'auto',
   backgroundColor: theme.palette.grey[900],
   color: theme.palette.common.white,
@@ -280,15 +282,19 @@ function AdminPanel() {
         Админ-панель
       </Typography>
 
-      {/* Кнопки действия */}
+      {/* Кнопки действия: на мобиле — в столбик на всю ширину, чтобы
+          подписи не обрезались и обе попадали под палец */}
       <Box
         sx={{
           display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
           gap: 2,
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: { xs: 'stretch', sm: 'center' },
           mb: 3,
           mt: 2,
+          maxWidth: { xs: 320, sm: 'none' },
+          mx: 'auto',
         }}
       >
         <Button
@@ -297,11 +303,7 @@ function AdminPanel() {
           startIcon={<CloudUploadIcon />}
           onClick={handleSyncDatabase}
           disabled={isSyncing}
-          sx={{
-            py: 1.5,
-            px: 4,
-            borderRadius: 2,
-          }}
+          sx={{ borderRadius: 2, width: { xs: '100%', sm: 'auto' } }}
         >
           {isSyncing ? 'Синхронизация...' : 'Синхронизировать'}
         </Button>
@@ -311,11 +313,7 @@ function AdminPanel() {
           size="large"
           startIcon={<PeopleIcon />}
           onClick={() => navigate(routes.usersList)}
-          sx={{
-            py: 1.5,
-            px: 4,
-            borderRadius: 2,
-          }}
+          sx={{ borderRadius: 2, width: { xs: '100%', sm: 'auto' } }}
         >
           Пользователи
         </Button>
@@ -331,7 +329,7 @@ function AdminPanel() {
       )}
 
       {/* Логи выполнения */}
-      <Box sx={{ mt: 3 }}>
+      <Box sx={{ mt: { xs: 2, sm: 3 } }}>
         <LogContainer id="log-container" elevation={3}>
           {logs.length === 0 ? (
             <Box
