@@ -109,4 +109,5 @@ jobs:
 
           sudo chown -R "${{ secrets.WEB_USER }}:${{ secrets.WEB_GROUP }}" "${{ secrets.TARGET_DIR }}"
           
+          
           echo "✅ Деплой успешно завершен!"
