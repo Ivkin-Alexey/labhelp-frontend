@@ -5,110 +5,73 @@ on:
     branches: [ main ]
 
 jobs:
-  deploy:
+  # ============================================================
+  # ЭТАП 1: Сборка на раннере GitHub (у него достаточно памяти)
+  # ============================================================
+  build:
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy using ssh
-      uses: appleboy/ssh-action@master
-      with:
-        command_timeout: 30m
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          set -e  # Завершать при любой ошибке
-          
-          # Валидация ВСЕХ обязательных секретов - ИСПРАВЛЕННЫЙ СИНТАКСИС
-          if [ -z "${{ secrets.HOST }}" ] || \
-             [ -z "${{ secrets.USERNAME }}" ] || \
-             [ -z "${{ secrets.PRIVATE_KEY }}" ] || \
-             [ -z "${{ secrets.SSH_PORT }}" ] || \
-             [ -z "${{ secrets.REPO_DIR }}" ] || \
-             [ -z "${{ secrets.BRANCH }}" ] || \
-             [ -z "${{ secrets.BUILD_DIR }}" ] || \
-             [ -z "${{ secrets.TARGET_DIR }}" ] || \
-             [ -z "${{ secrets.WEB_USER }}" ] || \
-             [ -z "${{ secrets.WEB_GROUP }}" ]; then
-            echo "❌ ОШИБКА: Не все обязательные секреты заполнены"
-            echo "Проверьте наличие следующих секретов в GitHub Secrets:"
-            echo "  - HOST, USERNAME, PRIVATE_KEY, SSH_PORT"
-            echo "  - REPO_DIR, BRANCH, BUILD_DIR, TARGET_DIR"
-            echo "  - WEB_USER, WEB_GROUP"
-            exit 1
-          fi
+      - name: Checkout
+        uses: actions/checkout@v4
 
-          echo "✅ Все обязательные секреты заполнены"
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
 
-          # Установка rsync если не установлен
-          if ! command -v rsync &> /dev/null; then
-            echo "Устанавливаем rsync..."
-            sudo apt-get update
-            sudo apt-get install -y rsync
-          fi
+      - name: Install dependencies
+        run: npm ci --no-audit
 
-          # Проверка существования целевой директории
-          if [ ! -d "${{ secrets.TARGET_DIR }}" ]; then
-            echo "❌ ОШИБКА: Целевая директория не существует: ${{ secrets.TARGET_DIR }}"
-            exit 1
-          fi
-          
-          # Проверка существования директории репозитория
-          if [ ! -d "${{ secrets.REPO_DIR }}" ]; then
-            echo "❌ ОШИБКА: Директория репозитория не существует: ${{ secrets.REPO_DIR }}"
-            exit 1
-          fi
-          
-          cd "${{ secrets.REPO_DIR }}"
-          echo "Рабочая директория: $(pwd)"
+      - name: Build
+        run: npm run build
 
-          # Переключение на ветку
-          git checkout "${{ secrets.BRANCH }}"
+      # Сохраняем результат сборки, чтобы передать во второй job
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
 
-          CURRENT_BRANCH=$(git branch --show-current)
-          if [ "$CURRENT_BRANCH" != "${{ secrets.BRANCH }}" ]; then
-            echo "❌ ОШИБКА: Остались на ветке $CURRENT_BRANCH вместо ${{ secrets.BRANCH }}"
-            exit 1
-          fi
+  # ============================================================
+  # ЭТАП 2: Копирование готового dist на VPS
+  # ============================================================
+  deploy:
+    needs: build                 # запускается только после успешной сборки
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
 
-          echo "✅ Успешно переключены на ветку: $CURRENT_BRANCH"
+      - name: Copy dist to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "dist/*"
+          target: "${{ secrets.TARGET_DIR }}"
+          strip_components: 1
+          overwrite: true
+          # Важно: scp-action не удаляет старые файлы,
+          # поэтому очистку делаем отдельным шагом ниже
 
-          # Обновление репозитория
-          if ! git pull origin "${{ secrets.BRANCH }}"; then
-            echo "❌ ОШИБКА: Не удалось обновить репозиторий"
-            exit 1
-          fi
-
-          # Установка зависимостей
-          if ! npm install; then
-            echo "❌ ОШИБКА: Не удалось установить зависимости"
-            exit 1
-          fi
-
-          # Сборка проекта
-          if ! npm run build; then
-            echo "❌ ОШИБКА: Сборка проекта не удалась"
-            exit 1
-          fi
-
-          # Проверка что сборка создала файлы
-          if [ ! -d "${{ secrets.BUILD_DIR }}" ] || [ -z "$(ls -A "${{ secrets.BUILD_DIR }}")" ]; then
-            echo "❌ ОШИБКА: Папка сборки пустая или не существует"
-            exit 1
-          fi
-
-          # Деплой
-          echo "=== DRY RUN - проверка изменений ==="
-          sudo rsync -av --delete --dry-run \
-            "${{ secrets.BUILD_DIR }}"/ \
-            "${{ secrets.TARGET_DIR }}"/
-
-          echo "=== ВЫПОЛНЯЕМ РЕАЛЬНУЮ СИНХРОНИЗАЦИЮ ==="
-          sudo rsync -av --delete --progress \
-            "${{ secrets.BUILD_DIR }}"/ \
-            "${{ secrets.TARGET_DIR }}"/
-
-          sudo chown -R "${{ secrets.WEB_USER }}:${{ secrets.WEB_GROUP }}" "${{ secrets.TARGET_DIR }}"
-          
-          
-          echo "✅ Деплой успешно завершен!"
+      - name: Fix ownership and reload web server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 5m
+          script: |
+            set -e
+            sudo chown -R "${{ secrets.WEB_USER }}:${{ secrets.WEB_GROUP }}" "${{ secrets.TARGET_DIR }}"
+            echo "✅ Права на ${{ secrets.TARGET_DIR }} обновлены"
+            # Если используете nginx — раскомментируйте:
+            # sudo systemctl reload nginx
